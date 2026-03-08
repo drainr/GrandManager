@@ -6,11 +6,13 @@ import RedButton from "../components/RedButton.jsx";
 
 const Dashboard = () => {
     return (
-        <div>
+        <div className="flex bg-[#364A85]">
+            <div className="flex flex-col">
             <GreenButton />
             <BlueButton />
             <YellowButton />
             <RedButton />
+            </div>
         </div>
     );
 };
