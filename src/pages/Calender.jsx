@@ -1,32 +1,16 @@
 import React from 'react';
+import TodoList from '../components/list/ListInput.jsx';
+import DisplayTodo from '../components/list/DisplayTodo.jsx';
+import MultiSelectButton from '../components/list/multiSelectButton.jsx';
 
 const Calender = () => {
-  // get the day from local pc/ local time
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const todayIndex = new Date().getDay();
-
   return (
     <div className="min-h-screen bg-white p-4">
-      <div className="mx-auto w-full max-w-5xl rounded-xl bg-white p-2 shadow-sm">
-        <div className="grid grid-cols-7 gap-2">
-          {weekDays.map((day, index) => {
-            const isToday = index === todayIndex;
+      <DisplayTodo />
 
-            return (
-              <button
-                type="button"
-                key={day}
-                className={`btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl w-full rounded-md font-semibold transition-colors ${
-                  isToday
-                    ? 'btn-primary'
-                    : 'bg-white! border-gray-300! text-success! hover:bg-success! hover:border-success! hover:text-white!'
-                }`}
-              >
-                {day}
-              </button>
-            );
-          })}
-        </div>
+      <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
+        <TodoList />
+        <MultiSelectButton />
       </div>
     </div>
   );

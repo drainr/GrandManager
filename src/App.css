@@ -43,3 +43,26 @@
 .read-the-docs {
   color: #888;
 }
+
+.list-Input {
+  width: 100%;
+  min-height: 6rem;
+  border: 2px solid #86efac;
+  border-radius: 0.9rem;
+  background-color: #bdbaba;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #404241;
+}
+
+.list-Input::placeholder {
+  color: #1e47ff;
+  font-weight: 700;
+}
+
+.list-Input:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(46, 51, 48, 0.2);
+}
