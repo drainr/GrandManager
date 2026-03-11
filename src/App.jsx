@@ -1,13 +1,15 @@
 
 import './App.css'
-import Login from './pages/Login.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+// import Login from './pages/Login.jsx';
+import Calender from './pages/Calender.jsx';
 
 function App() {
 
 
   return (
     <>
-       <Login />
+       <Calender />
     </>
   )
 }
