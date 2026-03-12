@@ -3,6 +3,7 @@ import './App.css'
 //import Login from './pages/Login.jsx';
 import SignUp from "./pages/SignUp.jsx";
 import Calendar from "daisyui/components/calendar/index.js";
+import Calender from "./pages/Calender.jsx";
 //import Calender from './pages/Calender.jsx';
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
 
   return (
     <>
-       <Calendar/>
+       <Calender/>
 
     </>
   )

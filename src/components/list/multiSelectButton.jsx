@@ -21,7 +21,7 @@ const MultiSelectButton = () => {
 	};
 
 	return (
-		<ul className="menu menu-horizontal flex-nowrap bg-base-200 rounded-box">
+		<ul className="menu menu-horizontal flex-nowrap bg-base-200">
 			{dayLetters.map((day) => (
 				<li key={day.key}>
 					<button
