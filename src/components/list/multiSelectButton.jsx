@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import GreenButton from "../GreenButton.jsx";
 
 const MultiSelectButton = () => {
 	const dayLetters = [
@@ -24,18 +25,14 @@ const MultiSelectButton = () => {
 		<ul className="menu menu-horizontal flex-nowrap bg-base-200">
 			{dayLetters.map((day) => (
 				<li key={day.key}>
-					<button
-						type="button"
-						onClick={() => toggleDay(day.key)}
-						aria-pressed={selectedDays.includes(day.key)}
-						className={
-							selectedDays.includes(day.key)
-								? 'btn btn-md px-5 py-3 text-base bg-success! border-success! text-white!'
-								: 'btn btn-md px-5 py-3 text-base bg-white! border border-gray-300! text-success! hover:bg-success! hover:text-white!'
-						}
-					>
-						{day.label}
-					</button>
+                    <GreenButton text={day.label} onClick={() => toggleDay(day.key)}
+                                 aria-pressed={selectedDays.includes(day.key)}
+                                 className={
+                                     selectedDays.includes(day.key)
+                                         ? 'btn btn-md px-5 py-3 text-base bg-success! border-success! text-white!'
+                                         : 'btn btn-md px-5 py-3 text-base bg-white! border border-gray-300! text-success! hover:bg-success! hover:text-white!'
+                                 }/>
+
 				</li>
 			))}
 		</ul>
