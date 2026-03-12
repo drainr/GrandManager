@@ -15,12 +15,12 @@ const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <div className='bg-[#1B2851] '>
-            <div style={{animation: 'slideInFromLeft 1s ease-out'}} className="max-w-md w-full overflow-hidden p-8 space-y-8 shadow-[0px_-20px_20px_0px_rgba(54,74,133,0.3)]">
-                <h2 style={{animation: 'appear 2s ease-out'}} className="text-center text-4xl font-extrabold text-white">
+        <div className="bg-[#405BA4] min-h-screen w-full flex items-center justify-center p-10">
+            <div className="bg-[#1B2851] max-w-md w-full p-10 space-y-8 shadow-2xl">
+                <h2 className="text-center text-4xl font-extrabold text-white">
                     Welcome
                 </h2>
-                <p style={{animation: 'appear 3s ease-out'}} className="text-center text-gray-200">
+                <p className="text-center text-gray-200">
                     Sign in to your account
                 </p>
                 <div className="login-with">
