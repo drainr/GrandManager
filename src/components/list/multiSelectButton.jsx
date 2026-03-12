@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import GreenButton from "../GreenButton.jsx";
+import RedButton from "../RedButton.jsx";
 
 const MultiSelectButton = () => {
 	const dayLetters = [
@@ -22,20 +23,18 @@ const MultiSelectButton = () => {
 	};
 
 	return (
-		<ul className="menu menu-horizontal flex-nowrap bg-base-200">
-			{dayLetters.map((day) => (
-				<li key={day.key}>
-                    <GreenButton text={day.label} onClick={() => toggleDay(day.key)}
-                                 aria-pressed={selectedDays.includes(day.key)}
-                                 className={
-                                     selectedDays.includes(day.key)
-                                         ? 'btn btn-md px-5 py-3 text-base bg-success! border-success! text-white!'
-                                         : 'btn btn-md px-5 py-3 text-base bg-white! border border-gray-300! text-success! hover:bg-success! hover:text-white!'
-                                 }/>
+        <ul className="flex gap-2 bg-[#1B2851] p-2 overflow-x-auto">
+            {dayLetters.map((day) => {
+                const isSelected = selectedDays.includes(day.key);
+                const ButtonComponent = isSelected ? RedButton : GreenButton;
 
-				</li>
-			))}
-		</ul>
+                return (
+                    <li key={day.key}>
+                        <ButtonComponent text={day.label} onClick={() => toggleDay(day.key)} />
+                    </li>
+                );
+            })}
+        </ul>
 	);
 };
 

@@ -5,7 +5,7 @@ import MultiSelectButton from '../components/list/multiSelectButton.jsx';
 
 const Calender = () => {
   return (
-    <div className="min-h-screen bg-white p-4">
+    <div className="min-h-screen bg-[#405BA4] p-4">
       <DisplayTodo />
 
       <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">

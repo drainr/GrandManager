@@ -39,17 +39,17 @@ const DisplayTodo = () => {
 				onDayClick={handleDayClick}
 			/>
 
-			<div className="mt-3 border border-gray-200 bg-white p-4 shadow-sm">
+			<div className="mt-3 border bg-[#405BA4] p-4 shadow-sm">
 				<div
 					key={menuVersion}
-					className="space-y-3"
+					className="space-y-3 "
 					style={{ animation: 'weeklyBarDrop 240ms ease-out' }}
 				>
-					<h3 className="text-left text-sm font-extrabold uppercase tracking-wide  bg-white! sm:text-base">{menuTitle}</h3>
-					<ul className="menu menu-xl bg-white! w-56">
+					<h3 className="text-left text-sm font-extrabold uppercase tracking-wide  bg-[#405BA4] sm:text-base">{menuTitle}</h3>
+					<ul className="menu menu-xl bg-[#405BA4] w-56">
 						{menuItems.map((item) => (
 							<li key={item}>
-								<a className="bg-white! hover:bg-white! active:bg-white! focus:bg-white!">{item}</a>
+								<a className="bg-[#405BA4] hover:bg-white! active:bg-white! focus:bg-white!">{item}</a>
 							</li>
 						))}
 					</ul>
