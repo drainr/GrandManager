@@ -1,11 +1,11 @@
 import React from 'react';
 import { useState } from "react";
-import PurpleButton from "../components/PurpleButton.jsx";
-import YellowButton from "../components/YellowButton.jsx";
+import PurpleButton from "../components/buttons/PurpleButton.jsx";
+import YellowButton from "../components/buttons/YellowButton.jsx";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 //import { useNavigate } from "react-router";
-import BlueButton from "../components/BlueButton.jsx";
-import RedButton from "../components/RedButton.jsx";
+import BlueButton from "../components/buttons/BlueButton.jsx";
+import RedButton from "../components/buttons/RedButton.jsx";
 //import { useAuth } from "../contexts/AuthContext";
 
 
@@ -15,7 +15,7 @@ const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <div className="bg-[#405BA4] min-h-screen w-full flex items-center justify-center p-10">
+        <div className="bg-[#405BA4] w-100 shadow-xl shadow-black">
             <div className="bg-[#1B2851] max-w-md w-full p-10 space-y-8 shadow-2xl">
                 <h2 className="text-center text-4xl font-extrabold text-white">
                     Welcome

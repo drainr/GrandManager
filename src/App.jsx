@@ -4,16 +4,21 @@ import './App.css'
 import SignUp from "./pages/SignUp.jsx";
 import Calendar from "daisyui/components/calendar/index.js";
 import Calender from "./pages/Calender.jsx";
+import Login from "./pages/Login.jsx";
 //import Calender from './pages/Calender.jsx';
 
 function App() {
 
 
   return (
-    <>
-       <Calender/>
+       <div className="m-10">
+           <Calender />
+           <div/><div className="m-10">
+           <Login /></div>
+           <div className="m-10">
+           <SignUp /></div>
+        </div>
 
-    </>
   )
 }
 

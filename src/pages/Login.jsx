@@ -1,11 +1,11 @@
 import React from 'react';
 import { useState } from "react";
-import PurpleButton from "../components/PurpleButton.jsx";
-import YellowButton from "../components/YellowButton.jsx";
+import PurpleButton from "../components/buttons/PurpleButton.jsx";
+import YellowButton from "../components/buttons/YellowButton.jsx";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import BlueButton from "../components/BlueButton.jsx";
-import RedButton from "../components/RedButton.jsx";
+import BlueButton from "../components/buttons/BlueButton.jsx";
+import RedButton from "../components/buttons/RedButton.jsx";
 //import { useAuth } from "../contexts/AuthContext";
 
 
@@ -43,7 +43,7 @@ const Login = () => {
         }
     };
     return (
-        <div className='bg-[#1B2851]'>
+        <div className='bg-[#1B2851] w-100 shadow-xl shadow-black'>
         <div className="max-w-md w-full overflow-hidden p-8 space-y-8 ">
             <h2 className="text-center text-4xl font-extrabold text-white">
                 Welcome
@@ -89,17 +89,19 @@ const Login = () => {
             </div>
             {showChangePassword && (
                 <div className="change-password-section">
-                    <div className="password-wrapper">
+                    <div className="m-10">
                         <input
-                            className="input"
+                            className="peer h-10 w-full border-b-2 border-gray-300 text-white bg-transparent placeholder-transparent focus:outline-none focus:border-grey-200"
                             placeholder="New Password"
                             type={showPassword ? "text" : "password"}
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                         />
+                        <label className="absolute left-0 -top-3.5 text-gray-200 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-200 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-grey-200 peer-focus:text-sm" htmlFor="password-new">New password</label>
                     </div>
+                    <div className="m-5"></div>
                     <BlueButton text={'Update'} onClick={handleChangePassword} />
-                    {changeMsg && <p style={{ color: changeMsg.includes("success") ? "green" : "red", fontSize: "12px" }}>{changeMsg}</p>}
+                    {changeMsg && <p style={{ color: changeMsg.includes("success") ? "green" : "red", fontSize: "12px", margin: "5px" }}>{changeMsg}</p>}
                 </div>
             )}
             <div className="text-center text-gray-300">
