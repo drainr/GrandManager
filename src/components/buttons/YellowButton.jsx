@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const GreenButton = ({onClick, text}) => {
+const YellowButton = ({onClick, text}) => {
     return (
         <StyledWrapper>
             <button onClick={onClick}>{text}</button>
@@ -112,4 +112,4 @@ button:active:after {
   box-shadow: 0 0 0 0 #EBB537;
 }`;
 
-export default GreenButton;
+export default YellowButton;
