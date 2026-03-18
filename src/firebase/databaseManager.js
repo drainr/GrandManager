@@ -1,4 +1,4 @@
-import { get, push, ref, serverTimestamp } from 'firebase/database';
+import { get, push, ref, remove, serverTimestamp } from 'firebase/database';
 import { rtdb } from './firebase.js';
 
 // default week data
@@ -56,4 +56,26 @@ export const getEntriesByDay = async (listId) => {
   });
 
   return entriesByDay;
+};
+
+// delete item
+export const deleteEntry = async (listId, day, text, matchIndex = 0) => {
+  const snapshot = await get(getEntriesRef(listId));
+
+  if (!snapshot.exists()) {
+    return;
+  }
+
+  const rawEntries = snapshot.val();
+  const matchingKeys = Object.entries(rawEntries)
+    .filter(([, entry]) => entry?.day === day && entry?.text === text)
+    .map(([entryKey]) => entryKey);
+
+  const targetKey = matchingKeys[matchIndex];
+
+  if (!targetKey) {
+    return;
+  }
+
+  await remove(ref(rtdb, `lists/${listId}/entries/${targetKey}`));
 };

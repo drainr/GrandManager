@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import ListInput from '../components/list/ListInputButton.jsx';
+import ListButtonConfig from '../components/list/ListButtonConfig.jsx';
 import DisplayDailyList from '../components/list/DailyListDisplayManager.jsx';
 import MultiSelectButton from '../components/list/multiSelectButton.jsx';
-import Submit from '../components/list/ListInputsubmitButton.jsx';
-import { addEntry, createEmptyWeekMenus, getEntriesByDay } from '../firebase/databaseManager.js';
+
+// database to store/remove list items
+import {
+  addEntry,
+  createEmptyWeekMenus,
+  deleteEntry,
+  getEntriesByDay,
+} from '../firebase/databaseManager.js';
 
 const DEFAULT_LIST_ID = 'default';
 
@@ -69,15 +75,42 @@ const Calender = () => {
     }
   };
 
+  const handleDeleteTodo = async (day, index) => {
+    const dayItems = dayMenus[day] || [];
+    const itemToDelete = dayItems[index];
+
+    if (!itemToDelete) {
+      return;
+    }
+
+    const sameTextBeforeIndex = dayItems
+      .slice(0, index)
+      .filter((item) => item === itemToDelete).length;
+
+    setDayMenus((prevMenus) => {
+      const updatedDayItems = (prevMenus[day] || []).filter((_, itemIndex) => itemIndex !== index);
+
+      return {
+        ...prevMenus,
+        [day]: updatedDayItems,
+      };
+    });
+
+    try {
+      await deleteEntry(DEFAULT_LIST_ID, day, itemToDelete, sameTextBeforeIndex);
+    } catch (error) {
+      console.error('Failed to delete todo entry:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen p-4">
-      <DisplayDailyList dayMenus={dayMenus} />
+      <DisplayDailyList dayMenus={dayMenus} onDeleteItem={handleDeleteTodo} />
 
       <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
-        <ListInput value={todoInput} onChange={setTodoInput} />
+        <ListButtonConfig value={todoInput} onChange={setTodoInput} onSubmit={handleSubmitTodo} />
         <div className="flex flex-col">
           <MultiSelectButton selectedDays={selectedDays} onToggleDay={handleToggleDay} />
-          <Submit onClick={handleSubmitTodo} />
         </div>
       </div>
     </div>
