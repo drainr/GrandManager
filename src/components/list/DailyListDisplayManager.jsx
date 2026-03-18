@@ -6,7 +6,7 @@ const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAYS_FULL  = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 // Tailwind class that controls how wide list items are 
-const LIST_WIDTH = 'w-130';
+const LIST_WIDTH = 'w-180';
 const SCROLL_THRESHOLD = 6;
 
 
@@ -54,13 +54,13 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem }) => {
                         {menuTitle}
                     </h3>
 					{/* item list display using daisyui */}
-                    <ul className={`menu menu-xl bg-[#405BA4] ${LIST_WIDTH} columns-1 flex flex-col flex-nowrap`}>
+                    <ul className={`bg-[#405BA4] ${LIST_WIDTH} columns-1 flex flex-col flex-nowrap gap-2`}>
                         {menuItems.map((item, index) => (
                             <li key={`${item}-${index}`} className="w-full">
                                 <div className="flex w-full items-center justify-between gap-3">
-                                    <a className="block flex-1 bg-[#405BA4] hover:bg-white! active:bg-white! focus:bg-white!">
+                                    <span className="block flex-1 rounded bg-[#405BA4] px-4 py-3 !text-white text-2xl transition-colors duration-150 hover:bg-white/10">
                                         {item}
-                                    </a>
+									</span>
 									{/* delete item button */}
                                     <RedButton text="DELETE" onClick={() => onDeleteItem?.(selectedFull, index)} />
                                 </div>
