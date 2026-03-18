@@ -13,7 +13,7 @@ import {
 
 const DEFAULT_LIST_ID = 'default';
 
-const calendar = () => {
+const Calendar = () => {
   const [todoInput, setTodoInput] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
   const [dayMenus, setDayMenus] = useState(createEmptyWeekMenus());
@@ -117,4 +117,4 @@ const calendar = () => {
   );
 };
 
-export default calendar;
+export default Calendar;
