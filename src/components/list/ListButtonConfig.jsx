@@ -16,6 +16,9 @@ const ListButtonConfig = ({ value, onChange, onSubmit }) => {
       <section className="list-input-submit-section mt-2">
         <BlueButton text="ENTER" onClick={onSubmit} />
       </section>
+
+
+      
     </div>
   );
 };
