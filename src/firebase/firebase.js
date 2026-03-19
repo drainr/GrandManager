@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
+import { getDatabase } from "firebase/database";
 
 const getEnv = (primaryKey, fallbackKey) => {
   const primaryValue = import.meta.env[primaryKey];
@@ -11,13 +12,14 @@ const firebaseConfig = {
   apiKey: getEnv("VITE_FIREBASE_API_KEY", "VITE_API_KEY"),
   authDomain: getEnv("VITE_FIREBASE_AUTH_DOMAIN", "VITE_AUTH_DOMAIN"),
   projectId: getEnv("VITE_FIREBASE_PROJECT_ID", "VITE_PROJECT_ID"),
+  databaseURL: getEnv("VITE_FIREBASE_DATABASE_URL", "VITE_DATABASE_URL"),
   storageBucket: getEnv("VITE_FIREBASE_STORAGE_BUCKET", "VITE_STORAGE_BUCKET"),
   messagingSenderId: getEnv("VITE_FIREBASE_MESSAGING_SENDER_ID", "VITE_MESSAGING_SENDER_ID"),
   appId: getEnv("VITE_FIREBASE_APP_ID", "VITE_APP_ID"),
   measurementId: getEnv("VITE_FIREBASE_MEASUREMENT_ID", "VITE_MEASUREMENT_ID"),
 };
 
-const requiredConfigKeys = ["apiKey", "authDomain", "projectId", "storageBucket", "messagingSenderId", "appId"];
+const requiredConfigKeys = ["apiKey", "authDomain", "projectId", "databaseURL", "storageBucket", "messagingSenderId", "appId"];
 const missingConfigKeys = requiredConfigKeys.filter((key) => !firebaseConfig[key]);
 
 if (missingConfigKeys.length > 0) {
@@ -25,6 +27,7 @@ if (missingConfigKeys.length > 0) {
 }
 
 export const app = initializeApp(firebaseConfig);
+export const rtdb = getDatabase(app);
 
 export let analytics = null;
 

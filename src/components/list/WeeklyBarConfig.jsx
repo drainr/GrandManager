@@ -4,6 +4,7 @@ import PurpleButton from "../PurpleButton.jsx";
 import RedButton from "../RedButton.jsx";
 import GreenButton from "../GreenButton.jsx";
 
+// weekly bar at top
 const WeeklyBar = ({ weekDays, todayIndex, activeDay, onDayClick }) => {
   return (
         <div className="grid grid-cols-7 gap-2">
