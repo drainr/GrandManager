@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const GreenButton = () => {
+const PurpleButton = ({onClick,text}) => {
     return (
         <StyledWrapper>
-            <button> Login </button>
+            <button onClick={onClick}>{text}</button>
         </StyledWrapper>
     );
 }
@@ -113,4 +113,4 @@ button:active:after {
   box-shadow: 0 0 0 0 #6E3FA3;
 }`;
 
-export default GreenButton;
+export default PurpleButton;
