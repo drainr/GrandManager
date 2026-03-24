@@ -22,7 +22,7 @@ const INSPIRATIONAL_IMAGES = [
 ];
 
 // Min/max seconds between random popups
-const MIN_INTERVAL = 5;
+const MIN_INTERVAL = 10;
 const MAX_INTERVAL = 10;
 
 export default function InspirationalPopup() {
