@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import GreenButton from "../GreenButton.jsx";
 import RedButton from "../RedButton.jsx";
 
-const MultiSelectButton = () => {
+const MultiSelectButton = ({ selectedDays, onToggleDay }) => {
 	const dayLetters = [
 		{ key: 'Sunday', label: 'S' },
 		{ key: 'Monday', label: 'M' },
@@ -12,25 +11,16 @@ const MultiSelectButton = () => {
 		{ key: 'Friday', label: 'F' },
 		{ key: 'Saturday', label: 'S' },
 	];
-	const [selectedDays, setSelectedDays] = useState([]);
-
-	const toggleDay = (dayKey) => {
-		setSelectedDays((prevSelected) =>
-			prevSelected.includes(dayKey)
-				? prevSelected.filter((d) => d !== dayKey)
-				: [...prevSelected, dayKey]
-		);
-	};
 
 	return (
         <ul className="flex gap-2 bg-[#1B2851] p-2 overflow-x-auto">
             {dayLetters.map((day) => {
                 const isSelected = selectedDays.includes(day.key);
-                const ButtonComponent = isSelected ? RedButton : GreenButton;
+                const ButtonComponent = isSelected ? GreenButton : RedButton;
 
                 return (
                     <li key={day.key}>
-                        <ButtonComponent text={day.label} onClick={() => toggleDay(day.key)} />
+						<ButtonComponent text={day.label} onClick={() => onToggleDay(day.key)} />
                     </li>
                 );
             })}
