@@ -13,7 +13,7 @@ const MultiSelectButton = ({ selectedDays, onToggleDay }) => {
 	];
 
 	return (
-        <ul className="flex gap-2 bg-[#1B2851] p-2 overflow-x-auto">
+        <ul className="flex gap-2 p-2 overflow-x-auto">
             {dayLetters.map((day) => {
                 const isSelected = selectedDays.includes(day.key);
                 const ButtonComponent = isSelected ? GreenButton : RedButton;
