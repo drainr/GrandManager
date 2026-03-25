@@ -24,6 +24,17 @@ html {
             repeating-conic-gradient(var(--c2) 0 25%,var(--c1) 0 50%)
             calc(.5*var(--s)) 0/calc(2*var(--s)) var(--s);
 }
+.titan-one-regular {
+    font-family: "Titan One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.shrikhand-regular {
+    font-family: "Shrikhand", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 
 @keyframes logo-spin {
   from {
