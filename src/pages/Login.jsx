@@ -78,7 +78,7 @@ const Login = () => {
                         <input className="form-checkbox h-4 w-4 text-gray-200 bg-gray-800 border-gray-300 rounded" type="checkbox" />
                         <span className="ml-2 p-1">Remember me </span>
                     </label>
-                    <a className="text-sm text-[#364A85] hover:underline" href="#"> Forgot your password?</a>
+                    <a className="text-sm text-[#EBB537] " href="#"> Forgot your password?</a>
                 </div>
                 <div className=''>
                 <PurpleButton text={'Login'} />
@@ -106,7 +106,7 @@ const Login = () => {
             )}
             <div className="text-center text-gray-300">
                 Don't have an account?
-                <a className="text-purple-300 hover:underline" href="SignUp.jsx">Sign up</a>
+                <a className="text-purple-300 hover:underline">Sign up</a>
             </div>
         </div></div>
     );
