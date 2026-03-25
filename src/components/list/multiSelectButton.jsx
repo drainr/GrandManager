@@ -3,13 +3,13 @@ import RedButton from "../RedButton.jsx";
 
 const MultiSelectButton = ({ selectedDays, onToggleDay }) => {
 	const dayLetters = [
-		{ key: 'Sunday', label: 'S' },
-		{ key: 'Monday', label: 'M' },
-		{ key: 'Tuesday', label: 'T' },
-		{ key: 'Wednesday', label: 'W' },
-		{ key: 'Thursday', label: 'T' },
-		{ key: 'Friday', label: 'F' },
-		{ key: 'Saturday', label: 'S' },
+		{ key: 'Sun', label: 'Sun' },
+		{ key: 'Mon', label: 'Mon' },
+		{ key: 'Tue', label: 'Tue' },
+		{ key: 'Wed', label: 'Wed' },
+		{ key: 'Thu', label: 'Thu' },
+		{ key: 'Fri', label: 'Fri' },
+		{ key: 'Sat', label: 'Sat' },
 	];
 
 	return (

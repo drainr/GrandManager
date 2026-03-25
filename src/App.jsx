@@ -8,7 +8,7 @@ import InspirationalPopup from "./pages/InspoPopUp.jsx";
 function App() {
   return (
     <div className="flex flex-row">
-     <Dashboard />
+     <Login />
     </div>
   )
 }
