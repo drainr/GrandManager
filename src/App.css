@@ -9,19 +9,7 @@
 }
 body {
     margin: 0;
-    background: #020024;
-    background: linear-gradient(1deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);}
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+    background-color: #2C8A3A;
 }
 
 @keyframes logo-spin {
