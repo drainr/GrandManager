@@ -46,7 +46,7 @@ const Login = () => {
     return (
         <div className='bg-[#1B2851] w-100 shadow-xl shadow-black'>
         <div className="max-w-md w-full overflow-hidden p-8 space-y-8 ">
-            <h2 className="text-center text-4xl font-extrabold text-white">
+            <h2 className="text-center text-4xl font-extrabold text-white shrikhand-regular">
                 Welcome
             </h2>
             <p className="text-center text-gray-200">
