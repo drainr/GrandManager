@@ -25,7 +25,7 @@ const StyledWrapper = styled.div`
     font-size: 18px;
     background-color: #9262D2;
     color: white;
-    text-shadow: 0 2px 0 #6E3FA3;
+    text-shadow: 0 2px 0 #4d2c72;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -70,7 +70,7 @@ const StyledWrapper = styled.div`
   transition: .7s cubic-bezier(0,.8,.26,.99);
   z-index: -1;
 
-  background-color: #6E3FA3;
+  background-color: #4d2c72;
 
   box-shadow:
     0 -4px rgba(0,0,0,0.4) inset,
@@ -89,7 +89,7 @@ button:after {
   height: 100%;
   content: '';
 
-  box-shadow: 0 4px 0 0 #6E3FA3;
+  box-shadow: 0 4px 0 0 #4d2c72;
   transition: .7s cubic-bezier(0,.8,.26,.99);
 }
 
@@ -102,7 +102,7 @@ button:hover:before {
 }
 
 button:hover:after {
-  box-shadow: 0 4px 0 0 #6E3FA3;
+  box-shadow: 0 4px 0 0 #4d2c72;
 }
 
 button:active {
@@ -110,7 +110,7 @@ button:active {
 }
 
 button:active:after {
-  box-shadow: 0 0 0 0 #6E3FA3;
+  box-shadow: 0 0 0 0 #4d2c72;
 }`;
 
 export default PurpleButton;

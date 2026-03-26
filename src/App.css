@@ -9,21 +9,32 @@
 }
 body {
     margin: 0;
-    background-color: #405BA4;
+
+}
+html {
+    --s: 78px; /* control the size*/
+    --c1: #3fb3e2;
+    --c2: #4d2c72;
+
+    --_g: radial-gradient(25% 25% at 25% 25%,var(--c1) 99%,#0000 101%);
+    background:
+            var(--_g) var(--s) var(--s)/calc(2*var(--s)) calc(2*var(--s)),
+            var(--_g) 0 0/calc(2*var(--s)) calc(2*var(--s)),
+            radial-gradient(50% 50%,var(--c2) 98%,#0000) 0 0/var(--s) var(--s),
+            repeating-conic-gradient(var(--c2) 0 25%,var(--c1) 0 50%)
+            calc(.5*var(--s)) 0/calc(2*var(--s)) var(--s);
+}
+.titan-one-regular {
+    font-family: "Titan One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.shrikhand-regular {
+    font-family: "Shrikhand", serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
 
 @keyframes logo-spin {
   from {
@@ -51,8 +62,6 @@ body {
 .list-Input {
   width: 100%;
   min-height: 6rem;
-  border: 2px solid #86efac;
-  border-radius: 0.9rem;
   background-color: #bdbaba;
   padding: 1rem 1.25rem;
   font-size: 1rem;
@@ -61,12 +70,7 @@ body {
 }
 
 .list-Input::placeholder {
-  color: #1e47ff;
+  color: grey;
   font-weight: 700;
 }
 
-.list-Input:focus {
-  outline: none;
-  border-color: #22c55e;
-  box-shadow: 0 0 0 3px rgba(46, 51, 48, 0.2);
-}

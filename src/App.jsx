@@ -6,10 +6,10 @@ import Calendar from "./pages/Calendar.jsx";
 import InspirationalPopup from "./pages/InspoPopUp.jsx";
 
 function App() {
-
-
   return (
-    <Calendar/>
+    <div className="flex flex-row">
+     <Dashboard />
+    </div>
   )
 }
 
