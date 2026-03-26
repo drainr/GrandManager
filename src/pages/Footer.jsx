@@ -3,7 +3,7 @@ import React from 'react';
 // Footer with navigation links, social media icons, and copyright
 const Footer = () => {
     return (
-        <footer className="footer footer-horizontal footer-center p-10 mt-20 bg-[#4d2c72] text-[#EBB537]">
+        <footer className="footer footer-horizontal footer-center w-full p-10 mt-20 bg-[#4d2c72] text-[#EBB537]">
             <nav className="grid grid-flow-col gap-4">
                 <p className="link link-hover">About us</p>
                 <p className="link link-hover">Contact</p>
