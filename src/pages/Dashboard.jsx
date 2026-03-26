@@ -18,7 +18,6 @@ import Footer from "./Footer.jsx";
 
 
 const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
-    const [dayMenus, setDayMenus] = useState({});
     const [todaysTodos, setTodaysTodos] = useState([]);
     const DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const DEFAULT_LIST_ID = 'default';
