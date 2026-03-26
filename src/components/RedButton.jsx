@@ -21,8 +21,7 @@ const StyledWrapper = styled.div`
       --brightYellow: #F1CD15;
       --darkRed: #AA282A;
       --lightRed: #C22B32;
-    padding: 10px 40px;
-    font-size: 18px;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
     background-color: #C22B32;
     color: white;
     text-shadow: 0 2px 0 #AA282A;
@@ -36,10 +35,12 @@ const StyledWrapper = styled.div`
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 1px;
-    white-space: unset;
-    padding: .8rem 1.5rem;
+    white-space: nowrap;
+    padding: clamp(0.5rem, 1.2vw, 0.8rem) clamp(0.75rem, 2.2vw, 1.25rem);
     text-decoration: none;
     font-weight: 900;
+    max-width: 100%;
+    box-sizing: border-box;
     transition: all 0.7s cubic-bezier(0,.8,.26,.99);
   }
 

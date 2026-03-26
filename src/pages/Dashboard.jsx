@@ -13,6 +13,7 @@ import Chat from "./Chat.jsx";
 import Checkbox from "../components/Checkbox.jsx";
 import PurpleButton from "../components/PurpleButton.jsx";
 import Weblist from "../components/weblist/Weblist.jsx";
+import Footer from "./Footer.jsx";
 
 
 
@@ -87,7 +88,9 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
 
             </div>
         </div>
-
+    <div className='w-full bottom-0 mt-10 left-0'>
+        <Footer/>
+    </div>
         </>
     );
 };

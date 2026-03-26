@@ -3,11 +3,11 @@ import SetTime from './settime.jsx';
 
 const ListButtonConfig = ({ value, onChange, onSubmit, timeValue, onTimeChange }) => {
   return (
-    <div className="w-full flex-1">
-      <section>
+    <div className="flex w-full flex-1 flex-col items-start">
+      <section className="w-full">
         <textarea
           placeholder="HEY THERE! CLICK AND START TYPING HERE TO ADD TO YOUR TO DO LIST"
-          className="text-white bg-[#364A85] placeholder-gray-400"
+          className="block w-full text-left text-white bg-[#364A85] placeholder-gray-400"
           value={value}
           onChange={(event) => onChange(event.target.value)}
         ></textarea>
