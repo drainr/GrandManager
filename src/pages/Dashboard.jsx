@@ -20,7 +20,7 @@ import {useNavigate} from "react-router-dom";
 
 const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
     const navigate = useNavigate();
-    const [dayMenus, setDayMenus] = useState({});
+    const setDayMenus = useState({});
     const [todaysTodos, setTodaysTodos] = useState([]);
     const DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const DEFAULT_LIST_ID = 'default';
@@ -55,7 +55,7 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
                     <h1 className="shrikhand-regular text-[#4d2c72] p-2">New Messages</h1>
 
                     <div>
-                        <GreenButton text="Go to Chat" onClick={navigate('/Chat')} />
+                        <GreenButton text={"Go to Chat"} onClick={() => navigate('/chat')} />
                     </div>
 
                 </div>
@@ -69,9 +69,9 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
                     ) : (
                         <>
                             {todaysTodos.slice(0, 3).map((todo, i) => (
-                                <p key={i} className="text-white truncate p-2">
+                                <div key={i} className="text-white truncate p-2">
                                     <Checkbox onClick={() => onDeleteItem?.(selectedFull, index)}/> {todo}
-                                </p>
+                                </div>
                             ))}
 
                             {todaysTodos.length > 3 && (
@@ -82,7 +82,7 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
                         </>
                     )}
                     <div className='mt-9'>
-                    <PurpleButton text={"Go to Calendar"} onClick={navigate('/Calendar')}/>
+                    <PurpleButton text={"Go to Calendar"} onClick={() => navigate('/calendar')}/>
                     </div>
                 </div>
 
