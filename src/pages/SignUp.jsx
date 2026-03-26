@@ -1,18 +1,32 @@
 import React from 'react';
 import { useState } from "react";
-import PurpleButton from "../components/PurpleButton.jsx";
 import YellowButton from "../components/YellowButton.jsx";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-//import { useNavigate } from "react-router";
-import BlueButton from "../components/BlueButton.jsx";
-import RedButton from "../components/RedButton.jsx";
-//import { useAuth } from "../contexts/AuthContext";
-
+import { useNavigate, Link } from "react-router-dom";
+import { registerWithEmail } from "../firebase/auth";
 
 const SignUp = () => {
-    // const { logIn, googleSignIn, changePassword } = useAuth();
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const handleSignUp = async (e) => {
+        e.preventDefault();
+        const form = e.target.closest("form");
+        const email = form.email.value;
+        const password = form.password.value;
+
+        if (!email || !password) {
+            return;
+        }
+
+        const result = await registerWithEmail(email, password);
+        if (result.success) {
+            navigate("/");
+        } else {
+            setErrorMsg(result.message);
+        }
+    };
 
     return (
         <div className="bg-[#405BA4] w-100 shadow-xl shadow-black">
@@ -21,7 +35,7 @@ const SignUp = () => {
                     Welcome
                 </h2>
                 <p className="text-center text-gray-200">
-                    Sign in to your account
+                    Sign up for an account
                 </p>
                 <div className="login-with">
                     <div className="button-log flex justify-center flex-row">
@@ -30,7 +44,7 @@ const SignUp = () => {
                 </div>
                 <form method="POST" action="#" className="space-y-6">
                     <div className="relative">
-                        <input placeholder="Jane Doe" className="peer h-10 w-full border-b-2 border-gray-300 text-white bg-transparent placeholder-transparent focus:outline-none focus:border-grey-200" required id="name" name="name" type="name" />
+                        <input placeholder="Jane Doe" className="peer h-10 w-full border-b-2 border-gray-300 text-white bg-transparent placeholder-transparent focus:outline-none focus:border-grey-200" required id="name" name="name" type="text" />
                         <label className="absolute left-0 -top-3.5 text-gray-200 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-200 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-grey-200 peer-focus:text-sm" htmlFor="name">Name</label>
                     </div>
                     <div className="relative">
@@ -49,22 +63,17 @@ const SignUp = () => {
                         </button>
                         <label className="absolute left-0 -top-3.5 text-gray-200 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-200 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-grey-200 peer-focus:text-sm" htmlFor="password">Password</label>
                     </div>
-                    <div className="flex items-center justify-between">
-                        <label className="flex items-center text-sm text-gray-200">
-                            <input className="form-checkbox h-4 w-4 text-gray-200 bg-gray-800 border-gray-300 rounded" type="checkbox" />
-                            <span className="ml-2 p-1">Remember me </span>
-                        </label>
-                        <a className="text-sm text-[#364A85] hover:underline" href="#"> Forgot your password?</a>
-                    </div>
                     <div className='flex items-center justify-center flex-row'>
-                        <YellowButton text={'Sign Up'} />
+                        <YellowButton text={'Sign Up'} onClick={handleSignUp} />
                     </div>
                 </form>
+                {errorMsg && <p style={{ color: "red", fontSize: "12px", textAlign: "center" }}>{errorMsg}</p>}
                 <div className="text-center text-gray-300">
-                    Already have an account?
-                    <a className="text-purple-300 hover:underline" href="Login.jsx">Sign in</a>
+                    Already have an account?{" "}
+                    <Link to="/login" className="text-purple-300 hover:underline">Sign in</Link>
                 </div>
-            </div></div>
+            </div>
+        </div>
     );
 }
 
