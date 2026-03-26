@@ -14,7 +14,7 @@ body {
 html {
     --s: 78px; /* control the size*/
     --c1: #3fb3e2;
-    --c2: #1b2851;
+    --c2: #4d2c72;
 
     --_g: radial-gradient(25% 25% at 25% 25%,var(--c1) 99%,#0000 101%);
     background:
