@@ -12,6 +12,8 @@ import {
 } from '../firebase/databaseManager.js';
 
 const DEFAULT_LIST_ID = 'default';
+const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const DAYS_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const DAY_KEY_TO_FULL = {
   Sun: 'Sunday',
   Mon: 'Monday',
@@ -26,6 +28,7 @@ const Calendar = () => {
   const [todoInput, setTodoInput] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
   const [dayMenus, setDayMenus] = useState(createEmptyWeekMenus());
+  const [focusDayShort, setFocusDayShort] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -61,26 +64,31 @@ const Calendar = () => {
     const selectedFullDays = selectedDays
       .map((dayKey) => DAY_KEY_TO_FULL[dayKey])
       .filter(Boolean);
+    const fallbackTodayShort = DAYS_SHORT[new Date().getDay()];
+    const fallbackTodayDay = DAYS_FULL[new Date().getDay()];
+    const targetDays = selectedFullDays.length > 0 ? selectedFullDays : [fallbackTodayDay];
+    const targetFocusDay = selectedDays[0] || fallbackTodayShort;
 
-    if (!trimmedTodo || selectedFullDays.length === 0) {
+    if (!trimmedTodo) {
       return;
     }
 
     setDayMenus((prevMenus) => {
       const updatedMenus = { ...prevMenus };
 
-      selectedFullDays.forEach((day) => {
+      targetDays.forEach((day) => {
         updatedMenus[day] = [...(updatedMenus[day] || []), trimmedTodo];
       });
 
       return updatedMenus;
     });
 
+    setFocusDayShort(targetFocusDay);
     setTodoInput('');
 
     try {
       await Promise.all(
-        selectedFullDays.map((day) => addEntry(DEFAULT_LIST_ID, day, trimmedTodo))
+        targetDays.map((day) => addEntry(DEFAULT_LIST_ID, day, trimmedTodo))
       );
     } catch (error) {
       console.error('Failed to save todo entry:', error);
@@ -117,7 +125,7 @@ const Calendar = () => {
 
   return (
     <div className="p-6 bg-[#1B2851] shadow-2xl max-w-6xl mx-auto">
-      <DisplayDailyList dayMenus={dayMenus} onDeleteItem={handleDeleteTodo} />
+      <DisplayDailyList dayMenus={dayMenus} onDeleteItem={handleDeleteTodo} forcedDay={focusDayShort} />
 
       <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
         <ListButtonConfig value={todoInput} onChange={setTodoInput} onSubmit={handleSubmitTodo} />

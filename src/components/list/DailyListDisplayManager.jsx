@@ -10,13 +10,14 @@ const LIST_WIDTH = 'w-180';
 const SCROLL_THRESHOLD = 6;
 
 
-const DisplayDailyList = ({ dayMenus, onDeleteItem }) => {
+const DisplayDailyList = ({ dayMenus, onDeleteItem, forcedDay }) => {
     const [activeDay, setActiveDay]       = useState(null);
     const [menuVersion, setMenuVersion]   = useState(0);
+    const effectiveActiveDay = forcedDay ?? activeDay;
 
 	//day config
     const todayIndex      = new Date().getDay();
-    const selectedShort   = activeDay ?? DAYS_SHORT[todayIndex];
+    const selectedShort   = effectiveActiveDay ?? DAYS_SHORT[todayIndex];
     const selectedIndex   = DAYS_SHORT.indexOf(selectedShort);
     const selectedFull    = DAYS_FULL[selectedIndex];
 
@@ -35,7 +36,7 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem }) => {
             <WeeklyBar
                 weekDays={DAYS_SHORT}
                 todayIndex={todayIndex}
-                activeDay={activeDay}
+                activeDay={effectiveActiveDay}
                 onDayClick={handleDayClick}
             />
 
@@ -58,7 +59,7 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem }) => {
                         {menuItems.map((item, index) => (
                             <li key={`${item}-${index}`} className="w-full">
                                 <div className="flex w-full items-center justify-between gap-3">
-                                    <span className="block flex-1 rounded bg-[#405BA4] px-4 py-3 !text-white text-2xl transition-colors duration-150 hover:bg-white/10">
+                                    <span className="block flex-1 rounded bg-[#405BA4] px-4 py-3 text-white! text-2xl transition-colors duration-150 hover:bg-white/10">
                                         {item}
 									</span>
 									{/* delete item button */}
