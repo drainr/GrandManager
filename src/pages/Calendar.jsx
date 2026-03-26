@@ -164,7 +164,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="p-6 bg-[#1B2851] shadow-2xl max-w-6xl mx-auto">
+    <div className="mx-auto max-w-6xl bg-[#1B2851] px-6 pb-6 pt-24 shadow-2xl">
       <DisplayDailyList dayMenus={dayMenus} onDeleteItem={handleDeleteTodo} forcedDay={focusDayShort} itemTimes={itemTimes} />
 
       <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
