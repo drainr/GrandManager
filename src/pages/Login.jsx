@@ -6,6 +6,7 @@ import RedButton from "../components/RedButton.jsx";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
+import { saveUser } from "../firebase/chatManager.js";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -26,6 +27,7 @@ const Login = () => {
 
         const result = await login(email, password);
         if (result.success) {
+            await saveUser(result.user.uid, result.user.displayName, email);
             navigate("/");
         } else {
             setChangeMsg(result.message);
