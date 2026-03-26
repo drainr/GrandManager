@@ -5,7 +5,7 @@ import YellowButton from "../components/YellowButton.jsx";
 import RedButton from "../components/RedButton.jsx";
 import Calendar from "./Calendar.jsx";
 import InspirationalPopup from "./InspoPopUp.jsx";
-import Weather from "../components/weather/Weather.jsx";
+import WeatherComponent from "../components/weather/WeatherComponent.jsx";
 import Navbar from "./Navbar.jsx";
 import { useEffect, useState } from 'react';
 import { getEntriesByDay } from '../firebase/databaseManager';
