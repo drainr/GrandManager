@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import RedButton from "../RedButton.jsx";
 
 const Weblist = () => {
   const [showModal, setShowModal] = useState(false);
@@ -36,15 +37,15 @@ const Weblist = () => {
   };
 
   return (
-    <div style={{ padding: '30px', background: '#ffffff', borderRadius: '16px', border: '1px solid #eaeaea', marginTop: '20px' }}>
-      <h3 style={{ marginBottom: '25px', fontFamily: 'sans-serif', color: '#111' }}>Frequently Used</h3>
+    <div style={{ padding: '30px', background: '#EBB537', boxShadow: '20px', marginTop: '20px',left:"20px" }}>
+      <h1 style={{ marginBottom: '25px', color: '#4d2c72' }} className='shrikhand-regular'>Frequently Used</h1>
       
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
         {links.map(link => (
           <div key={link.id} style={{ position: 'relative', width: '70px', textAlign: 'center' }}>
             <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
               <div style={{
-                width: '64px', height: '64px', borderRadius: '50%', background: '#fff',
+                width: '64px', height: '64px', background: '#fff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 4px 10px rgba(0,0,0,0.1)', marginBottom: '10px', margin: '0 auto'
               }}>
@@ -58,20 +59,13 @@ const Weblist = () => {
                 {link.name}
               </span>
             </a>
-            
-            <button 
+            <div className='absolute bottom-18 left-8 z-5 scale-45'>
+            <RedButton text='x'
               onClick={() => removeLink(link.id)} 
-              style={{
-                position: 'absolute', top: '-2px', right: '0px', 
-                background: '#ff4d4d', color: 'white', border: 'none', 
-                borderRadius: '50%', width: '22px', height: '22px',
-                cursor: 'pointer', fontSize: '16px', fontWeight: 'bold',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                padding: 0, lineHeight: 0, boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-              }}
+
             >
               <span style={{ marginTop: '-1px' }}>×</span>
-            </button>
+            </RedButton></div>
           </div>
         ))}
 
@@ -79,7 +73,7 @@ const Weblist = () => {
           <button 
             onClick={() => setShowModal(true)}
             style={{
-              width: '64px', height: '64px', borderRadius: '50%', border: '2px dashed #ccc',
+              width: '64px', height: '64px', border: '2px dashed #ccc',
               background: '#fafafa', color: '#888', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto',
               marginBottom: '10px', padding: 0

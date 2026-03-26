@@ -12,6 +12,7 @@ import { getEntriesByDay } from '../firebase/databaseManager';
 import Chat from "./Chat.jsx";
 import Checkbox from "../components/Checkbox.jsx";
 import PurpleButton from "../components/PurpleButton.jsx";
+import Weblist from "../components/weblist/Weblist.jsx";
 
 
 
@@ -38,10 +39,15 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
     }, []);
     return (
         <>
-            <div className="flex flex-col align-top">
+            <div className="flex flex-col align-top ">
             <Navbar />
             <div>
             </div>
+                <div className='flex flex-col mt-40 p-10'>
+                    <div>
+                        <Weblist />
+                    </div>
+                </div>
             <div className="flex flex-column gap-40 ">
                 <div className="bg-[#EBB537] shadow-2xl p-10">
                     <h1 className="shrikhand-regular text-[#4d2c72] p-2">New Messages</h1>
@@ -67,7 +73,7 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
                             ))}
 
                             {todaysTodos.length > 3 && (
-                                <p className="text-gray-400 text-sm">
+                                <p className="text-[#1B2851] text-sm">
                                     +{todaysTodos.length - 3} more
                                 </p>
                             )}
