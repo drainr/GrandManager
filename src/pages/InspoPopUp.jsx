@@ -4,6 +4,10 @@ import RedButton from "../components/RedButton.jsx";
 
 const INSPIRATIONAL_IMAGES = [
   {
+    src: "https://images.unsplash.com/photo-1534528747770-643190a1c986?w=600&h=800&fit=crop",
+    quote: "Welcome Back, Grandma! Let's make today amazing together.",
+  },
+  {
     src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=800&fit=crop",
     quote: "Believe you can and you're halfway there.",
   },
