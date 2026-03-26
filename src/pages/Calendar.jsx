@@ -12,6 +12,15 @@ import {
 } from '../firebase/databaseManager.js';
 
 const DEFAULT_LIST_ID = 'default';
+const DAY_KEY_TO_FULL = {
+  Sun: 'Sunday',
+  Mon: 'Monday',
+  Tue: 'Tuesday',
+  Wed: 'Wednesday',
+  Thu: 'Thursday',
+  Fri: 'Friday',
+  Sat: 'Saturday',
+};
 
 const Calendar = () => {
   const [todoInput, setTodoInput] = useState('');
@@ -49,15 +58,18 @@ const Calendar = () => {
 
   const handleSubmitTodo = async () => {
     const trimmedTodo = todoInput.trim();
+    const selectedFullDays = selectedDays
+      .map((dayKey) => DAY_KEY_TO_FULL[dayKey])
+      .filter(Boolean);
 
-    if (!trimmedTodo || selectedDays.length === 0) {
+    if (!trimmedTodo || selectedFullDays.length === 0) {
       return;
     }
 
     setDayMenus((prevMenus) => {
       const updatedMenus = { ...prevMenus };
 
-      selectedDays.forEach((day) => {
+      selectedFullDays.forEach((day) => {
         updatedMenus[day] = [...(updatedMenus[day] || []), trimmedTodo];
       });
 
@@ -68,7 +80,7 @@ const Calendar = () => {
 
     try {
       await Promise.all(
-        selectedDays.map((day) => addEntry(DEFAULT_LIST_ID, day, trimmedTodo))
+        selectedFullDays.map((day) => addEntry(DEFAULT_LIST_ID, day, trimmedTodo))
       );
     } catch (error) {
       console.error('Failed to save todo entry:', error);

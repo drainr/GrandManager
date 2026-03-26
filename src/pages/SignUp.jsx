@@ -3,10 +3,11 @@ import { useState } from "react";
 import YellowButton from "../components/YellowButton.jsx";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
-import { registerWithEmail } from "../firebase/auth";
+import { useAuth } from "../hooks/useAuth.js";
 
 const SignUp = () => {
     const navigate = useNavigate();
+    const { register } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
 
@@ -20,7 +21,7 @@ const SignUp = () => {
             return;
         }
 
-        const result = await registerWithEmail(email, password);
+        const result = await register(email, password);
         if (result.success) {
             navigate("/");
         } else {

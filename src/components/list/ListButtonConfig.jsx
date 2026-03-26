@@ -1,4 +1,4 @@
-import BlueButton from '../BlueButton.jsx';
+import SubmitButton from './SubmitButton.jsx';
 
 const ListButtonConfig = ({ value, onChange, onSubmit }) => {
   return (
@@ -12,10 +12,7 @@ const ListButtonConfig = ({ value, onChange, onSubmit }) => {
         ></textarea>
       </section>
 
-      {/* button for submitting the list */}
-      <section className="mt-2">
-        <BlueButton text="ENTER" onClick={onSubmit} />
-      </section>
+      <SubmitButton onSubmit={onSubmit} />
 
 
       

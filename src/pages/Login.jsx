@@ -5,10 +5,11 @@ import BlueButton from "../components/BlueButton.jsx";
 import RedButton from "../components/RedButton.jsx";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
-import { loginWithEmail, resetPasswordWithEmail } from "../firebase/auth";
+import { useAuth } from "../hooks/useAuth.js";
 
 const Login = () => {
     const navigate = useNavigate();
+    const { login, resetPassword } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [changeMsg, setChangeMsg] = useState("");
@@ -23,7 +24,7 @@ const Login = () => {
             return;
         }
 
-        const result = await loginWithEmail(email, password);
+        const result = await login(email, password);
         if (result.success) {
             navigate("/");
         } else {
@@ -41,7 +42,7 @@ const Login = () => {
             return;
         }
 
-        const result = await resetPasswordWithEmail(email);
+        const result = await resetPassword(email);
         if (result.success) {
             setChangeMsg("Password reset email sent! Check your inbox.");
             setShowChangePassword(false);
