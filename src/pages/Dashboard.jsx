@@ -41,7 +41,6 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
     return (
         <>
             <div className="flex flex-col align-top ">
-            <Navbar />
             <div>
             </div>
                 <div className='flex flex-col mt-40 p-10'>
@@ -88,9 +87,6 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
 
             </div>
         </div>
-    <div className='w-full bottom-0 mt-10 left-0'>
-        <Footer/>
-    </div>
         </>
     );
 };
