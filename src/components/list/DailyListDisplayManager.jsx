@@ -32,6 +32,12 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, forcedDay, itemTimes }) => {
         setMenuVersion((prev) => prev + 1);
     };
 
+    const handleDeleteClick = (dayName, index) => {
+        const shouldDelete = window.confirm('Are you sure you want to delete?');
+        if (!shouldDelete) return;
+        onDeleteItem?.(dayName, index);
+    };
+
     const getItemOccurrenceIndex = (items, index, itemText) =>
         items.slice(0, index).filter((entry) => entry === itemText).length;
 
@@ -81,7 +87,7 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, forcedDay, itemTimes }) => {
                                             ) : null}
                                         </div>
 										{/* delete item button */}
-                                        <RedButton text="DELETE" onClick={() => onDeleteItem?.(selectedFull, index)} />
+                                        <RedButton text="DELETE" onClick={() => handleDeleteClick(selectedFull, index)} />
                                     </div>
                                 </li>
                             );

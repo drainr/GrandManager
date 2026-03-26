@@ -5,6 +5,7 @@ import SignUp from "../pages/SignUp";
 import Dashboard from "../pages/Dashboard";
 import Calendar from "../pages/Calendar";
 import Chat from "../pages/Chat";
+import Root from "../layout/Root";
 
 
 const MainRoute = () => {
@@ -16,9 +17,11 @@ const MainRoute = () => {
 
         {/* Private */}
         <Route element={<PrivateRoute />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/chat" element={<Chat />} />
+            <Route element={<Root />}>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/calendar" element={<Calendar />} />
+                <Route path="/chat" element={<Chat />} />
+            </Route>
         </Route>
     </Routes>
   );
