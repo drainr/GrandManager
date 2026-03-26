@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "../firebase/firebase.js";
 import {
+  loginWithGoogle,
   loginWithEmail,
   registerWithEmail,
   resetPasswordWithEmail,
@@ -22,6 +23,7 @@ export const useAuth = () => {
   }, []);
 
   const login = async (email, password) => loginWithEmail(email, password);
+  const loginGoogle = async () => loginWithGoogle();
   const register = async (email, password) => registerWithEmail(email, password);
   const resetPassword = async (email) => resetPasswordWithEmail(email);
 
@@ -29,6 +31,7 @@ export const useAuth = () => {
     user,
     loading,
     login,
+    loginGoogle,
     register,
     resetPassword,
   };
