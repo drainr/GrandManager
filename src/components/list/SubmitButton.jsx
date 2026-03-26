@@ -2,7 +2,7 @@ import BlueButton from '../BlueButton.jsx';
 
 const SubmitButton = ({ onSubmit }) => {
   return (
-    <section className="mt-2">
+    <section className="flex items-center">
       <BlueButton text="ENTER" onClick={onSubmit} />
     </section>
   );

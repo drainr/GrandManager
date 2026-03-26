@@ -1,6 +1,7 @@
 import SubmitButton from './SubmitButton.jsx';
+import SetTime from './settime.jsx';
 
-const ListButtonConfig = ({ value, onChange, onSubmit }) => {
+const ListButtonConfig = ({ value, onChange, onSubmit, timeValue, onTimeChange }) => {
   return (
     <div className="w-full flex-1">
       <section>
@@ -12,7 +13,10 @@ const ListButtonConfig = ({ value, onChange, onSubmit }) => {
         ></textarea>
       </section>
 
-      <SubmitButton onSubmit={onSubmit} />
+      <section className="mt-2 flex items-center gap-2">
+        <SubmitButton onSubmit={onSubmit} />
+        <SetTime value={timeValue} onChange={onTimeChange} />
+      </section>
 
 
       

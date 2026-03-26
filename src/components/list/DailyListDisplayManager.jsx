@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import WeeklyBar from './WeeklyBarConfig.jsx';
 import RedButton from '../RedButton.jsx';
+import SetTime from './settime.jsx';
 
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAYS_FULL  = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -10,10 +11,10 @@ const LIST_WIDTH = 'w-180';
 const SCROLL_THRESHOLD = 6;
 
 
-const DisplayDailyList = ({ dayMenus, onDeleteItem, forcedDay }) => {
+const DisplayDailyList = ({ dayMenus, onDeleteItem, forcedDay, itemTimes }) => {
     const [activeDay, setActiveDay]       = useState(null);
     const [menuVersion, setMenuVersion]   = useState(0);
-    const effectiveActiveDay = forcedDay ?? activeDay;
+    const effectiveActiveDay = activeDay ?? forcedDay;
 
 	//day config
     const todayIndex      = new Date().getDay();
@@ -30,6 +31,11 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, forcedDay }) => {
         setActiveDay((prev) => (prev === day ? null : day));
         setMenuVersion((prev) => prev + 1);
     };
+
+    const getItemOccurrenceIndex = (items, index, itemText) =>
+        items.slice(0, index).filter((entry) => entry === itemText).length;
+
+    const getItemKey = (dayName, itemText, occurrenceIndex) => `${dayName}::${itemText}::${occurrenceIndex}`;
 
     return (
         <div className="mx-auto w-full max-w-5xl bg-[#1B2851] p-2 shadow-sm">
@@ -62,6 +68,24 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, forcedDay }) => {
                                     <span className="block flex-1 rounded bg-[#405BA4] px-4 py-3 text-white! text-2xl transition-colors duration-150 hover:bg-white/10">
                                         {item}
 									</span>
+                                    {(() => {
+                                        const occurrenceIndex = getItemOccurrenceIndex(menuItems, index, item);
+                                        const itemKey = getItemKey(selectedFull, item, occurrenceIndex);
+                                        const itemTime = itemTimes?.[itemKey] || '';
+
+                                        if (!itemTime) {
+                                            return null;
+                                        }
+
+                                        return (
+                                            <SetTime
+                                                value={itemTime}
+                                                onChange={() => {}}
+                                                showInput={false}
+                                                dayName={selectedFull}
+                                            />
+                                        );
+                                    })()}
 									{/* delete item button */}
                                     <RedButton text="DELETE" onClick={() => onDeleteItem?.(selectedFull, index)} />
                                 </div>
