@@ -4,6 +4,7 @@ import YellowButton from "../components/YellowButton.jsx";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
+import { saveUser } from '../firebase/chatManager.js';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const SignUp = () => {
     const handleSignUp = async (e) => {
         e.preventDefault();
         const form = e.target.closest("form");
+        const name = form.name.value;
         const email = form.email.value;
         const password = form.password.value;
 
@@ -23,6 +25,7 @@ const SignUp = () => {
 
         const result = await register(email, password);
         if (result.success) {
+            await saveUser(result.user.uid, name, email);
             navigate("/");
         } else {
             setErrorMsg(result.message);
