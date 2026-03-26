@@ -20,7 +20,7 @@ import {useNavigate} from "react-router-dom";
 
 const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
     const navigate = useNavigate();
-    const setDayMenus = useState({});
+    const [dayMenus, setDayMenus] = useState({});
     const [todaysTodos, setTodaysTodos] = useState([]);
     const DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const DEFAULT_LIST_ID = 'default';
@@ -69,9 +69,9 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
                     ) : (
                         <>
                             {todaysTodos.slice(0, 3).map((todo, i) => (
-                                <div key={i} className="text-white truncate p-2">
+                                <p key={i} className="text-white truncate p-2">
                                     <Checkbox onClick={() => onDeleteItem?.(selectedFull, index)}/> {todo}
-                                </div>
+                                </p>
                             ))}
 
                             {todaysTodos.length > 3 && (
