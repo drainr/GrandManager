@@ -3,12 +3,10 @@ import React from 'react';
 // Footer with navigation links, social media icons, and copyright
 const Footer = () => {
     return (
-        <footer className="footer footer-horizontal footer-center p-10 bg-[#4d2c72] text-[#EBB537]">
+        <footer className="footer footer-horizontal footer-center p-10 mt-20 bg-[#4d2c72] text-[#EBB537]">
             <nav className="grid grid-flow-col gap-4">
                 <a className="link link-hover">About us</a>
                 <a className="link link-hover">Contact</a>
-                <a className="link link-hover">Watchlist</a>
-                <a className="link link-hover">Already watched</a>
                 <a className="link link-hover">Terms & Conditions</a>
             </nav>
             <nav>
