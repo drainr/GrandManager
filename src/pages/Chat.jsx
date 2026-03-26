@@ -40,7 +40,7 @@ const Chat = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-[#405BA4]  mt-30">
+    <div className=" flex flex-col h-screen bg-[#405BA4]  mt-30">
 
       <div className="bg-[#1B2851] p-4 shadow-md">
         <div className="flex items-center justify-between mb-3">
