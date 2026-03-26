@@ -1,71 +1,36 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth';
-import { listenToMessages, sendMessage, getChatId, getUsers } from '../firebase/chatManager';
-import BlueButton from '../components/BlueButton';
 import { useNavigate } from 'react-router-dom';
+import { useUsers } from '../hooks/useUsers';
+import { useChat } from '../hooks/useChat';
+import YellowButton from '../components/YellowButton';
 
+/**
+ * Chat - Page for real-time messaging between users.
+ * Uses useUsers hook to fetch available contacts and
+ * useChat hook to manage message state and sending.
+ */
 const Chat = () => {
   const auth = getAuth();
   const currentUser = auth.currentUser;
   const navigate = useNavigate();
 
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-  const bottomRef = useRef(null);
+  const { users } = useUsers(currentUser?.uid);
+  const { messages, newMessage, setNewMessage, handleSend, bottomRef } = useChat(currentUser, selectedUser);
 
-  const chatId = selectedUser && currentUser ? getChatId(currentUser.uid, selectedUser.uid) : null;
-
-  // Fetch all users on mount
-  useEffect(() => {
-    if (!currentUser) return;
-
-    const fetchUsers = async () => {
-      const allUsers = await getUsers();
-      const otherUsers = allUsers.filter((u) => u.uid !== currentUser.uid);
-      setUsers(otherUsers);
-    };
-
-    fetchUsers();
-  }, [currentUser]);
-
-  // Listen to messages when a user is selected
-  useEffect(() => {
-    if (!currentUser || !selectedUser) return;
-
-    const unsubscribe = listenToMessages(chatId, (msgs) => {
-      setMessages(msgs);
-    });
-
-    return () => unsubscribe();
-  }, [currentUser, selectedUser, chatId]);
-
-  // Auto-scroll to the latest message
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  const handleSend = async (e) => {
-    e.preventDefault();
-    if (!newMessage.trim() || !chatId) return;
-
-    const senderName = currentUser.displayName || currentUser.email || 'User';
-    await sendMessage(chatId, currentUser.uid, senderName, newMessage.trim());
-    setNewMessage('');
-  };
-
+  // Handle user selection from dropdown
   const handleSelectUser = (e) => {
     const uid = e.target.value;
     if (!uid) {
       setSelectedUser(null);
-      setMessages([]);
       return;
     }
     const user = users.find((u) => u.uid === uid);
     setSelectedUser(user);
   };
 
+  // Show loader while auth state is resolving
   if (!currentUser) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -90,6 +55,7 @@ const Chat = () => {
           </h2>
           <div className="w-20"></div>
         </div>
+
         {/* User Selection Dropdown */}
         <div className="max-w-xs mx-auto">
           <select
@@ -140,7 +106,7 @@ const Chat = () => {
                 )}
               </div>
               <div
-                className={`chat-bubble ${
+                className={`chat-bubble break-words max-w-xs sm:max-w-sm text-left ${
                   isSent
                     ? 'bg-[#4d2c72] text-white'
                     : 'bg-[#1B2851] text-white'
@@ -154,7 +120,7 @@ const Chat = () => {
         <div ref={bottomRef} />
       </div>
 
-      {/* Message Input — only show when a user is selected */}
+      {/* Message Input — only visible when a user is selected */}
       {selectedUser && (
         <div className="bg-[#1B2851] p-4">
           <div className="flex gap-2 items-center max-w-3xl mx-auto">
@@ -170,7 +136,7 @@ const Chat = () => {
                 }
               }}
             />
-            <BlueButton text="Send" onClick={handleSend} small />
+            <YellowButton text="Send" onClick={handleSend} small />
           </div>
         </div>
       )}
