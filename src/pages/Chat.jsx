@@ -2,17 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getAuth } from 'firebase/auth';
 import { listenToMessages, sendMessage, getChatId, getUsers } from '../firebase/chatManager';
 import BlueButton from '../components/BlueButton';
+import { useNavigate } from 'react-router-dom';
 
 const Chat = () => {
   const auth = getAuth();
   const currentUser = auth.currentUser;
+  const navigate = useNavigate();
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [chatId, setChatId] = useState(null);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const bottomRef = useRef(null);
+
+  const chatId = selectedUser && currentUser ? getChatId(currentUser.uid, selectedUser.uid) : null;
 
   // Fetch all users on mount
   useEffect(() => {
@@ -20,7 +23,6 @@ const Chat = () => {
 
     const fetchUsers = async () => {
       const allUsers = await getUsers();
-      // Filter out the current user
       const otherUsers = allUsers.filter((u) => u.uid !== currentUser.uid);
       setUsers(otherUsers);
     };
@@ -32,15 +34,12 @@ const Chat = () => {
   useEffect(() => {
     if (!currentUser || !selectedUser) return;
 
-    const id = getChatId(currentUser.uid, selectedUser.uid);
-    setChatId(id);
-
-    const unsubscribe = listenToMessages(id, (msgs) => {
+    const unsubscribe = listenToMessages(chatId, (msgs) => {
       setMessages(msgs);
     });
 
     return () => unsubscribe();
-  }, [currentUser, selectedUser]);
+  }, [currentUser, selectedUser, chatId]);
 
   // Auto-scroll to the latest message
   useEffect(() => {
@@ -60,7 +59,6 @@ const Chat = () => {
     const uid = e.target.value;
     if (!uid) {
       setSelectedUser(null);
-      setChatId(null);
       setMessages([]);
       return;
     }
@@ -80,9 +78,18 @@ const Chat = () => {
     <div className="flex flex-col h-screen bg-[#405BA4] pt-14">
       {/* Chat Header */}
       <div className="bg-[#1B2851] p-4 shadow-md">
-        <h2 className="text-xl font-bold text-[#EBB537] shrikhand-regular text-center mb-3">
-          Chat
-        </h2>
+        <div className="flex items-center justify-between mb-3">
+          <button
+            onClick={() => navigate('/')}
+            className="text-white text-sm hover:text-[#EBB537] transition-colors"
+          >
+            ← Dashboard
+          </button>
+          <h2 className="text-xl font-bold text-[#EBB537] shrikhand-regular">
+            Chat
+          </h2>
+          <div className="w-20"></div>
+        </div>
         {/* User Selection Dropdown */}
         <div className="max-w-xs mx-auto">
           <select
