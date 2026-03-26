@@ -5,7 +5,7 @@ import YellowButton from "../components/YellowButton.jsx";
 import RedButton from "../components/RedButton.jsx";
 import Calendar from "./Calendar.jsx";
 import InspirationalPopup from "./InspoPopUp.jsx";
-import WeatherComponent from "../components/weather/WeatherComponent.jsx";
+import Weather from "../components/weather/Weather.jsx";
 import Navbar from "./Navbar.jsx";
 import { useEffect, useState } from 'react';
 import { getEntriesByDay } from '../firebase/databaseManager';
@@ -14,18 +14,20 @@ import Checkbox from "../components/Checkbox.jsx";
 import PurpleButton from "../components/PurpleButton.jsx";
 import Weblist from "../components/weblist/Weblist.jsx";
 import Footer from "./Footer.jsx";
+import {useNavigate} from "react-router-dom";
 
 
 
 const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
+    const navigate = useNavigate();
+    const [dayMenus, setDayMenus] = useState({});
     const [todaysTodos, setTodaysTodos] = useState([]);
     const DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const DEFAULT_LIST_ID = 'default';
     const selectedFull    = DAYS_FULL[selectedIndex];
     const todayIndex = new Date().getDay();
     const todayFull = DAYS_FULL[todayIndex];
-
-    useEffect(() => {
+        useEffect(() => {
         const loadTodos = async () => {
             const data = await getEntriesByDay(DEFAULT_LIST_ID);
             setDayMenus(data);
@@ -37,10 +39,10 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
 
         loadTodos();
     }, []);
+
     return (
         <>
             <div className="flex flex-col align-top ">
-            <Navbar />
             <div>
             </div>
                 <div className='flex flex-col mt-40 p-10'>
@@ -53,7 +55,7 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
                     <h1 className="shrikhand-regular text-[#4d2c72] p-2">New Messages</h1>
 
                     <div>
-                        <GreenButton text="Go to Chat" />
+                        <GreenButton text="Go to Chat" onClick={navigate('/Chat')} />
                     </div>
 
                 </div>
@@ -80,16 +82,13 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
                         </>
                     )}
                     <div className='mt-9'>
-                    <PurpleButton text={"Go to Calendar"}/>
+                    <PurpleButton text={"Go to Calendar"} onClick={navigate('/Calendar')}/>
                     </div>
                 </div>
 
 
             </div>
         </div>
-    <div className='w-full bottom-0 mt-10 left-0'>
-        <Footer/>
-    </div>
         </>
     );
 };
