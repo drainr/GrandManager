@@ -4,7 +4,5 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // Load env files from the parent workspace folder (../.env).
-  envDir: '..',
   plugins: [react(), tailwindcss()],
 })
