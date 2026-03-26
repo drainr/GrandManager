@@ -14,10 +14,12 @@ import Checkbox from "../components/Checkbox.jsx";
 import PurpleButton from "../components/PurpleButton.jsx";
 import Weblist from "../components/weblist/Weblist.jsx";
 import Footer from "./Footer.jsx";
+import { useNavigate} from "react-router-dom";
 
 
 
 const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
+    const navigate = useNavigate();
     const [dayMenus, setDayMenus] = useState({});
     const [todaysTodos, setTodaysTodos] = useState([]);
     const DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -38,6 +40,10 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
 
         loadTodos();
     }, []);
+
+    const handleNavigationtoCal = async () => {
+            navigate('/calendar');
+    };
     return (
         <>
             <div className="flex flex-col align-top ">
@@ -81,7 +87,7 @@ const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
                         </>
                     )}
                     <div className='mt-9'>
-                    <PurpleButton text={"Go to Calendar"}/>
+                    <PurpleButton text={"Go to Calendar"} onClick={handleNavigationtoCal} />
                     </div>
                 </div>
 

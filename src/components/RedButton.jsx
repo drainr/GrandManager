@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const RedButton = ({onClick, text}) => {
+const RedButton = ({text}) => {
+
     return (
         <StyledWrapper>
-            <button onClick={onClick}>{text}</button>
+            <button>{text}</button>
         </StyledWrapper>
     );
 }
