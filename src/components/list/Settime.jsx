@@ -5,7 +5,7 @@ const toTwoDigits = (value) => String(value).padStart(2, '0');
 
 // Reusable time UI: input mode (before submit) and display mode (after submit).
 const SetTime = ({ value, onChange, showInput = true, dayName }) => {
-	const [nowMs, setNowMs] = useState(null);
+	const [nowMs, setNowMs] = useState(() => Date.now());
 
 	// Only run a 1s clock tick when rendering countdown/days-remaining output.
 	useEffect(() => {
@@ -21,39 +21,43 @@ const SetTime = ({ value, onChange, showInput = true, dayName }) => {
 	}, [showInput]);
 
 	const hasTime = Boolean(value);
+	const [hoursText = '', minutesText = ''] = (value || '').split(':');
+	const inputHours = Number(hoursText);
+	const inputMinutes = Number(minutesText);
+	const hasValidTime =
+		hasTime &&
+		!Number.isNaN(inputHours) &&
+		!Number.isNaN(inputMinutes) &&
+		inputHours >= 0 &&
+		inputHours <= 23 &&
+		inputMinutes >= 0 &&
+		inputMinutes <= 59;
+
 	let remainingSeconds = null;
-	let daysRemaining = null;
+	let rawDiffSeconds = null;
 
-	// Compute either same-day countdown seconds OR days until the selected weekday.
-	if (hasTime && nowMs !== null && dayName && DAYS_FULL.includes(dayName)) {
-		const todayIndex = new Date(nowMs).getDay();
+	if (!showInput && hasValidTime && dayName && DAYS_FULL.includes(dayName)) {
+		const now = new Date(nowMs);
 		const selectedDayIndex = DAYS_FULL.indexOf(dayName);
+		const dayOffset = (selectedDayIndex - now.getDay() + 7) % 7;
 
-		if (selectedDayIndex !== todayIndex) {
-			daysRemaining = (selectedDayIndex - todayIndex + 7) % 7;
-		} else {
-			const [hoursText, minutesText] = value.split(':');
-			const hours = Number(hoursText);
-			const minutes = Number(minutesText);
+		const target = new Date(nowMs);
+		target.setDate(now.getDate() + dayOffset);
+		target.setHours(inputHours, inputMinutes, 0, 0);
 
-			if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
-				const now = new Date(nowMs);
-				const target = new Date(nowMs);
-				target.setHours(hours, minutes, 0, 0);
-				remainingSeconds = Math.floor((target.getTime() - now.getTime()) / 1000);
-			}
-		}
+		rawDiffSeconds = Math.floor((target.getTime() - now.getTime()) / 1000);
+		remainingSeconds = Math.max(0, rawDiffSeconds);
 	}
 
 	const safeSeconds = Math.max(0, remainingSeconds ?? 0);
-	const hours = Math.floor(safeSeconds / 3600);
+	const days = Math.floor(safeSeconds / 86400);
+	const hours = Math.floor((safeSeconds % 86400) / 3600);
 	const minutes = Math.floor((safeSeconds % 3600) / 60);
 	const seconds = safeSeconds % 60;
-	const hasCountdown = hasTime && typeof remainingSeconds === 'number';
-	const isLate = hasCountdown && remainingSeconds <= 0;
-	const showDaysRemaining = hasTime && !hasCountdown && typeof daysRemaining === 'number' && daysRemaining > 0;
+	const hasCountdown = !showInput && hasValidTime && typeof remainingSeconds === 'number';
+	const isLate = hasCountdown && typeof rawDiffSeconds === 'number' && rawDiffSeconds <= 0;
 
-	// Render: time input OR countdown/LATE/days-remaining output.
+	// Render: time input OR live day/hour/minute/second countdown.
 	return (
 		<div className="flex items-center gap-3">
 			{showInput && (
@@ -65,32 +69,13 @@ const SetTime = ({ value, onChange, showInput = true, dayName }) => {
 				/>
 			)}
 
-			{/* Same-day live HH:MM:SS */}
 			{hasCountdown && !isLate && (
-				<span className="countdown font-mono text-4xl text-white">
-					<span style={{ '--value': hours }} aria-live="polite" aria-label={`${hours}`}>
-						{toTwoDigits(hours)}
-					</span>
-					:
-					<span style={{ '--value': minutes }} aria-live="polite" aria-label={`${minutes}`}>
-						{toTwoDigits(minutes)}
-					</span>
-					:
-					<span style={{ '--value': seconds, '--digits': 2 }} aria-live="polite" aria-label={`${seconds}`}>
-						{toTwoDigits(seconds)}
-					</span>
+				<span className="font-mono text-sm font-bold text-yellow-200" aria-live="polite">
+					{days}D {toTwoDigits(hours)}H {toTwoDigits(minutes)}M {toTwoDigits(seconds)}S
 				</span>
 			)}
 
-			{/* Same-day timer expired */}
-			{hasCountdown && isLate && <span className="font-mono text-3xl font-extrabold text-red-300">LATE</span>}
-
-			{/* Not today's day: show distance in days */}
-			{showDaysRemaining && (
-				<span className="font-mono text-2xl font-bold text-yellow-200">
-					{daysRemaining} {daysRemaining === 1 ? 'DAY' : 'DAYS'} REMAINING
-				</span>
-			)}
+			{isLate && <span className="font-mono text-sm font-extrabold text-red-300">LATE</span>}
 		</div>
 	);
 };

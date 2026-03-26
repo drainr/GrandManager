@@ -6,8 +6,8 @@ import SetTime from './settime.jsx';
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAYS_FULL  = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-// Tailwind class that controls how wide list items are 
-const LIST_WIDTH = 'w-180';
+// Keep list rows constrained to container width so right-side labels stay visible.
+const LIST_WIDTH = 'w-full';
 const SCROLL_THRESHOLD = 6;
 
 
@@ -62,35 +62,30 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, forcedDay, itemTimes }) => {
                     </h3>
 					{/* item list display using daisyui */}
                     <ul className={`bg-[#405BA4] ${LIST_WIDTH} columns-1 flex flex-col flex-nowrap gap-2`}>
-                        {menuItems.map((item, index) => (
-                            <li key={`${item}-${index}`} className="w-full">
-                                <div className="flex w-full items-center justify-between gap-3">
-                                    <span className="block flex-1 rounded bg-[#405BA4] px-4 py-3 text-white! text-2xl transition-colors duration-150 hover:bg-white/10">
-                                        {item}
-									</span>
-                                    {(() => {
-                                        const occurrenceIndex = getItemOccurrenceIndex(menuItems, index, item);
-                                        const itemKey = getItemKey(selectedFull, item, occurrenceIndex);
-                                        const itemTime = itemTimes?.[itemKey] || '';
+                        {menuItems.map((item, index) => {
+                            const occurrenceIndex = getItemOccurrenceIndex(menuItems, index, item);
+                            const itemKey = getItemKey(selectedFull, item, occurrenceIndex);
+                            const itemTime = itemTimes?.[itemKey] || '';
 
-                                        if (!itemTime) {
-                                            return null;
-                                        }
-
-                                        return (
-                                            <SetTime
-                                                value={itemTime}
-                                                onChange={() => {}}
-                                                showInput={false}
-                                                dayName={selectedFull}
-                                            />
-                                        );
-                                    })()}
-									{/* delete item button */}
-                                    <RedButton text="DELETE" onClick={() => onDeleteItem?.(selectedFull, index)} />
-                                </div>
-                            </li>
-                        ))}
+                            return (
+                                <li key={`${item}-${index}`} className="w-full">
+                                    <div className="grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3">
+                                        <span className="block min-w-0 truncate rounded bg-[#405BA4] px-4 py-3 text-white! text-2xl transition-colors duration-150 hover:bg-white/10">
+                                            {item}
+										</span>
+                                        <div className="min-w-44 whitespace-nowrap rounded-md px-3 py-2 text-center">
+                                            {itemTime ? (
+                                                <div className="rounded-md bg-white/15 px-2 py-1">
+                                                    <SetTime value={itemTime} showInput={false} dayName={selectedFull} />
+                                                </div>
+                                            ) : null}
+                                        </div>
+										{/* delete item button */}
+                                        <RedButton text="DELETE" onClick={() => onDeleteItem?.(selectedFull, index)} />
+                                    </div>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </div>
             </div>

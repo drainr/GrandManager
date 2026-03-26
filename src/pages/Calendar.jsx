@@ -77,26 +77,23 @@ const Calendar = () => {
       return;
     }
 
+    const updatedMenus = { ...dayMenus };
     const newTimedEntries = [];
 
-    setDayMenus((prevMenus) => {
-      const updatedMenus = { ...prevMenus };
+    targetDays.forEach((day) => {
+      const dayItems = updatedMenus[day] || [];
+      const occurrenceIndex = dayItems.filter((entry) => entry === trimmedTodo).length;
+      updatedMenus[day] = [...dayItems, trimmedTodo];
 
-      targetDays.forEach((day) => {
-        const dayItems = updatedMenus[day] || [];
-        const occurrenceIndex = dayItems.filter((entry) => entry === trimmedTodo).length;
-        updatedMenus[day] = [...dayItems, trimmedTodo];
-
-        if (todoTime) {
-          newTimedEntries.push({
-            key: getTimeKey(day, trimmedTodo, occurrenceIndex),
-            value: todoTime,
-          });
-        }
-      });
-
-      return updatedMenus;
+      if (todoTime) {
+        newTimedEntries.push({
+          key: getTimeKey(day, trimmedTodo, occurrenceIndex),
+          value: todoTime,
+        });
+      }
     });
+
+    setDayMenus(updatedMenus);
 
     if (newTimedEntries.length > 0) {
       setItemTimes((prev) => {
