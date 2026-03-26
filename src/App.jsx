@@ -1,16 +1,8 @@
 import './App.css'
-import Login from './pages/Login.jsx';
-import Dashboard from './pages/Dashboard.jsx';
-import SignUp from "./pages/SignUp.jsx";
-import Calendar from "./pages/Calendar.jsx";
-import InspirationalPopup from "./pages/InspoPopUp.jsx";
+import MainRoute from "./routes/MainRoute";
 
 function App() {
-  return (
-    <div className="flex flex-row">
-     <Dashboard />
-    </div>
-  )
+  return <MainRoute />;
 }
 
-export default App
+export default App;

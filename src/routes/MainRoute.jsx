@@ -1,51 +1,24 @@
-import { createBrowserRouter } from "react-router";
-import Root from "";
-import Login from "../../pages/Login.jsx";
-import SignUp from "../../pages/SignUp.jsx";
-import Dashboard from "../../pages/Dashboard.jsx";
+import { Routes, Route } from "react-router-dom";
+import PrivateRoute from "./PrivateRoute";
+import Login from "../pages/Login";
+import SignUp from "../pages/SignUp";
+import Dashboard from "../pages/Dashboard";
+import Calendar from "../pages/Calendar";
 
+const MainRoute = () => {
+  return (
+    <Routes>
+      {/* Public */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
 
+      {/* Private */}
+      <Route element={<PrivateRoute />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/calendar" element={<Calendar />} />
+      </Route>
+    </Routes>
+  );
+};
 
-const router = createBrowserRouter([
-
-    {
-        element: <Root />,
-        errorElement: <NotFound />,
-        children: [
-            {
-                path: "signup",
-                element: <SignUp />,
-            },
-            {
-                path: "login",
-                element: <Login />,
-            },
-            {
-                path: "dashboard",
-                element: (
-                    <PrivateRoute>
-                        <Dashboard />
-                    </PrivateRoute>
-                ),
-            },
-            {
-                path: "about",
-                element: <NotFound />,
-            },
-            {
-                path: "watch",
-                element: <Unauthorized />,
-            },
-            {
-                path: "unauthorized",
-                element: <Unauthorized />,
-            },
-            {
-                path: "*",
-                element: <NotFound />,
-            },
-        ],
-    },
-]);
-
-export default router;
+export default MainRoute;
