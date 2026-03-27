@@ -13,135 +13,110 @@ import Footer from "./Footer.jsx";
  * useChat hook to manage message state and sending.
  */
 const Chat = () => {
-  const auth = getAuth();
-  const currentUser = auth.currentUser;
-  const navigate = useNavigate();
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    const navigate = useNavigate();
 
-  const [selectedUser, setSelectedUser] = useState(null);
-  const { users } = useUsers(currentUser?.uid);
-  const { messages, newMessage, setNewMessage, handleSend, bottomRef } = useChat(currentUser, selectedUser);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const { users } = useUsers(currentUser?.uid);
+    const { messages, newMessage, setNewMessage, handleSend, bottomRef } = useChat(currentUser, selectedUser);
 
-  // Handle user selection from dropdown
-  const handleSelectUser = (e) => {
-    const uid = e.target.value;
-    if (!uid) {
-      setSelectedUser(null);
-      return;
+    const handleSelectUser = (e) => {
+        const uid = e.target.value;
+        if (!uid) {
+            setSelectedUser(null);
+            return;
+        }
+        const user = users.find((u) => u.uid === uid);
+        setSelectedUser(user);
+    };
+
+    if (!currentUser) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <span className="loading loading-spinner loading-lg text-primary"></span>
+            </div>
+        );
     }
-    const user = users.find((u) => u.uid === uid);
-    setSelectedUser(user);
-  };
 
-  // Show loader while auth state is resolving
-  if (!currentUser) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
-      </div>
-    );
-  }
 
-  return (
-    <div className="flex flex-col h-screen bg-[#405BA4]  mt-30 border">
-      <div className="bg-[#1B2851] shadow-md pb-2">
-        <div className="relative top-1 bottom-0.5 flex items-center justify-center mb-3 p-2">
-            <div className="absolute left-0 scale-65">
-                <GreenButton text="← Back" onClick={() => navigate('/')} />
+        <div className="flex flex-col min-h-screen mt-15">
+
+
+            <div className="flex-1 flex flex-col items-center justify-center p-4 mt-10 ">
+
+                <div className="flex flex-col w-full max-w-md h-[550px] bg-[#405BA4] rounded-2xl shadow-2xl shadow-black overflow-hidden border border-[#1B2851]">
+
+
+                    <div className="bg-[#1B2851] shadow-md pb-4 pt-2">
+                        <div className="flex items-center justify-between px-4 mb-3">
+                            <div className="scale-75 origin-left">
+                                <GreenButton text="← Back" onClick={() => navigate('/')} />
+                            </div>
+                            <h2 className="text-xl font-bold text-[#EBB537] shrikhand-regular">Chat</h2>
+                            <div className="w-10"></div>
+                        </div>
+
+                        <div className="px-4">
+                            <select
+                                className="select select-bordered select-sm w-full bg-[#405BA4] text-white border-gray-500 focus:border-[#EBB537] focus:outline-none"
+                                onChange={handleSelectUser}
+                                value={selectedUser?.uid || ''}
+                            >
+                                <option value="">Select a contact...</option>
+                                {users.map((user) => (
+                                    <option key={user.uid} value={user.uid}>{user.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                        {!selectedUser && (
+                            <p className="text-center text-gray-300 mt-10">Select a person to start.</p>
+                        )}
+                        {messages.map((msg) => {
+                            const isSent = msg.uid === currentUser.uid;
+                            return (
+                                <div key={msg.id} className={`chat ${isSent ? 'chat-end' : 'chat-start'}`}>
+                                    <div className="chat-header text-[#EBB537] text-[10px] mb-1">
+                                        {msg.senderName}
+                                    </div>
+                                    <div className={`chat-bubble text-sm ${isSent ? 'bg-[#4d2c72]' : 'bg-[#1B2851]'} text-white`}>
+                                        {msg.text}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+
+                    {selectedUser && (
+                        <div className="bg-[#1B2851] p-3 border-t border-[#405BA4]">
+                            <div className="flex gap-2 items-center">
+                                <input
+                                    type="text"
+                                    className="input input-sm input-bordered flex-1 bg-[#405BA4] text-white border-gray-500 focus:outline-none"
+                                    placeholder="Type a message..."
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleSend(e)}
+                                />
+                                <div className="scale-90">
+                                    <YellowButton text="Send" onClick={handleSend} />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
             </div>
-            <h2 className="text-xl font-bold text-[#EBB537] shrikhand-regular">
-                Chat
-            </h2>
-        </div>
-
-        {/* User Selection Dropdown */}
-        <div className="max-w-xs mx-auto">
-          <select
-            className="select select-bordered w-full bg-[#405BA4] text-white border-gray-500 focus:border-[#EBB537] focus:outline-none"
-            onChange={handleSelectUser}
-            value={selectedUser?.uid || ''}
-          >
-            <option value="">Select someone to chat with...</option>
-            {users.map((user) => (
-              <option key={user.uid} value={user.uid}>
-                {user.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
-        {!selectedUser && (
-          <p className="text-center text-gray-300 mt-10">
-            Select a person above to start chatting.
-          </p>
-        )}
-
-        {selectedUser && messages.length === 0 && (
-          <p className="text-center text-gray-300 mt-10">
-            No messages yet. Say hello to {selectedUser.name}!
-          </p>
-        )}
-
-        {messages.map((msg) => {
-          const isSent = msg.uid === currentUser.uid;
-          return (
-            <div
-              key={msg.id}
-              className={`chat ${isSent ? 'chat-end' : 'chat-start'}`}
-            >
-              <div className="chat-header text-gray-300 text-xs mb-1">
-                {msg.senderName || 'Unknown'}
-                {msg.createdAt && (
-                  <time className="text-xs opacity-50 ml-2">
-                    {new Date(msg.createdAt).toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </time>
-                )}
-              </div>
-              <div
-                className={`chat-bubble break-words max-w-xs sm:max-w-sm text-left ${
-                  isSent
-                    ? 'bg-[#4d2c72] text-white'
-                    : 'bg-[#1B2851] text-white'
-                }`}
-              >
-                {msg.text}
-              </div>
-            </div>
-          );
-        })}
-        <div ref={bottomRef} />
-      </div>
-
-      {/* Message Input — only visible when a user is selected */}
-      {selectedUser && (
-        <div className="bg-[#1B2851] p-4">
-          <div className="flex gap-2 items-center max-w-3xl mx-auto">
-            <input
-              type="text"
-              className="input input-bordered flex-1 bg-[#405BA4] text-white border-gray-500 placeholder-gray-400 focus:outline-none focus:border-[#EBB537]"
-              placeholder={`Message ${selectedUser.name}...`}
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  handleSend(e);
-                }
-              }}
-            />
-            <YellowButton text="Send" onClick={handleSend} small />
-          </div>
             <Footer />
         </div>
-
-      )}
-    </div>
-
-  );
+    );
 };
+
 
 export default Chat;
