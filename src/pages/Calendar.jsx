@@ -9,7 +9,10 @@ import {
   createEmptyWeekMenus,
   deleteEntry,
   getEntriesByDay,
+  updateEntry,
 } from '../firebase/databaseManager.js';
+
+
 
 const DEFAULT_LIST_ID = 'default';
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -163,9 +166,30 @@ const Calendar = () => {
     }
   };
 
+  // Edit handler for tasks
+  const handleEditTodo = async (day, index, newText) => {
+    const dayItems = dayMenus[day] || [];
+    const oldText = dayItems[index];
+    if (!oldText || !newText.trim() || oldText === newText) return;
+    // Find which occurrence of the text this is
+    const matchIndex = dayItems.slice(0, index).filter((item) => item === oldText).length;
+    // Update local state
+    setDayMenus((prevMenus) => {
+      const updatedDayItems = [...(prevMenus[day] || [])];
+      updatedDayItems[index] = newText;
+      return { ...prevMenus, [day]: updatedDayItems };
+    });
+    // Update in database
+    try {
+      await updateEntry(DEFAULT_LIST_ID, day, oldText, newText, matchIndex);
+    } catch (error) {
+      console.error('Failed to update todo entry:', error);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-6xl bg-[#1B2851] px-6 pb-6 pt-24 shadow-2xl">
-      <DisplayDailyList dayMenus={dayMenus} onDeleteItem={handleDeleteTodo} forcedDay={focusDayShort} itemTimes={itemTimes} />
+      <DisplayDailyList dayMenus={dayMenus} onDeleteItem={handleDeleteTodo} onEditItem={handleEditTodo} forcedDay={focusDayShort} itemTimes={itemTimes} />
 
       <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
         <ListButtonConfig
