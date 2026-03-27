@@ -60,7 +60,10 @@ We worked together using a shared Google Doc, Trello Board, and iMessage.
 - **MainRouter** - Routes/Links to other pages
 - **PrivateRoute** - Private Route to a page that needs to be unlocked through a login or signup authentication
 - **PDF Download** — Download list of your todo's.
-
+- **To Do List** -adding/ deleting / editing to do's as well as send and recieve/download other's to-do's
+- **Chat** -- to communicate with each other
+- **frequently used links** -- to add links like bookmarks for easy access
+- **Weather API** -- displaying the weather of sarasota and a thousand oaks
 
 ---
 
