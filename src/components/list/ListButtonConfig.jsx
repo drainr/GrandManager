@@ -19,7 +19,7 @@ const ListButtonConfig = ({ value, onChange, onSubmit, timeValue, onTimeChange }
       </section>
 
 
-      
+
     </div>
   );
 };
