@@ -45,12 +45,12 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
     loadTodos();
   }, [todayFull]);
 
-  return (
-    <>
-      <div className="flex flex-col align-top min-h-screen w-screen">
-        <div className="flex justify-center items-center mt-30 p-10 w-200">
-          <Weblist />
-        </div>
+    return (
+        <>
+            <div className="flex flex-col align-top min-h-screen w-screen">
+                <div className='align-middle items-center mt-30 p-10 w-200'>
+                    <Weblist />
+                </div>
 
         <div className="flex flex-row gap-10 justify-center p-10">
           <div className="bg-[#4d2c72] rounded-xl p-6 w-80 shadow-2xl shadow-black">

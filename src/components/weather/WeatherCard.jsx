@@ -1,102 +1,81 @@
-import ReactWeather from 'react-open-weather';
+import React, { useState, useEffect } from 'react';
+import { fetchWeatherData } from './WeatherManager';
 
-const WeatherCard = ({ data, isLoading, errorMessage, locationLabel, isExpanded, toggleExpand }) => {
-  const variant = isExpanded ? 'expanded' : 'mini';
+const WeatherCard = ({ location }) => {
+  const [weather, setWeather] = useState(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const baseStyles = {
-    fontFamily: 'Helvetica, sans-serif',
-    gradientStart: variant === 'mini' ? '#f2f2f2' : '#0181C2',
-    gradientMid: variant === 'mini' ? '#f2f2f2' : '#04A7F9',
-    gradientEnd: variant === 'mini' ? '#f2f2f2' : '#4BC4F7',
-    locationFontColor: variant === 'mini' ? '#333' : '#FFF',
-    todayTempFontColor: variant === 'mini' ? '#333' : '#FFF',
-    todayDateFontColor: variant === 'mini' ? '#777' : '#B5DEF4',
-    todayIconColor: variant === 'mini' ? '#4BC4F7' : '#FFF',
-    forecastItemBgColor: '#FFF',
-    forecastTempColor: '#111',
-    forecastIconColor: '#4BC4F7',
-  };
+  useEffect(() => {
+    fetchWeatherData(location).then(data => setWeather(data));
+  }, [location]);
 
-  const miniContainerStyle = {
-    width: '320px',
-    height: '240px',
-    cursor: 'pointer',
-    border: '1px solid #ddd',
-    borderRadius: '16px',
-    background: '#f2f2f2',
-    overflow: 'hidden',
-    position: 'relative',
-    transition: 'transform 0.2s ease',
-  };
+  if (!weather) return <div style={{ padding: '20px', color: '#888' }}>Loading weather...</div>;
 
-  return (
+  const { current, forecast, location: locDetails } = weather;
+
+ return (
   <>
-    {/* THE MINI CARD */}
+    {/* MINI CARD */}
     <div 
-      style={miniContainerStyle} 
-      onClick={toggleExpand}
-      className="weather-card mini"
+      onClick={() => setIsExpanded(true)}
+      style={{
+        width: '280px', padding: '20px', borderRadius: '16px',
+        background: '#69a5e2', border: '1px solid #eaeaea', cursor: 'pointer',
+        transition: 'transform 0.2s', color: '#ffffff'
+      }}
     >
-      <style>
-        {`
-          .weather-card.mini .rw-container { height: 220px !important; border: none !important; background: #f2f2f2 !important; }
-          .weather-card.mini .rw-today { height: 100% !important; background: #f2f2f2 !important; }
-          .weather-card.mini .rw-today-left { background: #f2f2f2 !important; border: none !important; }
-          .weather-card.mini .rw-today-right { background: #f2f2f2 !important; justify-content: center !important; }
-          
-          /* Keep High/Low visible but hide wind/humidity in mini to prevent overflow */
-          .weather-card.mini .rw-today-info > div:not(:last-child) { display: none !important; } 
-          .weather-card.mini .rw-today-desc { display: none !important; }
-          
-          .weather-card.mini .rw-today svg { width: 60px !important; height: 60px !important; }
-        `}
-      </style>
-      <ReactWeather
-        theme={baseStyles}
-        isLoading={isLoading}
-        errorMessage={errorMessage}
-        data={data}
-        locationLabel={locationLabel}
-        unitsLabels={{ temperature: 'F', windSpeed: 'mi/h' }}
-        showForecast={false} 
-      />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h4 style={{ margin: 0, fontSize: '16px' }}>{locDetails.name}</h4>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <p style={{ margin: 0, fontSize: '24px', fontWeight: 'bold' }}>{current.temp_f}°F</p>
+          </div>
+        </div>
+        <img src={current.condition.icon} alt="weather" style={{ width: '64px' }} />
+      </div>
+      <div style={{ marginTop: '10px', fontSize: '13px', color: '#eaeaea' }}>
+        H: {forecast.forecastday[0].day.maxtemp_f.toFixed(0)}° | L: {forecast.forecastday[0].day.mintemp_f.toFixed(0)}°
+      </div>
     </div>
 
-    {/* THE MODAL */}
+    {/* EXPANDED MODAL */}
     {isExpanded && (
       <div 
-        onClick={toggleExpand}
+        onClick={() => setIsExpanded(false)}
         style={{
-          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-          background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center',
-          justifyContent: 'center', zIndex: 2000, padding: '20px'
+          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+          background: 'rgba(0,0,0,0.7)', zIndex: 3000, display: 'flex', 
+          alignItems: 'center', justifyContent: 'center'
         }}
       >
         <div 
-          onClick={(e) => e.stopPropagation()} 
+          onClick={e => e.stopPropagation()} 
           style={{
-            width: '100%', maxWidth: '800px', borderRadius: '20px',
-            overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
-            background: '#808080' 
+            background: '#69a5e2', padding: '30px', borderRadius: '24px',
+            width: '90%', maxWidth: '500px', textAlign: 'center', color: '#ffffff'
           }}
         >
-          <style>
-            {`
-              .weather-card-modal .rw-container { background: #ffffff !important; }
-              .weather-card-modal .rw-forecast { background: #ffffff !important; }
-              .weather-card-modal .rw-today-info { display: flex !important; }
-            `}
-          </style>
-          <div className="weather-card-modal">
-            <ReactWeather
-              theme={baseStyles}
-              isLoading={isLoading}
-              errorMessage={errorMessage}
-              data={data}
-              locationLabel={locationLabel}
-              unitsLabels={{ temperature: 'F', windSpeed: 'mi/h' }}
-              showForecast={true} 
-            />
+          <h2 style={{ marginBottom: '20px' }}>{locDetails.name}</h2>
+          
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: '', gap: '100px', marginBottom: '10px' }}>
+            <img src={current.condition.icon} alt="icon" style={{ width: '80px' }} />
+            <h1 style={{ fontSize: '48px', margin: 0 }}>{current.temp_f}°F</h1>
+          </div>
+          
+          <p style={{ marginBottom: '20px' }}>{current.condition.text}</p>
+          
+          <hr style={{ margin: '20px 0', border: '0', borderTop: '1px solid rgba(255,255,255,0.3)' }} />
+          
+          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            {forecast.forecastday.slice(1).map(day => (
+              <div key={day.date}>
+                <p style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '5px' }}>
+                  {new Date(day.date + "T00:00:00").toLocaleDateString('en-US', { weekday: 'short' })}
+                </p>
+                <img src={day.day.condition.icon} alt="tab" style={{ width: '35px' }} />
+                <p style={{ fontSize: '12px', marginTop: '5px' }}>{Math.round(day.day.maxtemp_f)}°</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
