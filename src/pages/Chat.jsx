@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUsers } from '../hooks/useUsers';
 import { useChat } from '../hooks/useChat';
 import YellowButton from '../components/YellowButton';
+import GreenButton from '../components/GreenButton';
 
 /**
  * Chat - Page for real-time messaging between users.
@@ -40,20 +41,15 @@ const Chat = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-[#405BA4] pt-14">
-      {/* Chat Header */}
-      <div className="bg-[#1B2851] p-4 shadow-md">
-        <div className="flex items-center justify-between mb-3">
-          <button
-            onClick={() => navigate('/')}
-            className="text-white text-sm hover:text-[#EBB537] transition-colors"
-          >
-            ← Dashboard
-          </button>
-          <h2 className="text-xl font-bold text-[#EBB537] shrikhand-regular">
-            Chat
-          </h2>
-          <div className="w-20"></div>
+    <div className="flex flex-col h-screen bg-[#405BA4]  mt-30">
+      <div className="bg-[#1B2851] shadow-md pb-2">
+        <div className="relative top-1 bottom-0.5 flex items-center justify-center mb-3 p-2">
+            <div className="absolute left-0 scale-65">
+                <GreenButton text="← Back" onClick={() => navigate('/')} />
+            </div>
+            <h2 className="text-xl font-bold text-[#EBB537] shrikhand-regular">
+                Chat
+            </h2>
         </div>
 
         {/* User Selection Dropdown */}

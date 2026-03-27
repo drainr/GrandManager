@@ -14,8 +14,8 @@ const ListButtonConfig = ({ value, onChange, onSubmit, timeValue, onTimeChange }
       </section>
 
       <section className="mt-2 flex items-center gap-2">
-        <SubmitButton onSubmit={onSubmit} />
         <SetTime value={timeValue} onChange={onTimeChange} />
+        <SubmitButton onSubmit={onSubmit} />
       </section>
 
 

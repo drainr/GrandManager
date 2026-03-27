@@ -1,15 +1,18 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0;
-  text-align: center;
-}
-body {
+ body {
+    height: 100%;
     margin: 0;
+    padding: 0;
+}
 
+#root {
+    width: 100%;
+    height: 100%; /* Now this will actually work */
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
 html {
     --s: 78px; /* control the size*/

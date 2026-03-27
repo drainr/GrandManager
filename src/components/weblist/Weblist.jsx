@@ -46,7 +46,7 @@ const Weblist = () => {
   }, [userId]);
 
   return (
-    <div style={{ padding: '30px', background: '#EBB537', boxShadow: '20px', marginTop: '20px',left:"20px" }}>
+    <div style={{ padding: '30px', background: '#EBB537', marginTop: '20px',left:"20px" }} className='shadow-2xl shadow-black p-6 rounded-xl'>
       <h1 style={{ marginBottom: '25px', color: '#4d2c72' }} className='shrikhand-regular'>Frequently Used</h1>
       
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
