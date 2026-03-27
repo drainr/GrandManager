@@ -3,6 +3,7 @@ import SetTime from './settime.jsx';
 
 const ListButtonConfig = ({ value, onChange, onSubmit, timeValue, onTimeChange }) => {
   return (
+    // styling button and input
     <div className="flex w-full flex-1 flex-col items-start">
       <section className="w-full">
         <textarea

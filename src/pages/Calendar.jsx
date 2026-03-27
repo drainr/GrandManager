@@ -84,7 +84,8 @@ const Calendar = () => {
     };
   }, [user]);
 
-
+  // styling for calendar page and header row with buttons
+  // content such as list, buttons, and status messages that are displayed on the calendar page
   return (
     <>
       <div className="mx-auto max-w-6xl bg-[#1B2851] px-6 pb-6 pt-24 shadow-2xl">

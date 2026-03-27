@@ -38,15 +38,16 @@ We worked together using a shared Google Doc, Trello Board, and iMessage.
 
 ### Thien Ong
 - Firebase Authentication
-- Calendar/To-do list
+- Calendar config with individual users
+- To-do task list with database implementation 
 - Exporting Calendar for sharing
-
+- 
 
 ---
 
 ## Features
 
-- **Login** - Login to an account to save movies in a wishlist or watchlist
+- **Login** - Login to an account to access personal calendar and todo list for tasks.
 - **SignUp** - Signup page to create an account with our page for personalized user experience
 - **Authentication** - both SignUp and Login use an authentication application to verify a user
 - **Not Found** -  Error codes for pages that do not exist or are wrong
@@ -54,11 +55,12 @@ We worked together using a shared Google Doc, Trello Board, and iMessage.
 - **PrivateRoute** - Private Route to a page that needs to be unlocked through a login or signup authentication
 - **PDF Download** — Download list of your todo's.
 
+
 ---
 
 ## System:
 1. **Authentication**
-    - Users create an account using the SignUp page.
+    - Users create an account using the SignUp page. Using google or email and password.
     - Firebase Authentication validates user credentials.
     - After login, users can access protected routes like the Dashboard.
 
@@ -104,6 +106,11 @@ npm run preview
 ```
 
 ---
+### deployment
+firebase login 
+firebase init hosting
+firebase deploy
+
 
 ## Project Structure
 

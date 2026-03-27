@@ -18,7 +18,7 @@ export const useUsers = (currentUid) => {
       setUsers(otherUsers);
       setLoading(false);
     };
-
+``
     fetchUsers();
   }, [currentUid]);
 

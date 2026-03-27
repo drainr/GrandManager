@@ -1,6 +1,7 @@
 import GreenButton from "../GreenButton.jsx";
 import RedButton from "../RedButton.jsx";
 
+// button to select days 
 const MultiSelectButton = ({ selectedDays, onToggleDay }) => {
 	const dayLetters = [
 		{ key: 'Sun', label: 'Sun' },
@@ -11,7 +12,7 @@ const MultiSelectButton = ({ selectedDays, onToggleDay }) => {
 		{ key: 'Fri', label: 'Fri' },
 		{ key: 'Sat', label: 'Sat' },
 	];
-
+	// map days to buttons, green if selected, red if not
 	return (
 		<ul className="flex flex-nowrap gap-2 p-2 overflow-x-auto">
             {dayLetters.map((day) => {

@@ -4,17 +4,18 @@ import { getDatabase, ref, get } from 'firebase/database';
 import { useUsers } from '../../hooks/useUsers';
 import { getChatId } from '../../firebase/chatManager';
 import YellowButton from '../YellowButton';
-
+// recieve data from user 
 const Recieve = () => {
   const auth = getAuth();
   const currentUser = auth.currentUser;
   const { users } = useUsers(currentUser?.uid);
   const [status, setStatus] = useState('');
 
+  // handle download helper
   const handleRecieve = async () => {
     if (!currentUser) return;
     setStatus('Checking...');
-    // Try to find the most recent sender who sent JSON
+    //grab recent json message from any sender
     let found = false;
     let lastJson = null;
     let lastSender = null;
@@ -36,7 +37,7 @@ const Recieve = () => {
       if (found) break;
     }
     if (found && lastJson) {
-      // Download JSON
+      // Download as json
       const blob = new Blob([lastJson], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -47,9 +48,15 @@ const Recieve = () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       setStatus(`Downloaded from ${lastSender}!`);
+      setTimeout(() => {
+        setStatus('');
+      }, 2000);
     } else {
       alert('No data available from any sender.');
       setStatus('No data available.');
+      setTimeout(() => {
+        setStatus('');
+      }, 2000);
     }
   };
 
