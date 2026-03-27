@@ -1,40 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import RedButton from "../RedButton.jsx";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { listenToBookmarks, updateBookmarks } from '../../firebase/weblistManager';
 
 const Weblist = () => {
+  const [links, setLinks] = useState([]);
+  const [userId, setUserId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ url: '', name: '' });
-  
-  const defaultLinks = [
-    { id: 1, name: "Women's Wear Daily", url: "https://www.wwd.com" },
-    { id: 2, name: "New York Times", url: "https://www.nytimes.com" },
-  ];
-
-  const [links, setLinks] = useState(() => {
-    const saved = localStorage.getItem('dash-links');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      return parsed.length > 0 ? parsed : defaultLinks;
-    }
-    return defaultLinks;
-  });
 
   useEffect(() => {
-    localStorage.setItem('dash-links', JSON.stringify(links));
-  }, [links]);
+    const auth = getAuth();
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      setUserId(user ? user.uid : null);
+    });
+    return () => unsubscribeAuth();
+  }, []);
 
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
-    if (!formData.url || !formData.name) return;
+    if (!formData.url || !formData.name || !userId) return;
+
     const formattedUrl = formData.url.startsWith('http') ? formData.url : `https://${formData.url}`;
-    setLinks([...links, { id: Date.now(), url: formattedUrl, name: formData.name }]);
+    const newLinks = [...links, { id: Date.now(), url: formattedUrl, name: formData.name }];
+    
+    await updateBookmarks(userId, newLinks);
     setFormData({ url: '', name: '' });
     setShowModal(false);
   };
 
-  const removeLink = (id) => {
-    setLinks(links.filter(link => link.id !== id));
+  const removeLink = async (id) => {
+    if (!userId) return;
+    const updatedLinks = links.filter(link => link.id !== id);
+    await updateBookmarks(userId, updatedLinks);
   };
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const unsubscribeWeblist = listenToBookmarks(userId, (data) => {
+      setLinks(data);
+    });
+
+    return () => unsubscribeWeblist();
+  }, [userId]);
 
   return (
     <div style={{ padding: '30px', background: '#EBB537', boxShadow: '20px', marginTop: '20px',left:"20px" }}>
