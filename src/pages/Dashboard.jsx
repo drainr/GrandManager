@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth"; // Added this
-import { getEntriesByDay } from "../firebase/databaseManager";
+import { getEntriesByDay } from "../firebase/TodoTaskManager";
 
 import GreenButton from "../components/GreenButton.jsx";
 import PurpleButton from "../components/PurpleButton.jsx";
