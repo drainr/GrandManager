@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import WeeklyBar from './WeeklyBarConfig.jsx';
 import RedButton from '../RedButton.jsx';
 import SetTime from './settime.jsx';
+import Checkbox from "../Checkbox.jsx";
 
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAYS_FULL  = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -109,12 +110,18 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, forcedDay, itemT
                                                 }}
                                             />
                                         ) : (
-                                            <span
-                                                className="block min-w-0 truncate rounded bg-[#405BA4] px-4 py-3 text-white text-2xl transition-colors duration-150 hover:bg-white/10 cursor-pointer"
-                                                onClick={() => handleEditStart(index, item)}
-                                            >
-                                                {item}
-                                            </span>
+                                            <div className="flex flex-row items-center gap-4 w-[400px]">
+                                                <div className="flex-shrink-0 flex items-center justify-center -translate-y-[7px]">
+                                                    <Checkbox />
+                                                </div>
+
+                                                <span
+                                                    className="block min-w-0 truncate rounded bg-[#405BA4] px-4 py-3 text-white text-2xl leading-none transition-colors duration-150 hover:bg-white/10 cursor-pointer flex-1"
+                                                    onClick={() => handleEditStart(index, item)}
+                                                >
+        {item}
+    </span>
+                                            </div>
                                         )}
                                         <div className="min-w-44 whitespace-nowrap rounded-md px-3 py-2 text-center">
                                             {itemTime ? (
