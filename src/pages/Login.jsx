@@ -51,6 +51,7 @@ const Login = () => {
     };
 
     return (
+        <div className='min-h-screen w-full flex items-center justify-center p-4'>
         <div className='bg-[#1B2851] w-100 shadow-xl shadow-black'>
             <div className="max-w-md w-full overflow-hidden p-8 space-y-8 ">
                 <h2 className="text-center text-4xl font-extrabold text-white shrikhand-regular">
@@ -75,7 +76,7 @@ const Login = () => {
                         <input placeholder="Password" className="peer h-10 w-full border-b-2 border-gray-300 text-white bg-transparent placeholder-transparent focus:outline-none focus:border-grey-200" required id="password" name="password" type={showPassword ? "text" : "password"} />
                         <button
                             type="button"
-                            style={{background: "none", margin: "10px 0", width: "10px"}}
+                            style={{background: "none", margin: "10px 0", width: "10px",top:"15px"}}
                             className="absolute right-2 top-1/2 -translate-y-1/2 text-white bg-transparent border-none outline-none focus:outline-none focus:ring-0 hover:bg-transparent active:bg-transparent p-0"
                             onClick={() => setShowPassword(!showPassword)}
                         >
@@ -84,10 +85,6 @@ const Login = () => {
                         <label className="absolute left-0 -top-3.5 text-gray-200 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-200 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-grey-200 peer-focus:text-sm" htmlFor="password">Password</label>
                     </div>
                     <div className="flex items-center justify-between">
-                        <label className="flex items-center text-sm text-gray-200">
-                            <input className="form-checkbox h-4 w-4 text-gray-200 bg-gray-800 border-gray-300 rounded" type="checkbox" />
-                            <span className="ml-2 p-1">Remember me </span>
-                        </label>
                         <a className="text-sm text-[#EBB537] cursor-pointer" onClick={() => setShowChangePassword(!showChangePassword)}> Forgot your password?</a>
                     </div>
                     <div className=''>
@@ -107,7 +104,7 @@ const Login = () => {
                     <Link to="/signup" className="text-purple-300 hover:underline">Sign up</Link>
                 </div>
             </div>
-        </div>
+        </div></div>
     );
 }
 
