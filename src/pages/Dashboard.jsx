@@ -114,12 +114,13 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
                                     {todaysTodos.slice(0, 3).map((todo, i) => (
                                         <div
                                             key={i}
-                                            className="flex align-center items-center gap-2 p-3"
+                                            className="flex items-center gap-3 p-2 h-min"
                                         >
+                                            <div className='flex-shrink-0 flex items-center'>
                                             <Checkbox
                                                 onClick={() => onDeleteItem?.(selectedFull, index)}
-                                            />
-                                            <p className="text-[#1B2851] font-medium align-center">
+                                            /></div>
+                                            <p className="text-[#1B2851] font-medium leading-none mt-3 p-0 flex items-center">
                                                 {todo}
                                             </p>
                                         </div>
