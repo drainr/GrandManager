@@ -45,6 +45,11 @@ const SetTime = ({ value, onChange, showInput = true, dayName }) => {
 		target.setDate(now.getDate() + dayOffset);
 		target.setHours(inputHours, inputMinutes, 0, 0);
 
+		// Only if the target is today and in the past, move to next week
+		if (dayOffset === 0 && target.getTime() <= now.getTime()) {
+			target.setDate(target.getDate() + 7);
+		}
+
 		rawDiffSeconds = Math.floor((target.getTime() - now.getTime()) / 1000);
 		remainingSeconds = Math.max(0, rawDiffSeconds);
 	}
@@ -59,23 +64,36 @@ const SetTime = ({ value, onChange, showInput = true, dayName }) => {
 
 	// Render: time input OR live day/hour/minute/second countdown.
 	return (
-		<div className="flex items-center gap-3">
-			{showInput && (
-				<input
-					type="time"
-					className="input h-14 min-w-44 rounded-lg border-gray-300 bg-white px-4 text-2xl font-semibold text-black [color-scheme:light]"
-					value={value}
-					onChange={onChange}
-				/>
-			)}
+		<div className="flex flex-col items-start gap-1">
+			<div className="flex items-center gap-3">
+				{showInput && (
+					<input
+						type="time"
+						className="input h-14 min-w-44 rounded-lg border-gray-300 bg-white px-4 text-2xl font-semibold text-black [color-scheme:light]"
+						value={value}
+						onChange={onChange}
+					/>
+				)}
 
-			{hasCountdown && !isLate && (
-				<span className="font-mono text-sm font-bold text-yellow-200" aria-live="polite">
-					{days}D {toTwoDigits(hours)}H {toTwoDigits(minutes)}M {toTwoDigits(seconds)}S
+				{hasCountdown && !isLate && (
+					<span className="font-mono text-sm font-bold text-yellow-200" aria-live="polite">
+						{days}D {toTwoDigits(hours)}H {toTwoDigits(minutes)}M {toTwoDigits(seconds)}S
+					</span>
+				)}
+
+				{isLate && <span className="font-mono text-sm font-extrabold text-red-300">LATE</span>}
+			</div>
+			{/* Show the exact chosen time below the countdown in 12-hour format with AM/PM */}
+			{!showInput && hasValidTime && (
+				<span className="text-xs text-gray-200 mt-1">
+					Time set: {(() => {
+						let hour = inputHours % 12 || 12;
+						let minute = toTwoDigits(inputMinutes);
+						let ampm = inputHours < 12 ? 'AM' : 'PM';
+						return `${hour}:${minute} ${ampm}`;
+					})()}
 				</span>
 			)}
-
-			{isLate && <span className="font-mono text-sm font-extrabold text-red-300">LATE</span>}
 		</div>
 	);
 };
