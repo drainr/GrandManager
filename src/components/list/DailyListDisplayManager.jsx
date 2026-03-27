@@ -11,7 +11,23 @@ const LIST_WIDTH = 'w-full';
 const SCROLL_THRESHOLD = 6;
 
 
-const DisplayDailyList = ({ dayMenus, onDeleteItem, forcedDay, itemTimes }) => {
+const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, forcedDay, itemTimes }) => {
+        const [editIndex, setEditIndex] = useState(null);
+        const [editValue, setEditValue] = useState("");
+        // Start editing a task
+        const handleEditStart = (index, value) => {
+            setEditIndex(index);
+            setEditValue(value);
+        };
+
+        // Save edit (on blur or Enter)
+        const handleEditSave = (dayName, index, oldValue) => {
+            if (editValue.trim() && editValue !== oldValue) {
+                onEditItem?.(dayName, index, editValue);
+            }
+            setEditIndex(null);
+            setEditValue("");
+        };
     const [activeDay, setActiveDay]       = useState(null);
     const [menuVersion, setMenuVersion]   = useState(0);
     const effectiveActiveDay = activeDay ?? forcedDay;
@@ -76,9 +92,30 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, forcedDay, itemTimes }) => {
                             return (
                                 <li key={`${item}-${index}`} className="w-full">
                                     <div className="grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3">
-                                        <span className="block min-w-0 truncate rounded bg-[#405BA4] px-4 py-3 text-white! text-2xl transition-colors duration-150 hover:bg-white/10">
-                                            {item}
-										</span>
+                                        {editIndex === index ? (
+                                            <input
+                                                className="block min-w-0 rounded bg-[#405BA4] px-4 py-3 text-white text-2xl w-full focus:bg-white/10 outline-none"
+                                                value={editValue}
+                                                autoFocus
+                                                onChange={e => setEditValue(e.target.value)}
+                                                onBlur={() => handleEditSave(selectedFull, index, item)}
+                                                onKeyDown={e => {
+                                                    if (e.key === "Enter") {
+                                                        handleEditSave(selectedFull, index, item);
+                                                    } else if (e.key === "Escape") {
+                                                        setEditIndex(null);
+                                                        setEditValue("");
+                                                    }
+                                                }}
+                                            />
+                                        ) : (
+                                            <span
+                                                className="block min-w-0 truncate rounded bg-[#405BA4] px-4 py-3 text-white text-2xl transition-colors duration-150 hover:bg-white/10 cursor-pointer"
+                                                onClick={() => handleEditStart(index, item)}
+                                            >
+                                                {item}
+                                            </span>
+                                        )}
                                         <div className="min-w-44 whitespace-nowrap rounded-md px-3 py-2 text-center">
                                             {itemTime ? (
                                                 <div className="rounded-md bg-white/15 px-2 py-1">
