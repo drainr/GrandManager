@@ -221,7 +221,7 @@ const Calendar = () => {
             </div>
             <DisplayDailyList dayMenus={dayMenus} onDeleteItem={handleDeleteTodo} onEditItem={handleEditTodo} onEditTime={handleEditTime} forcedDay={focusDayShort} itemTimes={itemTimes} />
 
-            <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
+            <div className="mr-auto mt-4 ml-10 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
                 <ListButtonConfig
                     value={todoInput}
                     onChange={setTodoInput}

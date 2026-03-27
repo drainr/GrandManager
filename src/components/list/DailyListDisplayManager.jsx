@@ -61,7 +61,7 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, forcedDay, itemT
     const getItemKey = (dayName, itemText, occurrenceIndex) => `${dayName}::${itemText}::${occurrenceIndex}`;
 
     return (
-        <div className="mx-auto w-full max-w-5xl bg-[#1B2851] p-2 shadow-sm">
+        <div className="mx-auto w-full max-w-5xl bg-[#1B2851] p-2 shadow-md shadow-black">
             <WeeklyBar
                 weekDays={DAYS_SHORT}
                 todayIndex={todayIndex}
