@@ -90,8 +90,9 @@ const Calendar = () => {
 
   return (
     <>
-      <div className="mx-auto max-w-6xl bg-[#1B2851] mt-25 px-6 p-6 rounded-xl shadow-2xl shadow-black">
-            <div className="relative flex items-center justify-center pb-30 pt-2">
+        <div className='flex flex-row juatify-center'>
+      <div className="mx-auto max-w-10xl bg-[#1B2851] mt-25 px-6 p-6 rounded-xl shadow-2xl shadow-black scale-90">
+            <div className="relative flex items-center justify-center pb-10 pt-2">
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 scale-75 origin-left">
                     <GreenButton text="← Back" onClick={() => navigate('/')} />
                 </div>
@@ -99,9 +100,6 @@ const Calendar = () => {
                 <h2 className="text-2xl font-bold text-[#EBB537] shrikhand-regular">
                     Calendar
                 </h2>
-                <div className='absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-1 items-end scale-90 origin-right'>
-                    <Send />
-                </div>
 
         </div>
 
@@ -115,14 +113,13 @@ const Calendar = () => {
           itemTimes={itemTimes}
         /></div>
         <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
-            <div className='ml-10'>
                 <ListButtonConfig
             value={todoInput}
             onChange={setTodoInput}
             onSubmit={() => handlers.handleSubmitTodo(todoInput, todoTime, selectedDays, dayMenus, setDayMenus, setItemTimes, setFocusDayShort, setTodoInput, setTodoTime, user)}
             timeValue={todoTime}
             onTimeChange={(event) => setTodoTime(event.target.value)}
-          /></div>
+          />
           <div className="flex flex-col">
             <MultiSelectButton
               selectedDays={selectedDays}
@@ -132,6 +129,10 @@ const Calendar = () => {
         </div>
 
       </div>
+            <div className='absolute right-0 top-1/2 bg-[#1B2851] p-5 rounded-xl -translate-y-1/2 flex flex-col gap-1 items-end scale-90 origin-right shadow-2xl right-5 shadow-black'>
+                <Send />
+            </div>
+        </div>
         <Footer />
     </>
   );

@@ -48,12 +48,13 @@ const Send = () => {
       </select>
         <div className='scale-65'>
         <BlueButton text='send' onClick={handleSend} />
+            {status && <span style={{ color: '#EBB537', fontWeight: 600 }}>{status}</span>}
             <div className='p-5'>
         <Recieve />
             </div>
-        </div>
-      {status && <span style={{ color: '#EBB537', fontWeight: 600 }}>{status}</span>}
-    </div>
+
+
+    </div></div>
   );
 };
 
