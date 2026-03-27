@@ -21,7 +21,7 @@ Ivy Bowers (PM), Annika Maringer, Angelo Morelli, Thien Ong
 ## Team Contributions
 We worked together using a shared Google Doc, Trello Board, and iMessage.
 
-![Trello Board](assets/GM_TrelloBoard.png)
+![Trello Board](src/assets/GM_TrelloBoard.png)
 
 ### Ivy Bowers
 - Client Interaction
@@ -139,12 +139,12 @@ firebase deploy
 ---
 
 ## UML
-![UML Component Diagram](assets/GM_UML.png)
+![UML Component Diagram](src/assets/GM_UML.png)
 
 ---
 
 ## State Diagram
-![State Diagram](assets/statediagram.png)
+![State Diagram](src/assets/statediagram.png)
 
 ---
 
