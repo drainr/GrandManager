@@ -18,7 +18,7 @@ const Navbar = () => {
             <div className="dropdown dropdown-end mr-4">
 
                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar overflow-hidden">
-                    <div className="w-full h-full rounded-full flex items-center justify-center bg-[#1B2851]">
+                    <div className="w-full h-full rounded-full flex items-center justify-center">
                         <CgProfile className="w-full h-full text-[#EBB537]"/>
                     </div>
                 </div>
