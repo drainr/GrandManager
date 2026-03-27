@@ -1,3 +1,4 @@
+// imports
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth.js';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +9,6 @@ import MultiSelectButton from '../components/list/multiSelectButton.jsx';
 import { useCalendarHandlers } from '../hooks/useCalendarHandlers.js';
 import Send from '../components/list/send.jsx';
 import Recieve from '../components/list/recieve.jsx';
-
 // database to store/remove list items
 import {
   addEntry,
@@ -19,11 +19,9 @@ import {
   updateEntryTime,
 } from '../firebase/TodoTaskManager.js';
 import Checkbox from "../components/Checkbox.jsx";
-import GreenButton from "../components/GreenButton.jsx";
-import Footer from "./Footer.jsx";
 
 
-
+// mapping of days for display and storage
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAYS_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const DAY_KEY_TO_FULL = {
@@ -35,7 +33,7 @@ const DAY_KEY_TO_FULL = {
   Fri: 'Friday',
   Sat: 'Saturday',
 };
-
+// calendar page displays
 const Calendar = () => {
   const { user } = useAuth();
   const [todoInput, setTodoInput] = useState('');
@@ -44,7 +42,7 @@ const Calendar = () => {
   const [dayMenus, setDayMenus] = useState(createEmptyWeekMenus());
   const [itemTimes, setItemTimes] = useState({});
   const [focusDayShort, setFocusDayShort] = useState(null);
-
+  
   const getTimeKey = (dayName, itemText, occurrenceIndex) => `${dayName}::${itemText}::${occurrenceIndex}`;
 
   const handlers = useCalendarHandlers({
@@ -85,25 +83,17 @@ const Calendar = () => {
       isMounted = false;
     };
   }, [user]);
-    const navigate = useNavigate();
 
 
   return (
     <>
-        <div className='flex flex-row juatify-center'>
-      <div className="mx-auto max-w-10xl bg-[#1B2851] mt-25 px-6 p-6 rounded-xl shadow-2xl shadow-black scale-90">
-            <div className="relative flex items-center justify-center pb-10 pt-2">
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 scale-75 origin-left">
-                    <GreenButton text="← Back" onClick={() => navigate('/')} />
-                </div>
-
-                <h2 className="text-2xl font-bold text-[#EBB537] shrikhand-regular">
-                    Calendar
-                </h2>
-
+      <div className="mx-auto max-w-6xl bg-[#1B2851] px-6 pb-6 pt-24 shadow-2xl">
+        {/* Unified header row: Return, Send, Recieve */}
+        <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '2rem' }}>
+          <Return />
+          <Send />
+          <Recieve />
         </div>
-
-          <div className='mt-5'>
         <DisplayDailyList
           dayMenus={dayMenus}
           onDeleteItem={(day, index) => handlers.handleDeleteTodo(day, index, dayMenus, setDayMenus, setItemTimes, user)}
@@ -111,9 +101,9 @@ const Calendar = () => {
           onEditTime={(day, index, newTime) => handlers.handleEditTime(day, index, newTime, dayMenus, setItemTimes, user)}
           forcedDay={focusDayShort}
           itemTimes={itemTimes}
-        /></div>
+        />
         <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
-                <ListButtonConfig
+          <ListButtonConfig
             value={todoInput}
             onChange={setTodoInput}
             onSubmit={() => handlers.handleSubmitTodo(todoInput, todoTime, selectedDays, dayMenus, setDayMenus, setItemTimes, setFocusDayShort, setTodoInput, setTodoTime, user)}
@@ -127,13 +117,7 @@ const Calendar = () => {
             />
           </div>
         </div>
-
       </div>
-            <div className='absolute right-0 top-1/2 bg-[#1B2851] p-5 rounded-xl -translate-y-1/2 flex flex-col gap-1 items-end scale-90 origin-right shadow-2xl right-5 shadow-black'>
-                <Send />
-            </div>
-        </div>
-        <Footer />
     </>
   );
 };

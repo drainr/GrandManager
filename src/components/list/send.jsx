@@ -14,18 +14,22 @@ const Send = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [status, setStatus] = useState('');
 
-  const handleSend = async (uid) => {
-    if (!uid || !currentUser) return;
+  const handleSend = async () => {
+    if (!selectedUser || !currentUser) return;
     setStatus('Sending...');
-    const db = getDatabase();
-    const userRef = ref(db, `lists/${currentUser.uid}`);
-    const snapshot = await get(userRef);
-    const data = snapshot.exists() ? snapshot.val() : {};
-    const grouped = groupEntriesByDay(data.entries);
-    const json = formatExportJSON(grouped);
-    const chatId = getChatId(currentUser.uid, uid);
-    await sendMessage(chatId, currentUser.uid, currentUser.displayName || currentUser.email, json);
-    setStatus('Sent!');
+    try {
+      const db = getDatabase();
+      const userRef = ref(db, `lists/${currentUser.uid}`);
+      const snapshot = await get(userRef);
+      const data = snapshot.exists() ? snapshot.val() : {};
+      const grouped = groupEntriesByDay(data.entries);
+      const json = formatExportJSON(grouped);
+      const chatId = getChatId(currentUser.uid, selectedUser);
+      await sendMessage(chatId, currentUser.uid, currentUser.displayName || currentUser.email, json);
+      setStatus('Sent!');
+    } catch (e) {
+      setStatus('Failed to send.');
+    }
   };
 
   const handleSelect = async (e) => {
@@ -34,28 +38,22 @@ const Send = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
       <select
-        className="select select-bordered select-sm w-full bg-[#405BA4] text-white border-gray-500 focus:border-[#EBB537] focus:outline-none"
+        className="select select-bordered select-sm bg-[#405BA4] text-white border-gray-500 focus:border-[#EBB537] focus:outline-none"
         onChange={handleSelect}
         value={selectedUser}
+        style={{ minWidth: 160 }}
       >
         <option value="">Send task list to...</option>
         {users.map(user => (
           <option key={user.uid} value={user.uid}>{user.name}</option>
         ))}
-
       </select>
-        <div className='scale-65'>
-        <BlueButton text='send' onClick={handleSend} />
-            {status && <span style={{ color: '#EBB537', fontWeight: 600 }}>{status}</span>}
-            <div className='p-5'>
-        <Recieve />
-            </div>
-
-
-    </div></div>
+      <BlueButton text='Send' onClick={handleSend} />
+      {status && <span style={{ color: '#EBB537', fontWeight: 600 }}>{status}</span>}
+    </div>
   );
 };
 
-export default SendCalendar;
+export default Send;
