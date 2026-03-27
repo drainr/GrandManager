@@ -107,7 +107,7 @@ export default function InspirationalPopup() {
             className="w-full h-64 object-cover"
           />
         </figure>
-        <div className="card-body items-center text-center py-5 px-6">
+        <div className="card-body items-center text-center py-5 px-6 text-white">
           <p className="text-lg font-semibold italic leading-relaxed">
             &ldquo;{currentImage.quote}&rdquo;
           </p>
