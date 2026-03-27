@@ -38,7 +38,7 @@ const Send = () => {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexDirection: 'column',marginRight: 5 }}>
       <select
         className="select select-bordered select-sm bg-[#405BA4] text-white border-gray-500 focus:border-[#EBB537] focus:outline-none"
         onChange={handleSelect}
@@ -50,8 +50,10 @@ const Send = () => {
           <option key={user.uid} value={user.uid}>{user.name}</option>
         ))}
       </select>
-      <YellowButton text='Send' onClick={handleSend} width={180} height={56} />
-      {status && <span style={{ color: '#EBB537', fontWeight: 600 }}>{status}</span>}
+        <div className='flex flex-column p-3'>
+      <YellowButton text='Send' onClick={handleSend} width={80} height={50} />
+        </div> <div className='flex flex-column p-3'>
+      {status && <span style={{ color: '#EBB537', fontWeight: 600 }}>{status}</span>}</div>
     </div>
   );
 };

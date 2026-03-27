@@ -47,7 +47,7 @@ const Recieve = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      setStatus(`Downloaded from ${lastSender}!`);
+      setStatus(`Downloaded!`);
       setTimeout(() => {
         setStatus('');
       }, 2000);
@@ -70,10 +70,11 @@ const Recieve = () => {
   }
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      <YellowButton text="Recieve List" onClick={handleRecieve} width={180} height={56} />
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexDirection: 'column' }}>
+      <YellowButton text="Recieve List" onClick={handleRecieve} width={180} height={50} />
+        <div className='flex flex-column p-3'>
       {status && <span style={{ color: '#EBB537', fontWeight: 600 }}>{status}</span>}
-    </div>
+    </div></div>
   );
 }
 

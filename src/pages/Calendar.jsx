@@ -1,6 +1,7 @@
 // imports
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth.js';
+import GreenButton from '../components/GreenButton.jsx';
 import { useNavigate } from 'react-router-dom';
 import Return from '../components/list/Return.jsx';
 import ListButtonConfig from '../components/list/ListButtonConfig.jsx';
@@ -8,6 +9,7 @@ import DisplayDailyList from '../components/list/DailyListDisplayManager.jsx';
 import MultiSelectButton from '../components/list/MultiSelectButton.jsx';
 import { useCalendarHandlers } from '../hooks/useCalendarHandlers.js';
 import Send from '../components/list/Send.jsx';
+import Footer from "./Footer.jsx";
 import Recieve from '../components/list/Recieve.jsx';
 // database to store/remove list items
 import {
@@ -36,6 +38,7 @@ const DAY_KEY_TO_FULL = {
 // calendar page displays
 const Calendar = () => {
   const { user } = useAuth();
+    const navigate = useNavigate();
   const [todoInput, setTodoInput] = useState('');
   const [todoTime, setTodoTime] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
@@ -87,39 +90,53 @@ const Calendar = () => {
   // styling for calendar page and header row with buttons
   // content such as list, buttons, and status messages that are displayed on the calendar page
   return (
-    <>
-      <div className="mx-auto max-w-6xl bg-[#1B2851] px-6 pb-6 pt-24 shadow-2xl">
-        {/* Unified header row: Return, Send, Recieve */}
-        <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '2rem' }}>
-          <Return />
-          <Send />
-          <Recieve />
-        </div>
-        <DisplayDailyList
-          dayMenus={dayMenus}
-          onDeleteItem={(day, index) => handlers.handleDeleteTodo(day, index, dayMenus, setDayMenus, setItemTimes, user)}
-          onEditItem={(day, index, newText) => handlers.handleEditTodo(day, index, newText, dayMenus, setDayMenus, user)}
-          onEditTime={(day, index, newTime) => handlers.handleEditTime(day, index, newTime, dayMenus, setItemTimes, user)}
-          forcedDay={focusDayShort}
-          itemTimes={itemTimes}
-        />
-        <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
-          <ListButtonConfig
-            value={todoInput}
-            onChange={setTodoInput}
-            onSubmit={() => handlers.handleSubmitTodo(todoInput, todoTime, selectedDays, dayMenus, setDayMenus, setItemTimes, setFocusDayShort, setTodoInput, setTodoTime, user)}
-            timeValue={todoTime}
-            onTimeChange={(event) => setTodoTime(event.target.value)}
-          />
-          <div className="flex flex-col">
-            <MultiSelectButton
-              selectedDays={selectedDays}
-              onToggleDay={(dayKey) => handlers.handleToggleDay(dayKey, selectedDays, setSelectedDays)}
-            />
+      <>
+          <div className='flex flex-row juatify-center'>
+              <div className="mx-auto max-w-10xl bg-[#1B2851] mt-25 px-6 p-6 rounded-xl shadow-2xl shadow-black scale-90">
+                  <div className="relative flex items-center justify-center pb-10 pt-2">
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 scale-75 origin-left">
+                          <GreenButton text="← Back" onClick={() => navigate('/')} />
+                      </div>
+
+                      <h2 className="text-2xl font-bold text-[#EBB537] shrikhand-regular">
+                          Calendar
+                      </h2>
+
+                  </div>
+
+                  <div className='mt-5'>
+                      <DisplayDailyList
+                          dayMenus={dayMenus}
+                          onDeleteItem={(day, index) => handlers.handleDeleteTodo(day, index, dayMenus, setDayMenus, setItemTimes, user)}
+                          onEditItem={(day, index, newText) => handlers.handleEditTodo(day, index, newText, dayMenus, setDayMenus, user)}
+                          onEditTime={(day, index, newTime) => handlers.handleEditTime(day, index, newTime, dayMenus, setItemTimes, user)}
+                          forcedDay={focusDayShort}
+                          itemTimes={itemTimes}
+                      /></div>
+                  <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
+                      <ListButtonConfig
+                          value={todoInput}
+                          onChange={setTodoInput}
+                          onSubmit={() => handlers.handleSubmitTodo(todoInput, todoTime, selectedDays, dayMenus, setDayMenus, setItemTimes, setFocusDayShort, setTodoInput, setTodoTime, user)}
+                          timeValue={todoTime}
+                          onTimeChange={(event) => setTodoTime(event.target.value)}
+                      />
+                      <div className="flex flex-col">
+                          <MultiSelectButton
+                              selectedDays={selectedDays}
+                              onToggleDay={(dayKey) => handlers.handleToggleDay(dayKey, selectedDays, setSelectedDays)}
+                          />
+                      </div>
+                  </div>
+
+              </div>
+              <div className='absolute top-1/2 bg-[#1B2851] p-5 rounded-xl -translate-y-1/2 flex flex-col gap-1 items-end scale-90 origin-right shadow-2xl right-5 shadow-black'>
+                  <Send />
+                  <Recieve />
+              </div>
           </div>
-        </div>
-      </div>
-    </>
+          <Footer />
+      </>
   );
 };
 
