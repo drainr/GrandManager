@@ -7,8 +7,9 @@ A web application that helps manage your most used links, the weather for Saraso
 ## Live Link
 - https://ncfgrandma.web.app/login 
 
+
 ## Trailer
-- https://youtu.be/G38xmqqE3mg
+[![GrandManager Trailer](https://img.youtube.com/vi/G38xmqqE3mg/0.jpg)](https://www.youtube.com/watch?v=G38xmqqE3mg)
 
 
 ## Team Members
@@ -19,6 +20,8 @@ Ivy Bowers (PM), Annika Maringer, Angelo Morelli, Thien Ong
 
 ## Team Contributions
 We worked together using a shared Google Doc, Trello Board, and iMessage.
+
+![Trello Board](assets/GM_TrelloBoard.png)
 
 ### Ivy Bowers
 - Client Interaction
@@ -136,12 +139,12 @@ firebase deploy
 ---
 
 ## UML
-insert UML image here and in assets
+![UML Component Diagram](assets/GM_UML.png)
 
 ---
 
 ## State Diagram
-![State Action Diagram](GrandManager/src/assets/statediagram.png)
+![State Diagram](assets/statediagram.png)
 
 ---
 
@@ -157,3 +160,4 @@ insert UML image here and in assets
 - [UIverse](https://uiverse.io/)
 - [ReactPDF](https://react-pdf.org/) - help for the download pdf part
 - [Firebase](https://firebase.google.com/)- for the authentication
+- [Chat] (https://www.youtube.com/watch?v=zQyrwxMPm88)- for chat function, had to switch to live DB

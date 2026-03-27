@@ -1,5 +1,3 @@
-// src/utils/exportHelpers.js
-
 // Group entries by day
 export function groupEntriesByDay(entries) {
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
