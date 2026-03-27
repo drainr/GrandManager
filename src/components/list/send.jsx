@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, get } from 'firebase/database';
-import { useUsers } from '../../hooks/useUsers';
-import { getChatId, sendMessage } from '../../firebase/chatManager';
-import { groupEntriesByDay, formatExportJSON } from '../../utils/exportHelpers';
-import BlueButton from "../BlueButton.jsx";
+import { useUsers } from '../../hooks/useUsers.js';
+import { getChatId, sendMessage } from '../../firebase/chatManager.js';
+import { groupEntriesByDay, formatExportJSON } from '../../utils/exportHelpers.js';
+import YellowButton from "../YellowButton.jsx";
 import Recieve from "./recieve.jsx";
 
 const Send = () => {
@@ -50,7 +50,7 @@ const Send = () => {
           <option key={user.uid} value={user.uid}>{user.name}</option>
         ))}
       </select>
-      <BlueButton text='Send' onClick={handleSend} />
+      <YellowButton text='Send' onClick={handleSend} width={180} height={56} />
       {status && <span style={{ color: '#EBB537', fontWeight: 600 }}>{status}</span>}
     </div>
   );

@@ -64,7 +64,7 @@ const Recieve = () => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      <YellowButton text="Recieve List" onClick={handleRecieve} />
+      <YellowButton text="Recieve List" onClick={handleRecieve} width={180} height={56} />
       {status && <span style={{ color: '#EBB537', fontWeight: 600 }}>{status}</span>}
     </div>
   );

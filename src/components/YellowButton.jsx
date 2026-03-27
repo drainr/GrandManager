@@ -1,26 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const YellowButton = ({text, onClick}) => {
-
-    return (
-        <StyledWrapper>
-            <button onClick={onClick}>{text}</button>
-        </StyledWrapper>
-    );
+const YellowButton = ({text, onClick, width, height}) => {
+  return (
+    <StyledWrapper width={width} height={height}>
+      <button onClick={onClick} style={{width: width ? width : undefined, height: height ? height : undefined}}>{text}</button>
+    </StyledWrapper>
+  );
 }
 
 const StyledWrapper = styled.div`
-    
- 
   button {
-      --green: #3FB348;
-      --darkGreen: #2C8A3A;
-      --lightBlue: #3FB3E2;
-      --darkBlue: #364A85;
-      --mediumBlue: #445AE2;
-      --brightYellow: #F1CD15;
-      --darkYellow: #EBB537;
+    --green: #3FB348;
+    --darkGreen: #2C8A3A;
+    --lightBlue: #3FB3E2;
+    --darkBlue: #364A85;
+    --mediumBlue: #445AE2;
+    --brightYellow: #F1CD15;
+    --darkYellow: #EBB537;
     padding: 10px 40px;
     font-size: 18px;
     background-color: #F1CD15;
@@ -41,6 +38,8 @@ const StyledWrapper = styled.div`
     text-decoration: none;
     font-weight: 900;
     transition: all 0.7s cubic-bezier(0,.8,.26,.99);
+    width: ${({width}) => width ? `${width}px` : 'auto'};
+    height: ${({height}) => height ? `${height}px` : 'auto'};
   }
 
   button:before {

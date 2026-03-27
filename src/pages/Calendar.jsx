@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import Return from '../components/list/Return.jsx';
 import ListButtonConfig from '../components/list/ListButtonConfig.jsx';
 import DisplayDailyList from '../components/list/DailyListDisplayManager.jsx';
-import MultiSelectButton from '../components/list/multiSelectButton.jsx';
+import MultiSelectButton from '../components/list/MultiSelectButton.jsx';
 import { useCalendarHandlers } from '../hooks/useCalendarHandlers.js';
-import Send from '../components/list/send.jsx';
-import Recieve from '../components/list/recieve.jsx';
+import Send from '../components/list/Send.jsx';
+import Recieve from '../components/list/Recieve.jsx';
 // database to store/remove list items
 import {
   addEntry,
