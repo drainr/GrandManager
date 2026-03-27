@@ -4,6 +4,7 @@ import ListButtonConfig from '../components/list/ListButtonConfig.jsx';
 import DisplayDailyList from '../components/list/DailyListDisplayManager.jsx';
 import MultiSelectButton from '../components/list/multiSelectButton.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useCalendarHandlers } from '../hooks/useCalendarHandlers.js';
 
 // database to store/remove list items
 import {
@@ -42,6 +43,25 @@ const Calendar = () => {
   const [focusDayShort, setFocusDayShort] = useState(null);
 
   const getTimeKey = (dayName, itemText, occurrenceIndex) => `${dayName}::${itemText}::${occurrenceIndex}`;
+
+  const handlers = useCalendarHandlers({
+    user,
+    dayMenus,
+    setDayMenus,
+    setItemTimes,
+    setFocusDayShort,
+    setTodoInput,
+    setTodoTime,
+    getTimeKey,
+    DAY_KEY_TO_FULL,
+    DAYS_SHORT,
+    DAYS_FULL,
+    addEntry,
+    updateEntryTime,
+    updateEntry,
+    deleteEntry,
+    getEntriesByDay,
+  });
 
   useEffect(() => {
     if (!user) return;
@@ -210,6 +230,22 @@ const Calendar = () => {
   };
 
   return (
+    <div className="mx-auto max-w-6xl bg-[#1B2851] px-6 pb-6 pt-24 shadow-2xl">
+      {/* Return and Export buttons */}
+      <div style={{ width: '100%', display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', marginRight: 'auto' }}>
+          <Return />
+          <Export />
+        </div>
+      </div>
+      <DisplayDailyList
+        dayMenus={dayMenus}
+        onDeleteItem={(day, index) => handlers.handleDeleteTodo(day, index, dayMenus, setDayMenus, setItemTimes, user)}
+        onEditItem={(day, index, newText) => handlers.handleEditTodo(day, index, newText, dayMenus, setDayMenus, user)}
+        onEditTime={(day, index, newTime) => handlers.handleEditTime(day, index, newTime, dayMenus, setItemTimes, user)}
+        forcedDay={focusDayShort}
+        itemTimes={itemTimes}
+      />
     <div className="mx-auto max-w-6xl mt-30 bg-[#1B2851] rounded-xl p-3 px-6 pb-6 shadow-2xl shadow-black">
         <div className='relative flex items-center justify-center pb-6 pt-2'>
 
@@ -225,12 +261,15 @@ const Calendar = () => {
         <ListButtonConfig
           value={todoInput}
           onChange={setTodoInput}
-          onSubmit={handleSubmitTodo}
+          onSubmit={() => handlers.handleSubmitTodo(todoInput, todoTime, selectedDays, dayMenus, setDayMenus, setItemTimes, setFocusDayShort, setTodoInput, setTodoTime, user)}
           timeValue={todoTime}
           onTimeChange={(event) => setTodoTime(event.target.value)}
         />
         <div className="flex flex-col">
-          <MultiSelectButton selectedDays={selectedDays} onToggleDay={handleToggleDay} />
+          <MultiSelectButton
+            selectedDays={selectedDays}
+            onToggleDay={(dayKey) => handlers.handleToggleDay(dayKey, selectedDays, setSelectedDays)}
+          />
         </div>
       </div>
     </div>
