@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../hooks/useAuth.js';
 import ListButtonConfig from '../components/list/ListButtonConfig.jsx';
 import DisplayDailyList from '../components/list/DailyListDisplayManager.jsx';
 import MultiSelectButton from '../components/list/multiSelectButton.jsx';
@@ -14,7 +15,6 @@ import {
 
 
 
-const DEFAULT_LIST_ID = 'default';
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAYS_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const DAY_KEY_TO_FULL = {
@@ -28,6 +28,7 @@ const DAY_KEY_TO_FULL = {
 };
 
 const Calendar = () => {
+  const { user, loading } = useAuth();
   const [todoInput, setTodoInput] = useState('');
   const [todoTime, setTodoTime] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
@@ -38,11 +39,11 @@ const Calendar = () => {
   const getTimeKey = (dayName, itemText, occurrenceIndex) => `${dayName}::${itemText}::${occurrenceIndex}`;
 
   useEffect(() => {
+    if (!user) return;
     let isMounted = true;
-
     const loadSavedEntries = async () => {
       try {
-        const savedMenus = await getEntriesByDay(DEFAULT_LIST_ID);
+        const savedMenus = await getEntriesByDay(user.uid);
         if (isMounted) {
           setDayMenus(savedMenus);
         }
@@ -50,13 +51,11 @@ const Calendar = () => {
         console.error('Failed to load saved todo entries:', error);
       }
     };
-
     loadSavedEntries();
-
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [user]);
 
   const handleToggleDay = (dayKey) => {
     setSelectedDays((prevSelected) =>
@@ -115,8 +114,9 @@ const Calendar = () => {
     setTodoTime('');
 
     try {
+      if (!user) return;
       await Promise.all(
-        targetDays.map((day) => addEntry(DEFAULT_LIST_ID, day, trimmedTodo))
+        targetDays.map((day) => addEntry(user.uid, day, trimmedTodo))
       );
     } catch (error) {
       console.error('Failed to save todo entry:', error);
@@ -160,7 +160,8 @@ const Calendar = () => {
     });
 
     try {
-      await deleteEntry(DEFAULT_LIST_ID, day, itemToDelete, sameTextBeforeIndex);
+      if (!user) return;
+      await deleteEntry(user.uid, day, itemToDelete, sameTextBeforeIndex);
     } catch (error) {
       console.error('Failed to delete todo entry:', error);
     }
@@ -181,7 +182,8 @@ const Calendar = () => {
     });
     // Update in database
     try {
-      await updateEntry(DEFAULT_LIST_ID, day, oldText, newText, matchIndex);
+      if (!user) return;
+      await updateEntry(user.uid, day, oldText, newText, matchIndex);
     } catch (error) {
       console.error('Failed to update todo entry:', error);
     }
