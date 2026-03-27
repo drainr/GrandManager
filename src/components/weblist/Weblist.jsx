@@ -46,8 +46,8 @@ const Weblist = () => {
   }, [userId]);
 
   return (
-    <div style={{ padding: '30px', background: '#EBB537', marginTop: '20px',left:"20px" }} className='shadow-2xl shadow-black p-6 rounded-xl'>
-      <h1 style={{ marginBottom: '25px', color: '#4d2c72' }} className='shrikhand-regular'>Frequently Used</h1>
+    <div style={{ padding: '25px 65px', background: '#EBB537', marginTop: '0px', left:"20px", border: '1px solid #4d2c72', width: "600px"}} className='shadow-2xl shadow-black p-6 rounded-xl'>
+      <h1 style={{ marginTop: '0px', marginBottom: '25px', color: '#4d2c72' }} className='shrikhand-regular'>Frequently Used</h1>
       
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
         {links.map(link => (
@@ -64,7 +64,7 @@ const Weblist = () => {
                   style={{ width: '30px', height: '30px' }}
                 />
               </div>
-              <span style={{ fontSize: '12px', fontWeight: '600', color: '#222', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: '12px', fontWeight: '600', color: '#222', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '10px' }}>
                 {link.name}
               </span>
             </a>
@@ -85,7 +85,7 @@ const Weblist = () => {
               width: '64px', height: '64px', border: '2px dashed #ccc',
               background: '#fafafa', color: '#888', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto',
-              marginBottom: '10px', padding: 0
+              marginBottom: '06px'
             }}
           >
             <span style={{ fontSize: '32px', fontWeight: '300', marginTop: '-4px' }}>+</span>
