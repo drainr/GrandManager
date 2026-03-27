@@ -18,7 +18,7 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
     // Initialize the chat hook (passing null for selectedUser to get general messages)
     const { messages } = useChat(currentUser, null);
 
-    const [dayMenus, setDayMenus] = useState({});
+    const setDayMenus = useState({});
     const [todaysTodos, setTodaysTodos] = useState([]);
     const DAYS_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const DEFAULT_LIST_ID = 'default';
