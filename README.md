@@ -16,25 +16,25 @@ Ivy Bowers (PM), Annika Maringer, Angelo Morelli, Thien Ong
 
 ## Team Contributions
 We worked together using a shared Google Doc, Trello Board, and iMessage.
-# Ivy Bowers
+### Ivy Bowers
 - Client Interaction
 - React Routing
 - Inspirational Popups
 - Chatting Feature & associated database implementation
 - UML Diagram
 
-# Annika Maringer
+### Annika Maringer
 - Custom Buttons
 - All UI
 - Navbar & Footer
 - App Trailer
 
-# Angelo Morelli
+### Angelo Morelli
 - Weather API for Sarasota and Thousand Oaks
 - Frequently Used Links
 - State Diagram
 
-# Thien Ong
+### Thien Ong
 - Firebase Authentication
 - Calendar/To-do list
 - Exporting Calendar for sharing
