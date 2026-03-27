@@ -141,7 +141,7 @@ insert UML image here and in assets
 ---
 
 ## State Diagram
-![State Action Diagram](GrandManager/src/assets/statediagram.svg)
+![State Action Diagram](GrandManager/src/assets/statediagram.png)
 
 ---
 
