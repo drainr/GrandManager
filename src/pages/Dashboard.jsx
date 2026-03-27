@@ -38,13 +38,12 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
     return (
         <>
             <div className="flex flex-col align-top min-h-screen">
-                <div className='flex flex-col mt-40 p-10'>
+                <div className='flex flex-col justify-center items-center mt-40 p-10 w-200'>
                     <Weblist />
                 </div>
 
                 <div className="flex flex-row gap-10 justify-center p-10">
-                    {/* NEW MESSAGES SECTION */}
-                    <div className="bg-[#4d2c72] shadow-2xl p-6 rounded-xl w-80">
+                    <div className="bg-[#4d2c72] rounded-xl p-6 w-80 shadow-2xl shadow-black">
                         <div className="flex justify-between items-center mb-4">
                             <h1 className="shrikhand-regular text-[#EBB537] text-xl">New Messages</h1>
                         </div>
@@ -76,8 +75,7 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
                         <GreenButton text={"Go to Chat"} onClick={() => navigate('/chat')} />
                     </div>
 
-                    {/* TO DO SECTION */}
-                    <div className="bg-[#EBB537] shadow-2xl p-6 rounded-xl w-80">
+                    <div className="bg-[#EBB537] p-6 rounded-xl w-80 shadow-2xl shadow-black">
                         <h1 className="shrikhand-regular text-[#4d2c72] text-xl mb-2">Today's To Do's!</h1>
                         <p className="text-[#1B2851] text-md shrikhand-regular mb-4 underline decoration-[#4d2c72]">
                             {todayFull}
@@ -89,9 +87,9 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
                             ) : (
                                 <>
                                     {todaysTodos.slice(0, 3).map((todo, i) => (
-                                        <div key={i} className="flex items-center gap-2 p-1">
+                                        <div key={i} className="flex align-center items-center gap-2 p-3">
                                             <Checkbox onClick={() => onDeleteItem?.(selectedFull, index)} />
-                                            <p className="text-[#1B2851] truncate font-medium">{todo}</p>
+                                            <p className="text-[#1B2851] font-medium align-center">{todo}</p>
                                         </div>
                                     ))}
                                     {todaysTodos.length > 3 && (
