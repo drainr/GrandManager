@@ -9,6 +9,7 @@ import PurpleButton from "../components/PurpleButton.jsx";
 import Checkbox from "../components/Checkbox.jsx";
 import Weblist from "../components/weblist/Weblist.jsx";
 import Footer from "./Footer.jsx";
+import WeatherCard from "../components/weather/WeatherCard.jsx";
 
 const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
     // Initialize the chat hook (passing null for selectedUser to get general messages)
     const { messages } = useChat(currentUser, null);
 
-    const [dayMenu,setDayMenus] = useState({});
+    const [dayMenu, setDayMenus] = useState({});
     const [todaysTodos, setTodaysTodos] = useState([]);
     const DAYS_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const DEFAULT_LIST_ID = 'default';
@@ -37,13 +38,20 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
 
     return (
         <>
-            <div className="flex flex-col align-top min-h-screen w-screen">
-                <div className='align-middle items-center mt-30 p-10 w-200'>
+           <div className="flex flex-col align-top min-h-screen w-screen">
+            <div className='flex flex-row items-start justify-center mt-20 p-10 gap-8'>
+                <div className='w-fit max-w-[600px]'>
                     <Weblist />
                 </div>
 
+                <div className="flex flex-col gap-4">
+                    <WeatherCard location="Sarasota" />
+                    <WeatherCard location="Thousand Oaks, CA" />
+                </div>
+            </div>
+
                 <div className="flex flex-row gap-10 justify-center p-10">
-                    <div className="bg-[#4d2c72] rounded-xl p-6 w-80 shadow-2xl shadow-black">
+                    <div className="bg-[#4d2c72] rounded-xl p-6 w-80 shadow-2xl shadow-black border border-[#EBB537]">
                         <div className="flex justify-between items-center mb-4">
                             <h1 className="shrikhand-regular text-[#EBB537] text-xl">New Messages</h1>
                         </div>
@@ -75,8 +83,8 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
                         <GreenButton text={"Go to Chat"} onClick={() => navigate('/chat')} />
                     </div>
 
-                    <div className="bg-[#EBB537] p-6 rounded-xl w-80 shadow-2xl shadow-black">
-                        <h1 className="shrikhand-regular text-[#4d2c72] text-xl mb-2">Today's To Do's!</h1>
+                    <div className="bg-[#EBB537] p-6 rounded-xl w-80 shadow-2xl shadow-black border border-[#4d2c72]">
+                        <h1 className="shrikhand-regular text-[#4d2c72] text-xl mb-2">Today's To-Dos!</h1>
                         <p className="text-[#1B2851] text-md shrikhand-regular mb-4 underline decoration-[#4d2c72]">
                             {todayFull}
                         </p>
