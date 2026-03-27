@@ -45,7 +45,7 @@ const Chat = () => {
       <div className="bg-[#1B2851] shadow-md pb-2">
         <div className="relative top-1 bottom-0.5 flex items-center justify-center mb-3 p-2">
             <div className="absolute left-0 scale-65">
-                <GreenButton text="← Dashboard" onClick={() => navigate('/')} />
+                <GreenButton text="← Back" onClick={() => navigate('/')} />
             </div>
             <h2 className="text-xl font-bold text-[#EBB537] shrikhand-regular">
                 Chat
