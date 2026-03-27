@@ -16,6 +16,7 @@ Ivy Bowers (PM), Annika Maringer, Angelo Morelli, Thien Ong
 
 ## Team Contributions
 We worked together using a shared Google Doc, Trello Board, and iMessage.
+
 ### Ivy Bowers
 - Client Interaction
 - React Routing
@@ -28,6 +29,7 @@ We worked together using a shared Google Doc, Trello Board, and iMessage.
 - All UI
 - Navbar & Footer
 - App Trailer
+- error 404 page
 
 ### Angelo Morelli
 - Weather API for Sarasota and Thousand Oaks
@@ -71,19 +73,6 @@ We worked together using a shared Google Doc, Trello Board, and iMessage.
     - without being logged in the features adding to watched and wishlist are disabled.
     - If the user enters a route (about us page) that does not exist, the **NotFound page** is displayed.
 
-## How It Works
-
-1. On Load the User gets send to the Home Page that shows the top rated movies and asks the User to Login or create an account to be able to save movies in watchlist or wishlist
-2. Login/SignUp requires the User to either fill out your data to create and account or if an account already exists to use the correct email and password to get access to your profile
-4. On load, the app fetches movie data from `/public/movie.json`.
-2. The `SearchBar` component provides a text input and four dropdowns (genre, age group, year, sort order).
-3. Filtering and sorting are computed with `useMemo` so the UI stays responsive.
-4. Each `MovieCard` shows the movie poster as a background image with a gradient overlay. Hovering reveals the short description, runtime, and budget.
-5. Clicking the heart button toggles a movie in the **Watchlist**; clicking the eye button toggles it in **Already Watched**.
-6. Both lists are accessible via the icons in the **Navbar**. Each opens a side drawer listing the saved movies with a Remove button and a Download List button.
-7. The Download button uses `@react-pdf/renderer` to generate and download a PDF with the movie title, year, genre, IMDB rating, and runtime for each entry.
-8. There are pages like about and watch that are unauthorized for the user or are not available which show an error code
----
 
 ## Getting Started
 
@@ -154,10 +143,7 @@ insert SD image here and in assets
 - [DaisyUI Documentation](https://daisyui.com/)
 - [Styled Components Documentation](https://styled-components.com/)
 - [React Icons](https://react-icons.github.io/react-icons/)
-- [React Toastify](https://fkhadra.github.io/react-toastify/)
 - [@react-pdf/renderer](https://react-pdf.org/)
-- [Claude by Anthropic](https://claude.ai) — used to assist with Git and GitHub workflows
-- [UIverse](https://uiverse.io/LightAndy1/tidy-pig-67)
-- [UIverse](https://uiverse.io/Uncannypotato69/ancient-hound-67)
+- [UIverse](https://uiverse.io/)
 - [ReactPDF](https://react-pdf.org/) - help for the download pdf part
 - [Firebase](https://firebase.google.com/)- for the authentication
