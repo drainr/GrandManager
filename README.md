@@ -1,32 +1,56 @@
 # GrandManager
 
-A web application that helps managing your most used links, the weather you want to know, the messages with your family and friends and your to do's.
+A web application that helps manage your most used links, the weather for Sarasota,FL and Thousand Oaks, CA, messaging with your family and friends, and keeping up with daily tasks on a calendar.
 
 ---
 
 ## Live Link
-- 
+- https://ncfgrandma.web.app/login 
 
 
 ## Team Members
 
-- Angelo
-- Thien
-- Ivy Bowers
-- Annika Maringer
+Ivy Bowers (PM), Annika Maringer, Angelo Morelli, Thien Ong
+
+---
+
+## Team Contributions
+We worked together using a shared Google Doc, Trello Board, and iMessage.
+### Ivy Bowers
+- Client Interaction
+- React Routing
+- Inspirational Popups
+- Chatting Feature & associated database implementation
+- UML Diagram
+
+### Annika Maringer
+- Custom Buttons
+- All UI
+- Navbar & Footer
+- App Trailer
+
+### Angelo Morelli
+- Weather API for Sarasota and Thousand Oaks
+- Frequently Used Links
+- State Diagram
+
+### Thien Ong
+- Firebase Authentication
+- Calendar/To-do list
+- Exporting Calendar for sharing
+
 
 ---
 
 ## Features
 
-- **PDF Download** — Download list of your todo's.
 - **Login** - Login to an account to save movies in a wishlist or watchlist
 - **SignUp** - Signup page to create an account with our page for personalized user experience
 - **Authentication** - both SignUp and Login use an authentication application to verify a user
 - **Not Found** -  Error codes for pages that do not exist or are wrong
 - **MainRouter** - Routes/Links to other pages
 - **PrivateRoute** - Private Route to a page that needs to be unlocked through a login or signup authentication
--
+- **PDF Download** — Download list of your todo's.
 
 ---
 
@@ -72,7 +96,7 @@ A web application that helps managing your most used links, the weather you want
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd mini-project-05
+cd GrandManager
 
 # Install dependencies
 npm install
@@ -99,7 +123,6 @@ npm run preview
     ├───assets
     ├───components
     │   ├───buttons
-    │   ├───firebase
     │   ├───list
     │   ├───routes
     │   ├───weather
@@ -110,6 +133,16 @@ npm run preview
     ├───pages
     └───routes
 ```
+
+---
+
+## UML
+insert UML image here and in assets
+
+---
+
+## State Diagram
+insert SD image here and in assets
 
 ---
 
