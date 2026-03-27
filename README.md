@@ -8,7 +8,7 @@ A web application that helps manage your most used links, the weather for Saraso
 - https://ncfgrandma.web.app/login 
 
 ## Trailer
-- https://youtu.be/h0n6mjOMijo
+- https://youtu.be/G38xmqqE3mg
 
 
 ## Team Members
