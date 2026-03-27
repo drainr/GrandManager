@@ -56,7 +56,7 @@ const Weblist = () => {
               <div style={{
                 width: '64px', height: '64px', background: '#fff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.1)', marginBottom: '10px', margin: '0 auto'
+                boxShadow: '0 4px 10px rgba(0,0,0,0.1)', marginBottom: '5px', margin: '0 auto'
               }}>
                 <img 
                   src={`https://www.google.com/s2/favicons?sz=128&domain=${link.url}`} 
@@ -85,7 +85,7 @@ const Weblist = () => {
               width: '64px', height: '64px', border: '2px dashed #ccc',
               background: '#fafafa', color: '#888', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto',
-              marginBottom: '06px'
+              marginBottom: '0px'
             }}
           >
             <span style={{ fontSize: '32px', fontWeight: '300', marginTop: '-4px' }}>+</span>
