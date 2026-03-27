@@ -20,7 +20,7 @@ import {useNavigate} from "react-router-dom";
 
 const Dashboard = ({onDeleteItem,selectedIndex,index}) => {
     const navigate = useNavigate();
-    const [dayMenus, setDayMenus] = useState({});
+    const setDayMenus = useState({});
     const [todaysTodos, setTodaysTodos] = useState([]);
     const DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const DEFAULT_LIST_ID = 'default';
