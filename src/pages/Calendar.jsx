@@ -19,6 +19,7 @@ import {
   updateEntryTime,
 } from '../firebase/TodoTaskManager.js';
 import Checkbox from "../components/Checkbox.jsx";
+import GreenButton from "../components/GreenButton.jsx";
 
 
 
@@ -83,21 +84,28 @@ const Calendar = () => {
       isMounted = false;
     };
   }, [user]);
+    const navigate = useNavigate();
 
 
   return (
     <>
-      <div className="mx-auto max-w-6xl bg-[#1B2851] px-6 pb-6 pt-24 shadow-2xl">
-        {/* Return and Share buttons, Send/Recieve on right */}
-        <div style={{ width: '100%', display: 'flex', alignItems: 'flex-start', marginBottom: '2rem' }}>
-          <div style={{ display: 'flex', gap: '1rem', marginRight: 'auto' }}>
-            <Return />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginLeft: '2rem', minWidth: 260 }}>
+      <div className="mx-auto max-w-6xl bg-[#1B2851] mt-20 px-6 pb-6 pt-5 rounded-xl shadow-2xl shadow-black">
+            <div className="relative flex items-center justify-center pb-6 pt-2">
+                <div className="absolute left-0 scale-75 origin-left">
+                    <GreenButton text="← Back" onClick={() => navigate('/')} />
+                </div>
+
+                <h2 className="text-2xl font-bold text-[#EBB537] shrikhand-regular">
+                    Calendar
+                </h2>
+
+          <div className='absolute right-0 flex flex-col gap-2 items-end mt-10'>
             <Send />
-            <Recieve />
+              <div className='scale-65'>
+            <Recieve /></div>
           </div>
         </div>
+          <div className='mt-20'>
         <DisplayDailyList
           dayMenus={dayMenus}
           onDeleteItem={(day, index) => handlers.handleDeleteTodo(day, index, dayMenus, setDayMenus, setItemTimes, user)}
@@ -105,23 +113,23 @@ const Calendar = () => {
           onEditTime={(day, index, newTime) => handlers.handleEditTime(day, index, newTime, dayMenus, setItemTimes, user)}
           forcedDay={focusDayShort}
           itemTimes={itemTimes}
-        />
+        /></div>
         <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
-          <ListButtonConfig
+            <div className='ml-10'>
+                <ListButtonConfig
             value={todoInput}
             onChange={setTodoInput}
             onSubmit={() => handlers.handleSubmitTodo(todoInput, todoTime, selectedDays, dayMenus, setDayMenus, setItemTimes, setFocusDayShort, setTodoInput, setTodoTime, user)}
             timeValue={todoTime}
             onTimeChange={(event) => setTodoTime(event.target.value)}
-          />
+          /></div>
           <div className="flex flex-col">
             <MultiSelectButton
               selectedDays={selectedDays}
               onToggleDay={(dayKey) => handlers.handleToggleDay(dayKey, selectedDays, setSelectedDays)}
             />
           </div>
-        </div>
-      </div>
+        </div></div>
     </>
   );
 };
