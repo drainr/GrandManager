@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth"; // Added this
-import { useChat } from "../hooks/useChat"; // Added this
 import { getEntriesByDay } from "../firebase/databaseManager";
 
 import GreenButton from "../components/GreenButton.jsx";
@@ -15,9 +14,6 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
   const navigate = useNavigate();
   const auth = getAuth(); // Initialize auth
   const currentUser = auth.currentUser;
-
-  // Initialize the chat hook (passing null for selectedUser to get general messages)
-  const { messages } = useChat(currentUser, null);
 
   const [dayMenu, setDayMenus] = useState({});
   const [todaysTodos, setTodaysTodos] = useState([]);
@@ -34,7 +30,8 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
   const selectedFull = DAYS_FULL[selectedIndex];
   const todayIndex = new Date().getDay();
   const todayFull = DAYS_FULL[todayIndex];
-  const previews = useMessagePreview(currentUser?.uid);
+
+  const { previews } = useMessagePreview(currentUser?.uid);
 
   useEffect(() => {
     const loadTodos = async () => {
