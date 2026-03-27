@@ -20,6 +20,7 @@ import {
 } from '../firebase/TodoTaskManager.js';
 import Checkbox from "../components/Checkbox.jsx";
 import GreenButton from "../components/GreenButton.jsx";
+import Footer from "./Footer.jsx";
 
 
 
@@ -89,23 +90,22 @@ const Calendar = () => {
 
   return (
     <>
-      <div className="mx-auto max-w-6xl bg-[#1B2851] mt-20 px-6 pb-6 pt-5 rounded-xl shadow-2xl shadow-black">
-            <div className="relative flex items-center justify-center pb-6 pt-2">
-                <div className="absolute left-0 scale-75 origin-left">
+      <div className="mx-auto max-w-6xl bg-[#1B2851] mt-25 px-6 p-6 rounded-xl shadow-2xl shadow-black">
+            <div className="relative flex items-center justify-center pb-30 pt-2">
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 scale-75 origin-left">
                     <GreenButton text="← Back" onClick={() => navigate('/')} />
                 </div>
 
                 <h2 className="text-2xl font-bold text-[#EBB537] shrikhand-regular">
                     Calendar
                 </h2>
+                <div className='absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-1 items-end scale-90 origin-right'>
+                    <Send />
+                </div>
 
-          <div className='absolute right-0 flex flex-col gap-2 items-end mt-10'>
-            <Send />
-              <div className='scale-65'>
-            <Recieve /></div>
-          </div>
         </div>
-          <div className='mt-20'>
+
+          <div className='mt-5'>
         <DisplayDailyList
           dayMenus={dayMenus}
           onDeleteItem={(day, index) => handlers.handleDeleteTodo(day, index, dayMenus, setDayMenus, setItemTimes, user)}
@@ -129,7 +129,10 @@ const Calendar = () => {
               onToggleDay={(dayKey) => handlers.handleToggleDay(dayKey, selectedDays, setSelectedDays)}
             />
           </div>
-        </div></div>
+        </div>
+
+      </div>
+        <Footer />
     </>
   );
 };
