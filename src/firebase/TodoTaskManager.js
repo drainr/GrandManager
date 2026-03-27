@@ -40,10 +40,11 @@ export const createEmptyWeekMenus = () => {
 };
 
 // stores data
-export const addEntry = async (listId, day, text) => {
+export const addEntry = async (listId, day, text, time = "") => {
   await push(getEntriesRef(listId), {
     day,
     text,
+    time,
     date: new Date().toISOString(),
     createdAt: serverTimestamp(),
   });
@@ -53,22 +54,36 @@ export const addEntry = async (listId, day, text) => {
 export const getEntriesByDay = async (listId) => {
   const snapshot = await get(getEntriesRef(listId));
   const entriesByDay = createEmptyWeekMenus();
-
-  //fallback if no data
+  const timesByKey = {};
   if (!snapshot.exists()) {
-    return entriesByDay;
+    return { entriesByDay, timesByKey };
   }
-
   const rawEntries = snapshot.val();
-
-  // group by day
   Object.values(rawEntries).forEach((entry) => {
     if (entry?.day && entry?.text && entriesByDay[entry.day]) {
       entriesByDay[entry.day].push(entry.text);
+      // Save time by key for this entry
+      const day = entry.day;
+      const text = entry.text;
+      const time = entry.time || "";
+      const occurrenceIndex = entriesByDay[day].filter((t) => t === text).length - 1;
+      const key = `${day}::${text}::${occurrenceIndex}`;
+      timesByKey[key] = time;
     }
   });
-
-  return entriesByDay;
+  return { entriesByDay, timesByKey };
+};
+// update item time
+export const updateEntryTime = async (listId, day, text, newTime, matchIndex = 0) => {
+  const snapshot = await get(getEntriesRef(listId));
+  if (!snapshot.exists()) return;
+  const rawEntries = snapshot.val();
+  const matchingKeys = Object.entries(rawEntries)
+    .filter(([, entry]) => entry?.day === day && entry?.text === text)
+    .map(([entryKey]) => entryKey);
+  const targetKey = matchingKeys[matchIndex];
+  if (!targetKey) return;
+  await update(ref(rtdb, `lists/${listId}/entries/${targetKey}`), { time: newTime });
 };
 
 // delete item

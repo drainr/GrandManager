@@ -6,6 +6,13 @@ import RedButton from "../components/RedButton.jsx";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 import { loginWithEmail, resetPasswordWithEmail, loginWithGoogle } from "../firebase/auth";
+
+const Login = () => {
+    const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showChangePassword, setShowChangePassword] = useState(false);
+    const [changeMsg, setChangeMsg] = useState("");
+
     const handleGoogleLogin = async () => {
         const result = await loginWithGoogle();
         if (result.success) {
@@ -14,12 +21,6 @@ import { loginWithEmail, resetPasswordWithEmail, loginWithGoogle } from "../fire
             setChangeMsg(result.message || "Google login failed.");
         }
     };
-
-const Login = () => {
-    const navigate = useNavigate();
-    const [showPassword, setShowPassword] = useState(false);
-    const [showChangePassword, setShowChangePassword] = useState(false);
-    const [changeMsg, setChangeMsg] = useState("");
 
     const handleLogin = async (e) => {
         e.preventDefault();

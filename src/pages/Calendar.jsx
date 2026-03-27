@@ -11,7 +11,8 @@ import {
   deleteEntry,
   getEntriesByDay,
   updateEntry,
-} from '../firebase/databaseManager.js';
+  updateEntryTime,
+} from '../firebase/TodoTaskManager.js';
 
 
 
@@ -28,7 +29,7 @@ const DAY_KEY_TO_FULL = {
 };
 
 const Calendar = () => {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const [todoInput, setTodoInput] = useState('');
   const [todoTime, setTodoTime] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
@@ -43,9 +44,10 @@ const Calendar = () => {
     let isMounted = true;
     const loadSavedEntries = async () => {
       try {
-        const savedMenus = await getEntriesByDay(user.uid);
+        const { entriesByDay, timesByKey } = await getEntriesByDay(user.uid);
         if (isMounted) {
-          setDayMenus(savedMenus);
+          setDayMenus(entriesByDay);
+          setItemTimes(timesByKey);
         }
       } catch (error) {
         console.error('Failed to load saved todo entries:', error);
@@ -86,13 +88,10 @@ const Calendar = () => {
       const dayItems = updatedMenus[day] || [];
       const occurrenceIndex = dayItems.filter((entry) => entry === trimmedTodo).length;
       updatedMenus[day] = [...dayItems, trimmedTodo];
-
-      if (todoTime) {
-        newTimedEntries.push({
-          key: getTimeKey(day, trimmedTodo, occurrenceIndex),
-          value: todoTime,
-        });
-      }
+      newTimedEntries.push({
+        key: getTimeKey(day, trimmedTodo, occurrenceIndex),
+        value: todoTime,
+      });
     });
 
     setDayMenus(updatedMenus);
@@ -116,10 +115,27 @@ const Calendar = () => {
     try {
       if (!user) return;
       await Promise.all(
-        targetDays.map((day) => addEntry(user.uid, day, trimmedTodo))
+        targetDays.map((day) => addEntry(user.uid, day, trimmedTodo, todoTime))
       );
     } catch (error) {
       console.error('Failed to save todo entry:', error);
+    }
+  };
+
+  // Handler for editing time and saving to DB
+  const handleEditTime = async (day, index, newTime) => {
+    const dayItems = dayMenus[day] || [];
+    const itemText = dayItems[index];
+    if (!itemText || !user) return;
+    const matchIndex = dayItems.slice(0, index).filter((item) => item === itemText).length;
+    setItemTimes((prev) => {
+      const key = getTimeKey(day, itemText, matchIndex);
+      return { ...prev, [key]: newTime };
+    });
+    try {
+      await updateEntryTime(user.uid, day, itemText, newTime, matchIndex);
+    } catch (error) {
+      console.error('Failed to update time:', error);
     }
   };
 
@@ -191,7 +207,7 @@ const Calendar = () => {
 
   return (
     <div className="mx-auto max-w-6xl bg-[#1B2851] px-6 pb-6 pt-24 shadow-2xl">
-      <DisplayDailyList dayMenus={dayMenus} onDeleteItem={handleDeleteTodo} onEditItem={handleEditTodo} forcedDay={focusDayShort} itemTimes={itemTimes} />
+      <DisplayDailyList dayMenus={dayMenus} onDeleteItem={handleDeleteTodo} onEditItem={handleEditTodo} onEditTime={handleEditTime} forcedDay={focusDayShort} itemTimes={itemTimes} />
 
       <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
         <ListButtonConfig

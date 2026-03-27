@@ -1,7 +1,8 @@
-import { get, push, ref, remove, serverTimestamp, update } from 'firebase/database';
+import { get, ref, update } from 'firebase/database';
 import { rtdb } from './firebase.js';
 
-// ...existing code...
+// Helper to get the reference to the entries for a list
+const getEntriesRef = (listId) => ref(rtdb, `lists/${listId}/entries`);
 
 // update item text
 export const updateEntry = async (listId, day, oldText, newText, matchIndex = 0) => {
