@@ -28,7 +28,7 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
         "Friday",
         "Saturday",
     ];
-    const DEFAULT_LIST_ID = "default";
+    const DEFAULT_LIST_ID = currentUser?.uid || 'default';
     const selectedFull = DAYS_FULL[selectedIndex];
     const todayIndex = new Date().getDay();
     const todayFull = DAYS_FULL[todayIndex];
@@ -37,9 +37,11 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
 
     useEffect(() => {
         const loadTodos = async () => {
-            const data = await getEntriesByDay(DEFAULT_LIST_ID);
-            setDayMenus(data);
-            setTodaysTodos(data[todayFull] || []);
+            const { entriesByDay} = await getEntriesByDay(DEFAULT_LIST_ID);
+            console.log("entriesByDay:", entriesByDay);
+            console.log("Thursday tasks:", entriesByDay["Thursday"]);
+            setDayMenus(entriesByDay);
+            setTodaysTodos(entriesByDay[todayFull] || []);
         };
         loadTodos();
     }, [todayFull]);
