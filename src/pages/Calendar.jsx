@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth.js';
 import ListButtonConfig from '../components/list/ListButtonConfig.jsx';
 import DisplayDailyList from '../components/list/DailyListDisplayManager.jsx';
 import MultiSelectButton from '../components/list/multiSelectButton.jsx';
+import { useNavigate } from 'react-router-dom';
 
 // database to store/remove list items
 import {
@@ -14,6 +15,7 @@ import {
   updateEntryTime,
 } from '../firebase/TodoTaskManager.js';
 import Checkbox from "../components/Checkbox.jsx";
+import GreenButton from "../components/GreenButton.jsx";
 
 
 
@@ -31,6 +33,7 @@ const DAY_KEY_TO_FULL = {
 
 const Calendar = () => {
   const { user } = useAuth();
+    const navigate = useNavigate();
   const [todoInput, setTodoInput] = useState('');
   const [todoTime, setTodoTime] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
@@ -207,7 +210,15 @@ const Calendar = () => {
   };
 
   return (
-    <div className="mx-auto max-w-6xl bg-[#1B2851] px-6 pb-6 pt-24 shadow-2xl">
+    <div className="mx-auto max-w-6xl mt-30 bg-[#1B2851] rounded-xl p-3 px-6 pb-6 shadow-2xl shadow-black">
+        <div className='relative flex items-center justify-center pb-6 pt-2'>
+
+        <div className=" absolute left-0 scale-75 origin-left">
+
+            <GreenButton text="← Back" onClick={() => navigate('/')} />
+        </div>
+            <h2 className="text-xl font-bold items-center text-[#EBB537] justify-center shrikhand-regular">Calendar</h2>
+    </div>
       <DisplayDailyList dayMenus={dayMenus} onDeleteItem={handleDeleteTodo} onEditItem={handleEditTodo} onEditTime={handleEditTime} forcedDay={focusDayShort} itemTimes={itemTimes} />
 
       <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
