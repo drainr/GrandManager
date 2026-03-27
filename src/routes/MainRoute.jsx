@@ -15,6 +15,7 @@ const MainRoute = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
+
         {/* Private */}
         <Route element={<PrivateRoute />}>
             <Route element={<Root />}>
