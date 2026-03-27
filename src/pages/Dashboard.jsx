@@ -18,7 +18,7 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
     // Initialize the chat hook (passing null for selectedUser to get general messages)
     const { messages } = useChat(currentUser, null);
 
-    const setDayMenus = useState({});
+    const [dayMenu,setDayMenus] = useState({});
     const [todaysTodos, setTodaysTodos] = useState([]);
     const DAYS_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const DEFAULT_LIST_ID = 'default';
@@ -37,8 +37,8 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
 
     return (
         <>
-            <div className="flex flex-col align-top min-h-screen">
-                <div className='flex flex-col justify-center items-center mt-40 p-10 w-200'>
+            <div className="flex flex-col align-top min-h-screen w-screen">
+                <div className='flex justify-center items-center mt-30 p-10 w-200'>
                     <Weblist />
                 </div>
 
