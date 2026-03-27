@@ -5,6 +5,7 @@ import { useUsers } from '../hooks/useUsers';
 import { useChat } from '../hooks/useChat';
 import YellowButton from '../components/YellowButton';
 import GreenButton from '../components/GreenButton';
+import Footer from "./Footer.jsx";
 
 /**
  * Chat - Page for real-time messaging between users.
@@ -41,7 +42,7 @@ const Chat = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-[#405BA4]  mt-30">
+    <div className="flex flex-col justify-center item-center w-full max-w-lg  bg-[#405BA4]  mt-30">
       <div className="bg-[#1B2851] shadow-md pb-2">
         <div className="relative top-1 bottom-0.5 flex items-center justify-center mb-3 p-2">
             <div className="absolute left-0 scale-65">
@@ -134,9 +135,12 @@ const Chat = () => {
             />
             <YellowButton text="Send" onClick={handleSend} small />
           </div>
+            <Footer />
         </div>
+
       )}
     </div>
+
   );
 };
 
