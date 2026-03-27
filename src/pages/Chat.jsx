@@ -5,6 +5,7 @@ import { useUsers } from '../hooks/useUsers';
 import { useChat } from '../hooks/useChat';
 import YellowButton from '../components/YellowButton';
 import GreenButton from '../components/GreenButton';
+import Footer from "./Footer.jsx";
 
 /**
  * Chat - Page for real-time messaging between users.
@@ -134,9 +135,12 @@ const Chat = () => {
             />
             <YellowButton text="Send" onClick={handleSend} small />
           </div>
+            <Footer />
         </div>
+
       )}
     </div>
+
   );
 };
 

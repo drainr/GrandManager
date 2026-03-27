@@ -69,7 +69,7 @@ const StyledWrapper = styled.div`
   transition: .7s cubic-bezier(0,.8,.26,.99);
   z-index: -1;
 
-  background-color: #364A85;
+  background-color: #3fb3e2;
 
   box-shadow:
     0 -4px rgba(0,0,0,0.4) inset,
