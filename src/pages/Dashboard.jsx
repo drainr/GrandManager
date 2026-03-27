@@ -38,7 +38,7 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
     return (
         <>
             <div className="flex flex-col align-top min-h-screen w-screen">
-                <div className='flex justify-center items-center mt-30 p-10 w-200'>
+                <div className='align-middle items-center mt-30 p-10 w-200'>
                     <Weblist />
                 </div>
 
