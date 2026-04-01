@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, get } from 'firebase/database';
 import { useUsers } from '../../hooks/useUsers.js';
 import { getChatId, sendMessage } from '../../firebase/chatManager.js';
-import { groupEntriesByDay, formatExportJSON } from '../../utils/exportHelpers.js';
+import { groupEntriesByDay, formatExportJSON } from '../../hooks/useExport.js';
 import YellowButton from "../YellowButton.jsx";
 import Recieve from "./recieve.jsx";
 
@@ -27,7 +27,7 @@ const Send = () => {
       const chatId = getChatId(currentUser.uid, selectedUser);
       await sendMessage(chatId, currentUser.uid, currentUser.displayName || currentUser.email, json);
       setStatus('Sent!');
-    } catch (e) {
+    } catch {
       setStatus('Failed to send.');
     }
   };

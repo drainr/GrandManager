@@ -3,14 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth.js';
 import GreenButton from '../components/GreenButton.jsx';
 import { useNavigate } from 'react-router-dom';
-import Return from '../components/list/Return.jsx';
 import ListButtonConfig from '../components/list/ListButtonConfig.jsx';
 import DisplayDailyList from '../components/list/DailyListDisplayManager.jsx';
 import MultiSelectButton from '../components/list/MultiSelectButton.jsx';
 import { useCalendarHandlers } from '../hooks/useCalendarHandlers.js';
-import Send from '../components/list/Send.jsx';
+import Send from '../components/list/send.jsx';
 import Footer from "./Footer.jsx";
-import Recieve from '../components/list/Recieve.jsx';
+import Recieve from '../components/list/recieve.jsx';
 // database to store/remove list items
 import {
   addEntry,
@@ -20,7 +19,7 @@ import {
   updateEntry,
   updateEntryTime,
 } from '../firebase/TodoTaskManager.js';
-import Checkbox from "../components/Checkbox.jsx";
+import { updateEntryChecked } from '../firebase/checkmanager.js';
 
 
 // mapping of days for display and storage
@@ -44,6 +43,7 @@ const Calendar = () => {
   const [selectedDays, setSelectedDays] = useState([]);
   const [dayMenus, setDayMenus] = useState(createEmptyWeekMenus());
   const [itemTimes, setItemTimes] = useState({});
+  const [checkedByKey, setCheckedByKey] = useState({});
   const [focusDayShort, setFocusDayShort] = useState(null);
   
   const getTimeKey = (dayName, itemText, occurrenceIndex) => `${dayName}::${itemText}::${occurrenceIndex}`;
@@ -53,6 +53,7 @@ const Calendar = () => {
     dayMenus,
     setDayMenus,
     setItemTimes,
+    setCheckedByKey,
     setFocusDayShort,
     setTodoInput,
     setTodoTime,
@@ -62,6 +63,7 @@ const Calendar = () => {
     DAYS_FULL,
     addEntry,
     updateEntryTime,
+    updateEntryChecked,
     updateEntry,
     deleteEntry,
     getEntriesByDay,
@@ -72,10 +74,11 @@ const Calendar = () => {
     let isMounted = true;
     const loadSavedEntries = async () => {
       try {
-        const { entriesByDay, timesByKey } = await getEntriesByDay(user.uid);
+        const { entriesByDay, timesByKey, checkedByKey } = await getEntriesByDay(user.uid);
         if (isMounted) {
           setDayMenus(entriesByDay);
           setItemTimes(timesByKey);
+          setCheckedByKey(checkedByKey);
         }
       } catch (error) {
         console.error('Failed to load saved todo entries:', error);
@@ -110,8 +113,10 @@ const Calendar = () => {
                           onDeleteItem={(day, index) => handlers.handleDeleteTodo(day, index, dayMenus, setDayMenus, setItemTimes, user)}
                           onEditItem={(day, index, newText) => handlers.handleEditTodo(day, index, newText, dayMenus, setDayMenus, user)}
                           onEditTime={(day, index, newTime) => handlers.handleEditTime(day, index, newTime, dayMenus, setItemTimes, user)}
+                            onToggleItemChecked={(day, index, nextChecked) => handlers.handleToggleTodoChecked(day, index, nextChecked, dayMenus, setCheckedByKey, user)}
                           forcedDay={focusDayShort}
                           itemTimes={itemTimes}
+                            checkedByKey={checkedByKey}
                       /></div>
                   <div className="mr-auto mt-4 flex w-full max-w-4xl flex-col gap-4 lg:flex-row lg:items-start">
                       <ListButtonConfig

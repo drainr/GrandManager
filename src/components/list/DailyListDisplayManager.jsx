@@ -12,7 +12,7 @@ const LIST_WIDTH = 'w-full';
 const SCROLL_THRESHOLD = 6;
 
 
-const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, forcedDay, itemTimes }) => {
+const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, onToggleItemChecked, forcedDay, itemTimes, checkedByKey }) => {
         const [editIndex, setEditIndex] = useState(null);
         const [editValue, setEditValue] = useState("");
         // Start editing a task
@@ -89,6 +89,7 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, forcedDay, itemT
                             const occurrenceIndex = getItemOccurrenceIndex(menuItems, index, item);
                             const itemKey = getItemKey(selectedFull, item, occurrenceIndex);
                             const itemTime = itemTimes?.[itemKey] || '';
+                            const isChecked = Boolean(checkedByKey?.[itemKey]);
 
                             return (
                                 <li key={`${item}-${index}`} className="w-full">
@@ -109,14 +110,18 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, forcedDay, itemT
                                                     }
                                                 }}
                                             />
+                                            // render checkbox and reflect checked state. styling for it too
                                         ) : (
                                             <div className="flex flex-row items-center gap-4 w-[400px]">
                                                 <div className="flex-shrink-0 flex items-center justify-center -translate-y-[7px]">
-                                                    <Checkbox />
+                                                    <Checkbox
+                                                        checked={isChecked}
+                                                        onChange={(nextChecked) => onToggleItemChecked?.(selectedFull, index, nextChecked)}
+                                                    />
                                                 </div>
 
                                                 <span
-                                                    className="block min-w-0 truncate rounded bg-[#405BA4] px-4 py-3 text-white text-2xl leading-none transition-colors duration-150 hover:bg-white/10 cursor-pointer flex-1"
+                                                    className={`block min-w-0 truncate rounded px-4 py-3 text-2xl leading-none transition-colors duration-150 cursor-pointer flex-1 ${isChecked ? 'bg-[#2f467e] text-white/60 line-through' : 'bg-[#405BA4] text-white hover:bg-white/10'}`}
                                                     onClick={() => handleEditStart(index, item)}
                                                 >
         {item}

@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useId } from 'react';
 import styled from 'styled-components';
 
-const Checkbox = () => {
+// Controlled checkbox: checked value and updates are managed by the parent.
+const Checkbox = ({ checked = false, onChange, disabled = false }) => {
+  const checkboxId = useId();
+
     return (
         <StyledWrapper>
-            <label className="checkbox-btn">
-                <label htmlFor="checkbox" />
-                <input id="checkbox" type="checkbox" />
+      <label className="checkbox-btn" htmlFor={checkboxId}>
+        <input
+          id={checkboxId}
+          type="checkbox"
+          checked={checked}
+          disabled={disabled}
+          onChange={(event) => onChange?.(event.target.checked)}
+        />
                 <span className="checkmark" />
             </label>
         </StyledWrapper>

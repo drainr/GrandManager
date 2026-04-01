@@ -1,7 +1,7 @@
 // src/hooks/useCalendarHandlers.js
 import { useCallback } from 'react';
 
-export function useCalendarHandlers({ user, dayMenus, setDayMenus, setItemTimes, setFocusDayShort, setTodoInput, setTodoTime, getTimeKey, DAY_KEY_TO_FULL, DAYS_SHORT, DAYS_FULL, addEntry, updateEntryTime, updateEntry, deleteEntry, getEntriesByDay }) {
+export function useCalendarHandlers({ user, dayMenus, setDayMenus, setItemTimes, setCheckedByKey, setFocusDayShort, setTodoInput, setTodoTime, getTimeKey, DAY_KEY_TO_FULL, DAYS_SHORT, DAYS_FULL, addEntry, updateEntryTime, updateEntryChecked, updateEntry, deleteEntry, getEntriesByDay }) {
   // Toggle selected day
   const handleToggleDay = useCallback((dayKey, selectedDays, setSelectedDays) => {
     setSelectedDays((prevSelected) =>
@@ -28,6 +28,7 @@ export function useCalendarHandlers({ user, dayMenus, setDayMenus, setItemTimes,
 
     const updatedMenus = { ...dayMenus };
     const newTimedEntries = [];
+    const newCheckedEntries = [];
 
     targetDays.forEach((day) => {
       const dayItems = updatedMenus[day] || [];
@@ -37,6 +38,11 @@ export function useCalendarHandlers({ user, dayMenus, setDayMenus, setItemTimes,
         key: getTimeKey(day, trimmedTodo, occurrenceIndex),
         value: todoTime,
       });
+    // Initialize new checkbox state as unchecked
+      newCheckedEntries.push({
+        key: getTimeKey(day, trimmedTodo, occurrenceIndex),
+        value: false,
+      });
     });
 
     setDayMenus(updatedMenus);
@@ -45,6 +51,16 @@ export function useCalendarHandlers({ user, dayMenus, setDayMenus, setItemTimes,
       setItemTimes((prev) => {
         const next = { ...prev };
         newTimedEntries.forEach(({ key, value }) => {
+          next[key] = value;
+        });
+        return next;
+      });
+    }
+    // Initialize new checkboxes as unchecked in state
+    if (newCheckedEntries.length > 0 && setCheckedByKey) {
+      setCheckedByKey((prev) => {
+        const next = { ...prev };
+        newCheckedEntries.forEach(({ key, value }) => {
           next[key] = value;
         });
         return next;
@@ -63,7 +79,7 @@ export function useCalendarHandlers({ user, dayMenus, setDayMenus, setItemTimes,
     } catch (error) {
       console.error('Failed to save todo entry:', error);
     }
-  }, [DAY_KEY_TO_FULL, DAYS_FULL, DAYS_SHORT, addEntry, getTimeKey]);
+  }, [DAY_KEY_TO_FULL, DAYS_FULL, DAYS_SHORT, addEntry, getTimeKey, setCheckedByKey]);
 
   // Edit time
   const handleEditTime = useCallback(async (day, index, newTime, dayMenus, setItemTimes, user) => {
@@ -81,6 +97,27 @@ export function useCalendarHandlers({ user, dayMenus, setDayMenus, setItemTimes,
       console.error('Failed to update time:', error);
     }
   }, [getTimeKey, updateEntryTime]);
+
+  // Toggle checkbox state
+  const handleToggleTodoChecked = useCallback(async (day, index, checked, dayMenus, setCheckedByKey, user) => {
+    const dayItems = dayMenus[day] || [];
+    const itemText = dayItems[index];
+    if (!itemText || !user) return;
+
+    const matchIndex = dayItems.slice(0, index).filter((item) => item === itemText).length;
+    const key = getTimeKey(day, itemText, matchIndex);
+
+    setCheckedByKey((prev) => ({
+      ...prev,
+      [key]: checked,
+    }));
+
+    try {
+      await updateEntryChecked(user.uid, day, itemText, checked, matchIndex);
+    } catch (error) {
+      console.error('Failed to update todo checkbox:', error);
+    }
+  }, [getTimeKey, updateEntryChecked]);
 
   // Delete todo
   const handleDeleteTodo = useCallback(async (day, index, dayMenus, setDayMenus, setItemTimes, user) => {
@@ -142,6 +179,7 @@ export function useCalendarHandlers({ user, dayMenus, setDayMenus, setItemTimes,
     handleToggleDay,
     handleSubmitTodo,
     handleEditTime,
+    handleToggleTodoChecked,
     handleDeleteTodo,
     handleEditTodo,
   };

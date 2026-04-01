@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth"; // Added this
 import { getEntriesByDay } from "../firebase/TodoTaskManager";
+import { updateEntryChecked } from "../firebase/checkmanager.js";
 
 import GreenButton from "../components/GreenButton.jsx";
 import PurpleButton from "../components/PurpleButton.jsx";
@@ -19,6 +20,7 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
 
     const [dayMenu, setDayMenus] = useState({});
     const [todaysTodos, setTodaysTodos] = useState([]);
+    const [checkedByKey, setCheckedByKey] = useState({});
     const DAYS_FULL = [
         "Sunday",
         "Monday",
@@ -35,12 +37,34 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
 
     const { previews } = useMessagePreview(currentUser?.uid);
 
+    const getItemOccurrenceIndex = (items, index, itemText) =>
+        items.slice(0, index).filter((entry) => entry === itemText).length;
+
+    const getItemKey = (dayName, itemText, occurrenceIndex) => `${dayName}::${itemText}::${occurrenceIndex}`;
+
+    const handleToggleTodoChecked = async (day, index, checked) => {
+        const dayItems = dayMenu[day] || [];
+        const itemText = dayItems[index];
+        if (!itemText || !currentUser) return;
+
+        const matchIndex = dayItems.slice(0, index).filter((item) => item === itemText).length;
+        const key = getItemKey(day, itemText, matchIndex);
+
+        setCheckedByKey((prev) => ({
+            ...prev,
+            [key]: checked,
+        }));
+
+        await updateEntryChecked(currentUser.uid, day, itemText, checked, matchIndex);
+    };
+
     useEffect(() => {
         const loadTodos = async () => {
-            const { entriesByDay} = await getEntriesByDay(DEFAULT_LIST_ID);
+            const { entriesByDay, checkedByKey: loadedCheckedByKey } = await getEntriesByDay(DEFAULT_LIST_ID);
             console.log("entriesByDay:", entriesByDay);
             console.log("Thursday tasks:", entriesByDay["Thursday"]);
             setDayMenus(entriesByDay);
+            setCheckedByKey(loadedCheckedByKey);
             setTodaysTodos(entriesByDay[todayFull] || []);
         };
         loadTodos();
@@ -50,7 +74,7 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
         <>
            <div className="flex flex-col align-top min-h-screen w-screen">
             <div className='flex flex-row items-start justify-center mt-20 p-10 gap-8'>
-                <div className='w-fit max-w-[600px]'>
+                <div className='w-fit max-w-150'>
                     <Weblist />
                 </div>
 
@@ -114,25 +138,33 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
                             {todayFull}
                         </p>
 
-                        <div className="min-h-[120px]">
+                        <div className="min-h-30">
                             {todaysTodos.length === 0 ? (
                                 <p className="text-red-900 font-bold">No tasks today</p>
                             ) : (
                                 <>
-                                    {todaysTodos.slice(0, 3).map((todo, i) => (
-                                        <div
-                                            key={i}
-                                            className="flex items-center gap-3 p-2 h-min"
-                                        >
-                                            <div className='flex-shrink-0 flex items-center'>
-                                            <Checkbox
-                                                onClick={() => onDeleteItem?.(selectedFull, index)}
-                                            /></div>
-                                            <p className="text-[#1B2851] font-medium leading-none mt-3 p-0 flex items-center">
-                                                {todo}
-                                            </p>
-                                        </div>
-                                    ))}
+                                    {todaysTodos.slice(0, 3).map((todo, i) => {
+                                        const occurrenceIndex = getItemOccurrenceIndex(todaysTodos, i, todo);
+                                        const itemKey = getItemKey(todayFull, todo, occurrenceIndex);
+                                        const isChecked = Boolean(checkedByKey?.[itemKey]);
+
+                                        return (
+                                            <div
+                                                key={i}
+                                                className="flex items-center gap-3 p-2 h-min"
+                                            >
+                                                <div className="shrink-0 flex items-center">
+                                                    <Checkbox
+                                                        checked={isChecked}
+                                                        onChange={(nextChecked) => handleToggleTodoChecked(todayFull, i, nextChecked)}
+                                                    />
+                                                </div>
+                                                <p className={`font-medium leading-none mt-3 p-0 flex items-center ${isChecked ? 'line-through text-[#1B2851]/60' : 'text-[#1B2851]'}`}>
+                                                    {todo}
+                                                </p>
+                                            </div>
+                                        );
+                                    })}
                                     {todaysTodos.length > 3 && (
                                         <p className="text-[#4d2c72] text-xs font-bold mt-1">
                                             + {todaysTodos.length - 3} more tasks

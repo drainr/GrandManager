@@ -1,17 +1,4 @@
-import { update } from 'firebase/database';
-// update item text
-export const updateEntry = async (listId, day, oldText, newText, matchIndex = 0) => {
-  const snapshot = await get(getEntriesRef(listId));
-  if (!snapshot.exists()) return;
-  const rawEntries = snapshot.val();
-  const matchingKeys = Object.entries(rawEntries)
-    .filter(([, entry]) => entry?.day === day && entry?.text === oldText)
-    .map(([entryKey]) => entryKey);
-  const targetKey = matchingKeys[matchIndex];
-  if (!targetKey) return;
-  await update(ref(rtdb, `lists/${listId}/entries/${targetKey}`), { text: newText });
-};
-import { get, push, ref, remove, serverTimestamp } from 'firebase/database';
+import { get, push, ref, remove, serverTimestamp, update } from 'firebase/database';
 import { rtdb } from './firebase.js';
 
 // default week data
@@ -27,6 +14,16 @@ const EMPTY_WEEK_MENUS = {
 
 // database path
 const getEntriesRef = (listId) => ref(rtdb, `lists/${listId}/entries`);
+// create a key to access stored checkbox in firebase
+const buildEntryKey = (day, text, occurrenceIndex) => `${day}::${text}::${occurrenceIndex}`;
+
+const findMatchingEntryKey = (rawEntries, day, text, matchIndex = 0) => {
+  const matchingKeys = Object.entries(rawEntries)
+    .filter(([, entry]) => entry?.day === day && entry?.text === text)
+    .map(([entryKey]) => entryKey);
+
+  return matchingKeys[matchIndex];
+};
 
 // create empty week copy
 export const createEmptyWeekMenus = () => {
@@ -45,6 +42,7 @@ export const addEntry = async (listId, day, text, time = "") => {
     day,
     text,
     time,
+    checked: false,
     date: new Date().toISOString(),
     createdAt: serverTimestamp(),
   });
@@ -55,8 +53,9 @@ export const getEntriesByDay = async (listId) => {
   const snapshot = await get(getEntriesRef(listId));
   const entriesByDay = createEmptyWeekMenus();
   const timesByKey = {};
+  const checkedByKey = {};
   if (!snapshot.exists()) {
-    return { entriesByDay, timesByKey };
+    return { entriesByDay, timesByKey, checkedByKey };
   }
   const rawEntries = snapshot.val();
   Object.values(rawEntries).forEach((entry) => {
@@ -67,23 +66,31 @@ export const getEntriesByDay = async (listId) => {
       const text = entry.text;
       const time = entry.time || "";
       const occurrenceIndex = entriesByDay[day].filter((t) => t === text).length - 1;
-      const key = `${day}::${text}::${occurrenceIndex}`;
+      const key = buildEntryKey(day, text, occurrenceIndex);
       timesByKey[key] = time;
+      checkedByKey[key] = Boolean(entry.checked);
     }
   });
-  return { entriesByDay, timesByKey };
+  return { entriesByDay, timesByKey, checkedByKey };
 };
 // update item time
 export const updateEntryTime = async (listId, day, text, newTime, matchIndex = 0) => {
   const snapshot = await get(getEntriesRef(listId));
   if (!snapshot.exists()) return;
   const rawEntries = snapshot.val();
-  const matchingKeys = Object.entries(rawEntries)
-    .filter(([, entry]) => entry?.day === day && entry?.text === text)
-    .map(([entryKey]) => entryKey);
-  const targetKey = matchingKeys[matchIndex];
+  const targetKey = findMatchingEntryKey(rawEntries, day, text, matchIndex);
   if (!targetKey) return;
   await update(ref(rtdb, `lists/${listId}/entries/${targetKey}`), { time: newTime });
+};
+
+// update item text
+export const updateEntry = async (listId, day, oldText, newText, matchIndex = 0) => {
+  const snapshot = await get(getEntriesRef(listId));
+  if (!snapshot.exists()) return;
+  const rawEntries = snapshot.val();
+  const targetKey = findMatchingEntryKey(rawEntries, day, oldText, matchIndex);
+  if (!targetKey) return;
+  await update(ref(rtdb, `lists/${listId}/entries/${targetKey}`), { text: newText });
 };
 
 // delete item
