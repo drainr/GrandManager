@@ -41,22 +41,16 @@ const MIN_INTERVAL = 270;
 const MAX_INTERVAL = 330;
 
 export default function InspirationalPopup() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [currentImage, setCurrentImage] = useState(null);
-  const [hasShownWelcome, setHasShownWelcome] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const [currentImage, setCurrentImage] = useState(INSPIRATIONAL_IMAGES[WELCOME_INDEX]);
 
   const getRandomInterval = () =>
     (Math.floor(Math.random() * (MAX_INTERVAL - MIN_INTERVAL + 1)) + MIN_INTERVAL) * 1000;
 
-  const showPopup = useCallback((isWelcome = false) => {
-    if (isWelcome) {
-      setCurrentImage(INSPIRATIONAL_IMAGES[WELCOME_INDEX]);
-    } else {
-      // Pick a random one, excluding the welcome message
-      const others = INSPIRATIONAL_IMAGES.filter((_, i) => i !== WELCOME_INDEX);
-      const randomIndex = Math.floor(Math.random() * others.length);
-      setCurrentImage(others[randomIndex]);
-    }
+  const showPopup = useCallback(() => {
+    const others = INSPIRATIONAL_IMAGES.filter((_, i) => i !== WELCOME_INDEX);
+    const randomIndex = Math.floor(Math.random() * others.length);
+    setCurrentImage(others[randomIndex]);
     setIsOpen(true);
   }, []);
 
@@ -65,18 +59,8 @@ export default function InspirationalPopup() {
     setCurrentImage(null);
   };
 
-  // Show welcome popup once on mount (login)
-  useEffect(() => {
-    if (!hasShownWelcome) {
-      showPopup(true);
-      setHasShownWelcome(true);
-    }
-  }, [hasShownWelcome, showPopup]);
-
   // Random interval timer — starts after welcome is shown
   useEffect(() => {
-    if (!hasShownWelcome) return;
-
     let timeoutId;
 
     const scheduleNext = () => {
@@ -89,7 +73,7 @@ export default function InspirationalPopup() {
 
     scheduleNext();
     return () => clearTimeout(timeoutId);
-  }, [hasShownWelcome, showPopup]);
+  }, [showPopup]);
 
   if (!isOpen || !currentImage) return null;
 
