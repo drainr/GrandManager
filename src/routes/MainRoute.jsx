@@ -7,6 +7,7 @@ import Calendar from "../pages/Calendar";
 import Chat from "../pages/Chat";
 import Root from "../layout/Root";
 import NotFound from "../pages/NotFound.jsx";
+import Settings from "../pages/Settings.jsx";
 
 
 const MainRoute = () => {
@@ -23,6 +24,7 @@ const MainRoute = () => {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/chat" element={<Chat />} />
+                <Route path="/Settings" element={<Settings />} /> {/* Optional: Redirect /dashboard to / */}
             </Route>
         </Route>
         <Route path='*' element={<NotFound />} />
