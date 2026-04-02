@@ -14,7 +14,7 @@ import Footer from "./Footer.jsx";
 import WeatherCard from "../components/weather/WeatherCard.jsx";
 import BlueButton from "../components/BlueButton.jsx";
 
-const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
+const Dashboard = () => {
   const navigate = useNavigate();
   const auth = getAuth(); // Initialize auth
   const currentUser = auth.currentUser;
@@ -32,7 +32,6 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
     "Saturday",
   ];
   const DEFAULT_LIST_ID = currentUser?.uid || "default";
-  const selectedFull = DAYS_FULL[selectedIndex];
   const todayIndex = new Date().getDay();
   const todayFull = DAYS_FULL[todayIndex];
 
@@ -73,8 +72,6 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
     const loadTodos = async () => {
       const { entriesByDay, checkedByKey: loadedCheckedByKey } =
         await getEntriesByDay(DEFAULT_LIST_ID);
-      console.log("entriesByDay:", entriesByDay);
-      console.log("Thursday tasks:", entriesByDay["Thursday"]);
       setDayMenus(entriesByDay);
       setCheckedByKey(loadedCheckedByKey);
       setTodaysTodos(entriesByDay[todayFull] || []);
