@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth"; // Added this
 import { getEntriesByDay } from "../firebase/TodoTaskManager";
 import { updateEntryChecked } from "../firebase/checkmanager.js";
-
+import "/src/App.css";
 import GreenButton from "../components/GreenButton.jsx";
 import PurpleButton from "../components/PurpleButton.jsx";
 import Checkbox from "../components/Checkbox.jsx";
@@ -72,19 +72,19 @@ const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
 
     return (
         <>
-           <div className="flex flex-col align-top min-h-screen w-screen">
-            <div className='flex flex-row items-start justify-center mt-20 p-10 gap-8'>
-                <div className='w-fit max-w-150'>
+           <div className="dashboard-container flex flex-col align-top min-h-screen w-screen">
+            <div className='dashboard-top-section flex flex-row items-start justify-center mt-20 p-10 gap-8'>
+                <div className="weblist-container w-100">
                     <Weblist />
                 </div>
 
-                <div className="flex flex-col gap-4">
+                <div className=" weather-container flex flex-col gap-4">
                     <WeatherCard location="Sarasota" />
                     <WeatherCard location="Thousand Oaks, CA" />
                 </div>
             </div>
 
-                <div className="flex flex-row gap-10 justify-center p-10">
+                <div className="dashboard-bottom-section flex flex-row gap-10 justify-center p-10">
                     <div className="bg-[#4d2c72] rounded-xl p-6 w-80 shadow-2xl shadow-black border border-[#EBB537]">
                         <div className="flex justify-between items-center mb-4">
                             <h1 className="shrikhand-regular text-[#EBB537] text-xl">

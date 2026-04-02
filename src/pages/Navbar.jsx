@@ -1,4 +1,5 @@
 import React from 'react';
+import "/src/App.css";
 import { useNavigate } from 'react-router-dom';
 import RedButton from '../components/RedButton';
 import { logout } from '../firebase/auth';
@@ -19,17 +20,17 @@ const Navbar = () => {
 
 
     return (
-        <div className="fixed top-0 left-0 w-full p-2 bg-[#4d2c72] shadow-xl flex items-center justify-between z-50">
-            <h1 className="text-sm shrikhand-regular text-[#EBB537]">GrandManager</h1>
+        <div className="navbar-container fixed top-0 left-0 w-full p-2 bg-[#4d2c72] shadow-xl flex items-center justify-between z-50 ">
+            <h1 className="navbar-title text-sm shrikhand-regular text-[#EBB537] ">GrandManager</h1>
             <div className="dropdown dropdown-end mr-4">
-            <span className="shrikhand-regular text-[#EBB537] p-2">
+            <span className="navbar-username shrikhand-regular text-[#EBB537] p-2">
                             {displayName || "Guest"}
                         </span>
                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar overflow-hidden">
 
                     <div className="w-full h-full rounded-full flex items-center justify-center">
 
-                        <CgProfile className="w-full h-full text-[#EBB537]"/>
+                        <CgProfile className=" navbar-icon w-full h-full text-[#EBB537]"/>
                     </div>
                 </div>
 

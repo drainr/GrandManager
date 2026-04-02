@@ -78,3 +78,50 @@ html {
   font-weight: 700;
 }
 
+@media (max-width: 600px) {
+    .navbar-container {
+        padding: 6px 10px;
+    }
+
+    .navbar-title {
+        font-size: 20px;
+    }
+
+    .navbar-username {
+        font-size: 15px;
+    }
+
+    .navbar-icon {
+        width: 25px;
+        height: 25px;
+    }
+
+    .dashboard-top-section {
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .dashboard-bottom-section {
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .weblist-container {
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto;
+
+    }
+
+    .weather-container {
+        width: 100%;
+        align-items: center;
+    }
+}
+
+
+
