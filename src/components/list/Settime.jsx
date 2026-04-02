@@ -85,7 +85,7 @@ const SetTime = ({ value, onChange, showInput = true, dayName }) => {
 			</div>
 			{/* Show the exact chosen time below the countdown in 12-hour format with AM/PM */}
 			{!showInput && hasValidTime && (
-				<span className="text-xs text-gray-200 mt-1">
+				<span className="mt-1 text-xs text-black">
 					Time set: {(() => {
 						let hour = inputHours % 12 || 12;
 						let minute = toTwoDigits(inputMinutes);

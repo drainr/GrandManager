@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import WeeklyBar from './WeeklyBarConfig.jsx';
 import RedButton from '../RedButton.jsx';
-import SetTime from './settime.jsx';
 import Checkbox from "../Checkbox.jsx";
 
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -11,14 +10,83 @@ const DAYS_FULL  = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 const LIST_WIDTH = 'w-full';
 const SCROLL_THRESHOLD = 6;
 
+// Take stored HH:mm values and format for display (e.g., 8:00 PM).
+const formatTime12Hour = (timeValue) => {
+    const [hourStr = '', minuteStr = ''] = (timeValue || '').split(':');
+    const hour = Number(hourStr);
+    const minute = Number(minuteStr);
 
-const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, onToggleItemChecked, forcedDay, itemTimes, checkedByKey }) => {
+    if (Number.isNaN(hour) || Number.isNaN(minute)) {
+        return '';
+    }
+
+    const normalizedHour = hour % 12 || 12;
+    const ampm = hour < 12 ? 'AM' : 'PM';
+    return `${normalizedHour}:${String(minute).padStart(2, '0')} ${ampm}`;
+};
+
+// Determine whether a task should display as LATE for the currently viewed day.
+const isTaskLate = (dayName, timeValue, nowMs) => {
+    const [hourStr = '', minuteStr = ''] = (timeValue || '').split(':');
+    const hour = Number(hourStr);
+    const minute = Number(minuteStr);
+
+    if (Number.isNaN(hour) || Number.isNaN(minute) || !DAYS_FULL.includes(dayName)) {
+        return false;
+    }
+
+    const now = new Date(nowMs);
+    const selectedDayIndex = DAYS_FULL.indexOf(dayName);
+    const todayIndex = now.getDay();
+
+    // Only consider a task late on its actual day.
+    if (selectedDayIndex !== todayIndex) {
+        return false;
+    }
+
+    // Compare at minute precision and only mark late after the set minute has passed.
+    // Treat 00:00 as midnight tonight (end of day), not the start of today.
+    const nowMinutes = (now.getHours() * 60) + now.getMinutes();
+    const targetMinutes = (hour === 0 && minute === 0) ? 1440 : (hour * 60) + minute;
+    return nowMinutes > targetMinutes;
+};
+
+
+const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, onEditTime, onToggleItemChecked, forcedDay, itemTimes, checkedByKey }) => {
         const [editIndex, setEditIndex] = useState(null);
         const [editValue, setEditValue] = useState("");
+        const [editTimeKey, setEditTimeKey] = useState(null);
+        const [editTimeValue, setEditTimeValue] = useState('');
+        const [nowMs, setNowMs] = useState(() => Date.now());
+
+        useEffect(() => {
+            const timer = setInterval(() => {
+                setNowMs(Date.now());
+            }, 1000);
+
+            return () => clearInterval(timer);
+        }, []);
+
+        // Inline task text editing handlers.
         // Start editing a task
         const handleEditStart = (index, value) => {
             setEditIndex(index);
             setEditValue(value);
+        };
+
+        // Inline task time editing handlers.
+        const handleTimeEditStart = (itemKey, currentTime) => {
+            setEditTimeKey(itemKey);
+            setEditTimeValue(currentTime || '');
+        };
+
+        const handleTimeEditSave = (dayName, index, currentTime) => {
+            const nextTime = editTimeValue || '';
+            if (nextTime !== (currentTime || '')) {
+                onEditTime?.(dayName, index, nextTime);
+            }
+            setEditTimeKey(null);
+            setEditTimeValue('');
         };
 
         // Save edit (on blur or Enter)
@@ -29,6 +97,8 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, onToggleItemChec
             setEditIndex(null);
             setEditValue("");
         };
+
+    // Active day and list metadata for the current panel.
     const [activeDay, setActiveDay]       = useState(null);
     const [menuVersion, setMenuVersion]   = useState(0);
     const effectiveActiveDay = activeDay ?? forcedDay;
@@ -60,6 +130,7 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, onToggleItemChec
 
     const getItemKey = (dayName, itemText, occurrenceIndex) => `${dayName}::${itemText}::${occurrenceIndex}`;
 
+    // Render selected day list with inline task and time editing.
     return (
         <div className="mx-auto w-full max-w-5xl bg-[#1B2851] p-2 shadow-md shadow-black">
             <WeeklyBar
@@ -86,10 +157,12 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, onToggleItemChec
 					{/* item list display using daisyui */}
                     <ul className={`bg-[#405BA4] ${LIST_WIDTH} columns-1 flex flex-col flex-nowrap gap-2`}>
                         {menuItems.map((item, index) => {
+                            // Build stable per-item keys, including duplicate task names.
                             const occurrenceIndex = getItemOccurrenceIndex(menuItems, index, item);
                             const itemKey = getItemKey(selectedFull, item, occurrenceIndex);
                             const itemTime = itemTimes?.[itemKey] || '';
                             const isChecked = Boolean(checkedByKey?.[itemKey]);
+                            const showLate = itemTime ? isTaskLate(selectedFull, itemTime, nowMs) : false;
 
                             return (
                                 <li key={`${item}-${index}`} className="w-full">
@@ -131,7 +204,39 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, onToggleItemChec
                                         <div className="min-w-44 whitespace-nowrap rounded-md px-3 py-2 text-center">
                                             {itemTime ? (
                                                 <div className="rounded-md bg-white/15 px-2 py-1">
-                                                    <SetTime value={itemTime} showInput={false} dayName={selectedFull} />
+                                                    {editTimeKey === itemKey ? (
+                                                        <input
+                                                            type="time"
+                                                            className="input time-edit-input bg-[#405BA4]! text-white! border-white/20 scheme-light"
+                                                            value={editTimeValue}
+                                                            autoFocus
+                                                            onChange={(event) => setEditTimeValue(event.target.value)}
+                                                            onBlur={() => handleTimeEditSave(selectedFull, index, itemTime)}
+                                                            onKeyDown={(event) => {
+                                                                if (event.key === 'Enter') {
+                                                                    handleTimeEditSave(selectedFull, index, itemTime);
+                                                                } else if (event.key === 'Escape') {
+                                                                    setEditTimeKey(null);
+                                                                    setEditTimeValue('');
+                                                                }
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <span
+                                                            role="button"
+                                                            tabIndex={0}
+                                                            className={`mt-1 cursor-pointer text-xs ${showLate ? 'font-extrabold text-red-300' : 'text-gray-200'}`}
+                                                            onClick={() => handleTimeEditStart(itemKey, itemTime)}
+                                                            onKeyDown={(event) => {
+                                                                if (event.key === 'Enter' || event.key === ' ') {
+                                                                    event.preventDefault();
+                                                                    handleTimeEditStart(itemKey, itemTime);
+                                                                }
+                                                            }}
+                                                        >
+                                                            {showLate ? 'LATE' : `Time set: ${formatTime12Hour(itemTime)}`}
+                                                        </span>
+                                                    )}
                                                 </div>
                                             ) : null}
                                         </div>
@@ -149,6 +254,20 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, onToggleItemChec
                 @keyframes weeklyBarDrop {
                     from { opacity: 0; transform: translateY(-12px); }
                     to   { opacity: 1; transform: translateY(0); }
+                }
+
+                .time-edit-input::-webkit-calendar-picker-indicator {
+                    opacity: 0;
+                    width: 0;
+                    pointer-events: none;
+                    transition: opacity 120ms ease;
+                }
+
+                .time-edit-input:focus::-webkit-calendar-picker-indicator,
+                .time-edit-input:active::-webkit-calendar-picker-indicator {
+                    opacity: 1;
+                    width: auto;
+                    pointer-events: auto;
                 }
             `}</style>
         </div>
