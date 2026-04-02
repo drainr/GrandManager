@@ -7,7 +7,6 @@ import { useAuth } from "../hooks/useAuth.js";
 
 const Navbar = () => {
     const { user } = useAuth();
-    const uid = user?.uid || "guest";
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -15,7 +14,7 @@ const Navbar = () => {
         navigate("/login");
     };
     const displayName = user
-        ? user.displayName || user.email?.split("@")[0] || "User"
+        ? user.displayName || user.name || "User"
         : "Guest";
 
 

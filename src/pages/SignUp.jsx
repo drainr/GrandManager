@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 import { saveUser } from '../firebase/chatManager.js';
+import { updateProfile } from "firebase/auth";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -24,7 +25,12 @@ const SignUp = () => {
         }
 
         const result = await register(email, password);
+
         if (result.success) {
+            await updateProfile(result.user, {
+                displayName: name
+            });
+
             await saveUser(result.user.uid, name, email);
             navigate("/");
         } else {
