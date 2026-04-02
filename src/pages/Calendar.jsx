@@ -157,8 +157,8 @@ const Calendar = () => {
                   </div>
 
               </div>
-              <div className="mt-6 flex justify-end">
-                  <DownloadPDFButton groupedEntries={dayMenus} />
+              <div className='absolute top-1/2 bg-[#1B2851] p-5 rounded-xl -translate-y-1/2 flex flex-col gap-1 items-end scale-90 origin-right shadow-2xl right-5 shadow-black'>
+                  <Send />
               </div>
           </div>
           <Footer />
