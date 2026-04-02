@@ -13,8 +13,7 @@ import Footer from "./Footer.jsx";
 import WeatherCard from "../components/weather/WeatherCard.jsx";
 import BlueButton from "../components/BlueButton.jsx";
 
-const Dashboard = ({ onDeleteItem, selectedIndex, index,
- }) => {
+const Dashboard = ({ onDeleteItem, selectedIndex, index }) => {
     const navigate = useNavigate();
     const auth = getAuth(); // Initialize auth
     const currentUser = auth.currentUser;
