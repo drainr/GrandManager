@@ -99,7 +99,7 @@ const Send = () => {
         return grouped;
     };
 
-    const handleSendPdf = async () => {
+    const handleSendPdfData = async () => {
         if (!selectedUser || !currentUser) return;
 
         try {
@@ -111,54 +111,31 @@ const Send = () => {
             const data = snapshot.exists() ? snapshot.val() : {};
 
             const pdfEntries = buildPdfEntries(data.entries || {});
-            console.log('pdfEntries:', pdfEntries);
-
-            setStatus('Generating PDF...');
-
-            const blob = await pdf(
-                <DownloadToDos
-                    groupedEntries={pdfEntries}
-                    listTitle="Weekly To-Do List"
-                />
-            ).toBlob();
-
-            console.log('PDF blob created:', blob);
-
-            setStatus('Uploading PDF...');
-
-            const storage = getStorage();
-            const fileName = `weekly-todo-${Date.now()}.pdf`;
-            const fileRef = storageRef(storage, `pdfs/${currentUser.uid}/${fileName}`);
-
-            await uploadBytes(fileRef, blob, {
-                contentType: 'application/pdf',
-            });
-
-            console.log('Upload finished');
-
-            setStatus('Getting download link...');
-
-            const fileUrl = await getDownloadURL(fileRef);
-            console.log('fileUrl:', fileUrl);
-
-            setStatus('Sending message...');
-
             const chatId = getChatId(currentUser.uid, selectedUser.uid);
 
-            const pdfMessageText = `Shared a PDF: ${fileName}\n${fileUrl}`;
+            const pdfMessage = {
+                type: 'weekly_todo_pdf_data',
+                title: 'Weekly To-Do List',
+                entries: pdfEntries,
+            };
+
+            setStatus('Sending...');
 
             await sendMessage(
                 chatId,
                 currentUser.uid,
                 currentUser.displayName || currentUser.email,
-                pdfMessageText
+                {
+                    type: 'weekly_todo_pdf_data',
+                    title: 'Weekly To-Do List',
+                    entries: pdfEntries,
+                }
             );
 
-            console.log('Message sent');
-            setStatus('PDF sent!');
+            setStatus('Weekly planner sent!');
         } catch (error) {
-            console.error('handleSendPdf error:', error);
-            setStatus(`Failed to send PDF.`);
+            console.error('handleSendPdfData error:', error);
+            setStatus('Failed to send.');
         }
     };
 
@@ -187,7 +164,7 @@ const Send = () => {
             </select>
 
             <div className="flex flex-col gap-3 p-3">
-                <YellowButton text="Send PDF" onClick={handleSendPdf} width={110} height={50} />
+                <YellowButton text="Send PDF" onClick={handleSendPdfData} width={110} height={50} />
             </div>
 
             <div className="flex flex-column p-3">
