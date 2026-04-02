@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, get } from 'firebase/database';
 import { useUsers } from '../../hooks/useUsers.js';
 import { getChatId, sendMessage } from '../../firebase/chatManager.js';
-import { groupEntriesByDay, formatExportJSON } from '../../hooks/useExport.js';
+import { groupEntriesByDay, formatExportText } from '../../hooks/useExport.js';
 import YellowButton from "../YellowButton.jsx";
 import Recieve from "./recieve.jsx";
 
@@ -23,10 +23,9 @@ const Send = () => {
       const snapshot = await get(userRef);
       const data = snapshot.exists() ? snapshot.val() : {};
       const grouped = groupEntriesByDay(data.entries);
-      const json = formatExportJSON(grouped);
+      const messageText = formatExportText(grouped);
       const chatId = getChatId(currentUser.uid, selectedUser);
-      await sendMessage(chatId, currentUser.uid, currentUser.displayName || currentUser.email, json);
-      setStatus('Sent!');
+      await sendMessage(chatId, currentUser.uid, currentUser.displayName || currentUser.email, messageText);setStatus('Sent!');
     } catch {
       setStatus('Failed to send.');
     }

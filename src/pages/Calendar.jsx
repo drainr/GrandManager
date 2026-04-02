@@ -10,6 +10,7 @@ import { useCalendarHandlers } from '../hooks/useCalendarHandlers.js';
 import Send from '../components/list/send.jsx';
 import Footer from "./Footer.jsx";
 import Recieve from '../components/list/recieve.jsx';
+import DownloadPDFButton from '../components/list/DownloadPDFButton.jsx';
 // database to store/remove list items
 import {
   addEntry,
@@ -90,6 +91,27 @@ const Calendar = () => {
     };
   }, [user]);
 
+    const getOccurrenceIndex = (items, index, itemText) =>
+        items.slice(0, index).filter((entry) => entry === itemText).length;
+
+    const pdfEntries = Object.fromEntries(
+        DAYS_FULL.map((dayName) => {
+            const items = dayMenus[dayName] || [];
+
+            const mappedItems = items.map((item, index) => {
+                const occurrenceIndex = getOccurrenceIndex(items, index, item);
+                const itemKey = `${dayName}::${item}::${occurrenceIndex}`;
+
+                return {
+                    entry: item,
+                    time: itemTimes?.[itemKey] || '',
+                };
+            });
+
+            return [dayName, mappedItems];
+        })
+    );
+
   // styling for calendar page and header row with buttons
   // content such as list, buttons, and status messages that are displayed on the calendar page
   return (
@@ -135,9 +157,8 @@ const Calendar = () => {
                   </div>
 
               </div>
-              <div className='absolute top-1/2 bg-[#1B2851] p-5 rounded-xl -translate-y-1/2 flex flex-col gap-1 items-end scale-90 origin-right shadow-2xl right-5 shadow-black'>
-                  <Send />
-                  <Recieve />
+              <div className="mt-6 flex justify-end">
+                  <DownloadPDFButton groupedEntries={dayMenus} />
               </div>
           </div>
           <Footer />
