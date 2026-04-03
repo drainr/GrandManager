@@ -27,7 +27,7 @@ const buildPdfEntries = (entries = {}) => {
     Object.values(entries).forEach((item) => {
         if (item.day && grouped[item.day]) {
             grouped[item.day].push({
-                entry: item.entry || '',
+                entry: item.entry || item.text || item.name || item.title || '',
                 time: item.time || '',
             });
         }

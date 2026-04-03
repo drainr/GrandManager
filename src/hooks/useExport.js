@@ -12,7 +12,7 @@ export const groupEntriesByDay = (entries = {}) => {
     Object.values(entries).forEach((item) => {
         if (item.day && grouped[item.day]) {
             grouped[item.day].push({
-                entry: item.entry || '',
+                entry: item.entry || item.text || item.name || item.title || '',
                 time: item.time || '',
             });
         }
@@ -27,8 +27,14 @@ export const formatExportText = (groupedEntries = {}) => {
             if (!tasks.length) return `${day}:\n- No tasks`;
 
             const lines = tasks.map((task, index) => {
-                const timeText = task.time ? ` (${task.time})` : '';
-                return `${index + 1}. ${task.entry}${timeText}`;
+                const taskName = typeof task === 'string'
+                    ? (task.trim() || 'Untitled task')
+                    : (task.entry || task.text || task.name || task.title || task.task || task.label || task.value || 'Untitled task');
+                const taskTime = typeof task === 'object' && task !== null
+                    ? (task.time || task.dueTime || '')
+                    : '';
+                const timeText = taskTime ? ` (${taskTime})` : '';
+                return `${index + 1}. ${taskName}${timeText}`;
             });
 
             return `${day}:\n${lines.join('\n')}`;

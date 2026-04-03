@@ -68,6 +68,29 @@ const formatTime = (time) => {
     return `${twelveHour}:${minute} ${ampm}`;
 };
 
+const getTaskName = (task) => {
+    if (typeof task === 'string') {
+        const trimmed = task.trim();
+        return trimmed || 'Untitled task';
+    }
+
+    if (!task || typeof task !== 'object') {
+        return 'Untitled task';
+    }
+
+    const rawName = task.entry ?? task.text ?? task.name ?? task.title ?? task.task ?? task.label ?? task.value;
+    if (typeof rawName === 'string' && rawName.trim()) {
+        return rawName.trim();
+    }
+
+    return 'Untitled task';
+};
+
+const getTaskTime = (task) => {
+    if (!task || typeof task !== 'object') return '';
+    return task.time ?? task.dueTime ?? '';
+};
+
 const DownloadToDos = ({ groupedEntries = {}, listTitle = "Weekly To-Do List" }) => {
     return (
         <Document>
@@ -84,12 +107,17 @@ const DownloadToDos = ({ groupedEntries = {}, listTitle = "Weekly To-Do List" })
                             {tasks.length === 0 ? (
                                 <Text style={styles.emptyText}>No tasks</Text>
                             ) : (
-                                tasks.map((task, index) => (
-                                    <Text key={`${day}-${index}`} style={styles.taskRow}>
-                                        {index + 1}. {task.entry}
-                                        {task.time ? ` — ${formatTime(task.time)}` : ''}
-                                    </Text>
-                                ))
+                                tasks.map((task, index) => {
+                                    const taskName = getTaskName(task);
+                                    const taskTime = getTaskTime(task);
+
+                                    return (
+                                        <Text key={`${day}-${index}`} style={styles.taskRow}>
+                                            {index + 1}. {taskName}
+                                            {taskTime ? ` - ${formatTime(taskTime)}` : ''}
+                                        </Text>
+                                    );
+                                })
                             )}
                         </View>
                     );
