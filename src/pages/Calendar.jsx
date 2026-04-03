@@ -9,8 +9,6 @@ import MultiSelectButton from '../components/list/MultiSelectButton.jsx';
 import { useCalendarHandlers } from '../hooks/useCalendarHandlers.js';
 import Send from '../components/list/send.jsx';
 import Footer from "./Footer.jsx";
-import Recieve from '../components/list/recieve.jsx';
-import DownloadPDFButton from '../components/list/DownloadPDFButton.jsx';
 // database to store/remove list items
 import {
   addEntry,

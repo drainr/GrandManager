@@ -1,17 +1,40 @@
 import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, get } from 'firebase/database';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { pdf } from '@react-pdf/renderer';
 import { useUsers } from '../../hooks/useUsers.js';
 import { getChatId, sendMessage } from '../../firebase/chatManager.js';
 import YellowButton from "../YellowButton.jsx";
-import DownloadToDos from "./DownloadToDos.jsx";
+import DownloadToDos from './DownloadToDos.jsx';
 import {useNavigate} from "react-router-dom";
 import {useFamily} from "../../hooks/useFamily.js";
 import PurpleButton from "../PurpleButton.jsx";
 import GreenButton from "../GreenButton.jsx";
 import Footer from "../../pages/Footer.jsx";
+
+// Convert flat Firebase entries
+const buildPdfEntries = (entries = {}) => {
+    const grouped = {
+        Sunday: [],
+        Monday: [],
+        Tuesday: [],
+        Wednesday: [],
+        Thursday: [],
+        Friday: [],
+        Saturday: [],
+    };
+
+    Object.values(entries).forEach((item) => {
+        if (item.day && grouped[item.day]) {
+            grouped[item.day].push({
+                entry: item.entry || '',
+                time: item.time || '',
+            });
+        }
+    });
+
+    return grouped;
+};
 
 const Send = () => {
     const auth = getAuth();
@@ -75,30 +98,6 @@ const Send = () => {
         );
     }
 
-
-    const buildPdfEntries = (entries = {}) => {
-        const grouped = {
-            Sunday: [],
-            Monday: [],
-            Tuesday: [],
-            Wednesday: [],
-            Thursday: [],
-            Friday: [],
-            Saturday: [],
-        };
-
-        Object.values(entries).forEach((item) => {
-            if (item.day && grouped[item.day]) {
-                grouped[item.day].push({
-                    entry: item.entry || '',
-                    time: item.time || '',
-                });
-            }
-        });
-
-        return grouped;
-    };
-
     const handleSendPdfData = async () => {
         if (!selectedUser || !currentUser) return;
 
@@ -113,12 +112,6 @@ const Send = () => {
             const pdfEntries = buildPdfEntries(data.entries || {});
             const chatId = getChatId(currentUser.uid, selectedUser.uid);
 
-            const pdfMessage = {
-                type: 'weekly_todo_pdf_data',
-                title: 'Weekly To-Do List',
-                entries: pdfEntries,
-            };
-
             setStatus('Sending...');
 
             await sendMessage(
@@ -126,16 +119,71 @@ const Send = () => {
                 currentUser.uid,
                 currentUser.displayName || currentUser.email,
                 {
+                    // PDF download flows.
                     type: 'weekly_todo_pdf_data',
                     title: 'Weekly To-Do List',
                     entries: pdfEntries,
                 }
             );
-
             setStatus('Weekly planner sent!');
         } catch (error) {
             console.error('handleSendPdfData error:', error);
             setStatus('Failed to send.');
+        }
+    };
+
+    const handleDownloadPdf = async () => {
+        // Download works per selected user
+        if (!currentUser || !selectedUser) {
+            setStatus('Select a contact first.');
+            return;
+        }
+
+        try {
+            setStatus('Preparing PDF...');
+
+            const db = getDatabase();
+            const chatId = getChatId(currentUser.uid, selectedUser.uid);
+            const messagesRef = ref(db, `chats/${chatId}/messages`);
+            const snapshot = await get(messagesRef);
+
+            let latestPdfEntries = null;
+            let latestTitle = 'Weekly To-Do List';
+
+            if (snapshot.exists()) {
+                // Use the most recent shared
+                snapshot.forEach((child) => {
+                    const msg = child.val();
+                    if (msg?.type === 'weekly_todo_pdf_data' && msg?.entries) {
+                        latestPdfEntries = msg.entries;
+                        latestTitle = msg.title || 'Weekly To-Do List';
+                    }
+                });
+            }
+
+            if (!latestPdfEntries) {
+                setStatus('No shared PDF data found in this chat.');
+                return;
+            }
+
+            // Build the PDF from shared task data, then trigger browser download.
+            const blob = await pdf(
+                <DownloadToDos groupedEntries={latestPdfEntries} listTitle={latestTitle} />
+            ).toBlob();
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'weekly-todo-list.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            setStatus('PDF downloaded!');
+        } catch (error) {
+            console.error('handleDownloadPdf error:', error);
+            setStatus('Failed to download PDF.');
         }
     };
 
@@ -165,6 +213,8 @@ const Send = () => {
 
             <div className="flex flex-col gap-3 p-3">
                 <YellowButton text="Send PDF" onClick={handleSendPdfData} width={110} height={50} />
+                {/* Matches Send button styling while downloading from chat payload data. */}
+                <YellowButton text="Download PDF" onClick={handleDownloadPdf} width={110} height={50} />
             </div>
 
             <div className="flex flex-column p-3">
