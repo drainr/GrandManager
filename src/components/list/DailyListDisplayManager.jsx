@@ -132,76 +132,74 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, onEditTime, onTo
 
     // Render selected day list with inline task and time editing.
     return (
-        <div className="mx-auto w-full max-w-5xl bg-[#1B2851] p-2 shadow-md shadow-black">
-            <WeeklyBar
-                weekDays={DAYS_SHORT}
-                todayIndex={todayIndex}
-                activeDay={effectiveActiveDay}
-                onDayClick={handleDayClick}
-            />
+    <div className="mx-auto w-full max-w-5xl bg-[#1B2851] p-2 shadow-md shadow-black">
+        <WeeklyBar
+            weekDays={DAYS_SHORT}
+            todayIndex={todayIndex}
+            activeDay={effectiveActiveDay}
+            onDayClick={handleDayClick}
+        />
 
+        <div
+            className={`mt-3 border bg-[#405BA4] p-2 md:p-4 shadow-sm ${shouldScroll ? 'overflow-y-auto overflow-x-hidden' : ''}`}
+            style={shouldScroll ? { maxHeight: '26rem' } : undefined}
+        >
             <div
-			// Content panel — scrollable once item is over 6
-                className={`mt-3 border bg-[#405BA4] p-4 shadow-sm ${shouldScroll ? 'overflow-y-auto overflow-x-hidden' : ''}`}
-                style={shouldScroll ? { maxHeight: '26rem' } : undefined}
+                key={menuVersion}
+                className="space-y-3"
+                style={{ animation: 'weeklyBarDrop 240ms ease-out' }}
             >
-                <div
+                <h3 className="text-left text-xs md:text-sm font-extrabold uppercase tracking-wide bg-[#405BA4] sm:text-base">
+                    {menuTitle}
+                </h3>
 
-                    key={menuVersion}
-                    className="space-y-3"
-                    style={{ animation: 'weeklyBarDrop 240ms ease-out' }}
-                >
-                    <h3 className="text-left text-sm font-extrabold uppercase tracking-wide bg-[#405BA4] sm:text-base">
-                        {menuTitle}
-                    </h3>
-					{/* item list display using daisyui */}
-                    <ul className={`bg-[#405BA4] ${LIST_WIDTH} columns-1 flex flex-col flex-nowrap gap-2`}>
-                        {menuItems.map((item, index) => {
-                            // Build stable per-item keys, including duplicate task names.
-                            const occurrenceIndex = getItemOccurrenceIndex(menuItems, index, item);
-                            const itemKey = getItemKey(selectedFull, item, occurrenceIndex);
-                            const itemTime = itemTimes?.[itemKey] || '';
-                            const isChecked = Boolean(checkedByKey?.[itemKey]);
-                            const showLate = itemTime ? isTaskLate(selectedFull, itemTime, nowMs) : false;
+                <ul className={`bg-[#405BA4] ${LIST_WIDTH} columns-1 flex flex-col flex-nowrap gap-2`}>
+                    {menuItems.map((item, index) => {
+                        const occurrenceIndex = getItemOccurrenceIndex(menuItems, index, item);
+                        const itemKey = getItemKey(selectedFull, item, occurrenceIndex);
+                        const itemTime = itemTimes?.[itemKey] || '';
+                        const isChecked = Boolean(checkedByKey?.[itemKey]);
+                        const showLate = itemTime ? isTaskLate(selectedFull, itemTime, nowMs) : false;
 
-                            return (
-                                <li key={`${item}-${index}`} className="w-full">
-                                    <div className="grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3">
-                                        {editIndex === index ? (
-                                            <input
-                                                className="block min-w-0 rounded bg-[#405BA4] px-4 py-3 text-white text-2xl w-full focus:bg-white/10 outline-none"
-                                                value={editValue}
-                                                autoFocus
-                                                onChange={e => setEditValue(e.target.value)}
-                                                onBlur={() => handleEditSave(selectedFull, index, item)}
-                                                onKeyDown={e => {
-                                                    if (e.key === "Enter") {
-                                                        handleEditSave(selectedFull, index, item);
-                                                    } else if (e.key === "Escape") {
-                                                        setEditIndex(null);
-                                                        setEditValue("");
-                                                    }
-                                                }}
-                                            />
-                                            // render checkbox and reflect checked state. styling for it too
-                                        ) : (
-                                            <div className="flex flex-row items-center gap-4 w-[400px]">
-                                                <div className="flex-shrink-0 flex items-center justify-center -translate-y-[7px]">
-                                                    <Checkbox
-                                                        checked={isChecked}
-                                                        onChange={(nextChecked) => onToggleItemChecked?.(selectedFull, index, nextChecked)}
-                                                    />
-                                                </div>
-
-                                                <span
-                                                    className={`block min-w-0 truncate rounded px-4 py-3 text-2xl leading-none transition-colors duration-150 cursor-pointer flex-1 ${isChecked ? 'bg-[#2f467e] text-white/60 line-through' : 'bg-[#405BA4] text-white hover:bg-white/10'}`}
-                                                    onClick={() => handleEditStart(index, item)}
-                                                >
-        {item}
-    </span>
+                        return (
+                            <li key={`${item}-${index}`} className="w-full">
+                                <div className="flex flex-col md:grid md:grid-cols-[minmax(0,1fr)_auto_auto] w-full items-start md:items-center gap-2 md:gap-3">
+                                    {editIndex === index ? (
+                                        <input
+                                            className="block min-w-0 rounded bg-[#405BA4] px-2 md:px-4 py-2 md:py-3 text-white text-base md:text-2xl w-full focus:bg-white/10 outline-none"
+                                            value={editValue}
+                                            autoFocus
+                                            onChange={e => setEditValue(e.target.value)}
+                                            onBlur={() => handleEditSave(selectedFull, index, item)}
+                                            onKeyDown={e => {
+                                                if (e.key === "Enter") {
+                                                    handleEditSave(selectedFull, index, item);
+                                                } else if (e.key === "Escape") {
+                                                    setEditIndex(null);
+                                                    setEditValue("");
+                                                }
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className="flex flex-row items-center gap-2 md:gap-4 min-w-0 flex-1 w-full">
+                                            <div className="flex-shrink-0 flex items-center justify-center -translate-y-[7px]">
+                                                <Checkbox
+                                                    checked={isChecked}
+                                                    onChange={(nextChecked) => onToggleItemChecked?.(selectedFull, index, nextChecked)}
+                                                />
                                             </div>
-                                        )}
-                                        <div className="min-w-44 whitespace-nowrap rounded-md px-3 py-2 text-center">
+
+                                            <span
+                                                className={`block min-w-0 truncate rounded px-2 md:px-4 py-2 md:py-3 text-base md:text-2xl leading-none transition-colors duration-150 cursor-pointer flex-1 ${isChecked ? 'bg-[#2f467e] text-white/60 line-through' : 'bg-[#405BA4] text-white hover:bg-white/10'}`}
+                                                onClick={() => handleEditStart(index, item)}
+                                            >
+                                                {item}
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    <div className="flex flex-row items-center gap-2 md:contents w-full md:w-auto justify-between">
+                                        <div className="min-w-0 md:min-w-44 whitespace-nowrap rounded-md px-2 md:px-3 py-1 md:py-2 text-center">
                                             {itemTime ? (
                                                 <div className="rounded-md bg-white/15 px-2 py-1">
                                                     {editTimeKey === itemKey ? (
@@ -240,38 +238,41 @@ const DisplayDailyList = ({ dayMenus, onDeleteItem, onEditItem, onEditTime, onTo
                                                 </div>
                                             ) : null}
                                         </div>
-										{/* delete item button */}
-                                        <RedButton text="DELETE" onClick={() => handleDeleteClick(selectedFull, index)} />
+
+                                        <div className="scale-75 md:scale-100 origin-right">
+                                            <RedButton text="DELETE" onClick={() => handleDeleteClick(selectedFull, index)} />
+                                        </div>
                                     </div>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ul>
             </div>
-
-            <style>{`
-                @keyframes weeklyBarDrop {
-                    from { opacity: 0; transform: translateY(-12px); }
-                    to   { opacity: 1; transform: translateY(0); }
-                }
-
-                .time-edit-input::-webkit-calendar-picker-indicator {
-                    opacity: 0;
-                    width: 0;
-                    pointer-events: none;
-                    transition: opacity 120ms ease;
-                }
-
-                .time-edit-input:focus::-webkit-calendar-picker-indicator,
-                .time-edit-input:active::-webkit-calendar-picker-indicator {
-                    opacity: 1;
-                    width: auto;
-                    pointer-events: auto;
-                }
-            `}</style>
         </div>
-    );
+
+        <style>{`
+            @keyframes weeklyBarDrop {
+                from { opacity: 0; transform: translateY(-12px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
+
+            .time-edit-input::-webkit-calendar-picker-indicator {
+                opacity: 0;
+                width: 0;
+                pointer-events: none;
+                transition: opacity 120ms ease;
+            }
+
+            .time-edit-input:focus::-webkit-calendar-picker-indicator,
+            .time-edit-input:active::-webkit-calendar-picker-indicator {
+                opacity: 1;
+                width: auto;
+                pointer-events: auto;
+            }
+        `}</style>
+    </div>
+);
 };
 
 export default DisplayDailyList;
